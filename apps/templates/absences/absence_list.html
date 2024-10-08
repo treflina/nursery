@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+
+{% load render_table from django_tables2 %}
+
+{% load static django_tables2 %}
+
+{% block extra_styles %}
+<style>
+  .w-min {
+    width: min-content;
+  }
+
+  .wrapper {
+    overflow: scroll;
+    padding-bottom: .5rem;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: max(65rem, 100%);
+    table-layout: fixed;
+  }
+
+  th,
+  caption {
+    text-align: start;
+  }
+
+  caption {
+    margin-block: 0.75rem;
+  }
+
+  thead th:not(:first-child),
+  td {
+    text-align: start;
+  }
+
+  thead {
+    background: whitesmoke;
+  }
+
+
+  th,
+  td {
+    border: 1px solid lightgrey;
+    padding: 0.25rem 0.75rem;
+    vertical-align: baseline;
+  }
+
+
+  tbody th {
+    background: white;
+  }
+
+  thead th,
+  tfoot th {
+    background: whitesmoke;
+  }
+
+  thead th {
+    vertical-align: bottom;
+  }
+
+  /* For the shadow: https://adrianroselli.com/2020/01/fixed-table-headers.html */
+  div[tabindex="0"][aria-labelledby][role="region"] {
+    background:
+      linear-gradient(to right, transparent 30%, rgba(255, 255, 255, 0)),
+      linear-gradient(to right, rgba(255, 255, 255, 0), white 70%) 0 100%,
+      radial-gradient(farthest-side at 0% 50%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)),
+      radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) 0 100%;
+    background-repeat: no-repeat;
+    background-color: #fff;
+    background-size: 4em 100%, 4em 100%, 1.4em 100%, 1.4em 100%;
+    background-position: 0 0, 100%, 0 0, 100%;
+    background-attachment: local, local, scroll, scroll;
+  }
+</style>
+{% endblock extra_styles %}
+
+{% block content %}
+<main class="modal-wrapper container flex flex-col justify-center items-center">
+  <div class="flex flex-wrap justify-center items-center gap-4 py-4 bg-neutral-200 w-full">
+    {% if not today_off or not tomorrow_off %}
+    <div class="font-semibold">
+      <p>Liczba dzieci <span class="px-2 py-1 bg-[#92F398] rounded-md shadow-md">obecnych</span> /
+        <span class="px-2 py-1 bg-[#F3C892] rounded-md shadow-md">nieobecnych</span> :
+      </p>
+    </div>
+    {% endif %}
+    <div class="flex flex-wrap gap-4 justify-center">
+      {% if not today_off %}
+      <div class="flex gap-2 items-center">
+        <p>{{ today|date:"l (j.m)"}}</p>
+        <div class="w-40 flex justify-between px-2 py-1 rounded-lg shadow-md font-semibold" style="background: linear-gradient(
+        to right,
+        #92F398 {{ perc_present_today }}%,
+        #F3C892 {{ perc_present_today }}% 100%)">
+          <p>{{ present_today }}</p>
+          <div class="flex items-center gap-2">
+            <button type="button" class="openModal" data-target="#absent-today">
+              <svg class="w-5 h-5">
+                <use href="{% static 'img/sprite.svg' %}#list" />
+              </svg>
+            </button>
+            <p>{{ absent_today }}</p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% if not tomorrow_off %}
+      <div class="flex items-center gap-2">
+        <p>{{ tomorrow|date:"l (j.m)"}}</p>
+        <div class="w-40 flex justify-between px-2 py-1 rounded-lg shadow-md font-semibold" style="background: linear-gradient(
+        to right,
+        #92F398 {{ perc_present_tomorrow }}%,
+        #F3C892  {{ perc_present_tomorrow }}% 100%)">
+          <p>{{ present_tomorrow }}</p>
+          <div class="flex items-center gap-2">
+            {% if absent_tomorrow > 0 %}
+            <button type="button" class="openModal" data-target="#absent-tomorrow">
+              <svg class="w-5 h-5">
+                <use href="{% static 'img/sprite.svg' %}#list" />
+              </svg>
+            </button>
+            {% endif %}
+            <p>{{ absent_tomorrow }}</p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if messages %}
+  <div x-data="{showMsg : true}">
+    <div x-show="showMsg" class="p-2 bg-[#bdf3c1] rounded-md">
+      <button @click="showMsg = false" class="p-2">x</button>
+      {% for m in messages %}
+      <p {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ m }}</p>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  <div class="fixed top-3 right-3" x-data="{showMsg : true}">
+    <div x-show="showMsg" class="relative pr-5 pl-3 pb-4 bg-[#e0f6e2] rounded-md border-2 border-[#77ef7f] shadow-sm">
+      <button @click="showMsg = false" aria-label="Zamknij"
+        class="ml-auto -mr-4 flex justify-center items-center px-2 rounded-md after:absolute after:inset-0"><span aria-hidden="true">x</span></button>
+      <p class="">Data has been submitted sucessfully</p>
+    </div>
+  </div>
+
+  <h1 class="text-2xl font-semibold my-4">Zestawienie nieobecności</h1>
+
+  <div class="table-top-container">
+    <div class="flex flex-wrap justify-center gap-3 mb-1 mt-2 p-2 border rounded-sm bg-neutral-100">
+      <div class="flex flex-wrap gap-3">
+        <div class="flex flex-col gap-1">
+          <label for="id_day" class="font-semibold text-sm text-neutral-800">Dzień</label>
+          {{filter.form.day}}
+        </div>
+        <div class="flex flex-col gap-1">
+          <label for="id_month" class="font-semibold text-sm text-neutral-800">Miesiąc</label>
+          <select name="month" class="form-control" id="id_month" hx-trigger="change" hx-get="{% url 'absences:absences_list' %}"
+            hx-indicator=".progress" hx-target=".table-container"
+            hx-include="[name='year'], [name='query'], [name='day']" x-data
+            x-on:htmx:before-request="$dispatch('clear-pagination-and-sort')">
+            <option value="" selected="">---------</option>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+
+        </div>
+        <div class="flex flex-col gap-1">
+          <label for="id_year" class="font-semibold text-sm text-neutral-800">Rok</label>
+          {{filter.form.year}}
+        </div>
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="id_day" class="font-semibold text-sm text-neutral-800">Dziecko</label>
+        <input type="search" name="query" placeholder="Nazwisko imię" class="searchinput form-control" id="id_query"
+          hx-trigger="keyup changed delay:500ms, search" hx-get="{% url 'absences:absences_list' %}" hx-indicator=".progress"
+          hx-target=".table-container" hx-include="[name='month'], [name='year'], [name='day'] " x-data
+          x-on:htmx:before-request="$dispatch('clear-pagination-and-sort')">
+      </div>
+    </div>
+    <div class="absences wrapper max-w-[1200px]" tabindex="0">
+      {# Table header #}
+      <form id="bulk-actions" hx-get="{% url 'absences:absences_list' %}" hx-target=".table-container"
+        hx-trigger="sort-initiated, pagination-initiated" hx-swap="outerHTML"
+        hx-include="#id_query, #id_year, #id_month, #id_day" hx-indicator=".progress" x-data="{ sort_by: '',
+                  page_by: 1}" @clear-pagination-and-sort.window="page_by = 1; sort_by = ''">
+
+        {# Hidden input to store pagination page and column to sort by #}
+        <input type="hidden" name="sort" x-ref="sort_input" x-model="sort_by" x-init="$watch('sort_by',
+                           () => $refs.sort_input.dispatchEvent(
+                                    new Event('sort-initiated',
+                                              { bubbles: true })))">
+
+        <input type="hidden" name="page" x-ref="paginate_input" x-model="page_by" x-init="$watch('page_by',
+                           () => $refs.paginate_input.dispatchEvent(
+                                    new Event('pagination-initiated',
+                                              { bubbles: true })))">
+
+        <table class="table table-header checkcolumn-table header">
+          <thead {{ table.attrs.thead.as_html }}>
+            <tr>
+              {% for column in table.columns %}
+
+              {% if column.orderable %}
+              <th {{ column.attrs.th.as_html }} x-data="{ col_name: '{{ column.order_by_alias }}',
+                    toggleSort(event) {
+                      this.col_name = this.col_name.startsWith('-') ? this.col_name.substring(1) : ('-' + this.col_name);
+                      sort_by = this.col_name;
+                    }
+                  }" @click="toggleSort()"
+                :class="sort_by !== '' ? (sort_by === col_name ? (sort_by.startsWith('-') ? 'desc' : 'asc') : '') : ''"
+                style="cursor: pointer;">
+                {{ column.header }}
+              </th>
+              {% else %}
+              <th {{ column.attrs.th.as_html }}>{{ column.header }}</th>
+              {% endif %}
+              {% endfor %}
+            </tr>
+          </thead>
+        </table>
+
+        {# Progress indicator #}
+        <div class="progress">
+          <div class="indeterminate"></div>
+        </div>
+
+        {# Content table #}
+        {% render_table table %}
+      </form>
+    </div>
+  </div>
+</main>
+
+<div class="modalBackground hidden"></div>
+<div role="dialog" id="absent-today" aria-labelledby="absences-today" class="hidden bg-neutral-50 rounded-md p-2 lg:p-6"
+  tabindex="-1">
+  <h2 id="absences-today" class="font-semibold mb-2 text-lg">Dzieci nieobecne w dniu {{ today|date:"j.m.y" }}:</h2>
+  <ol class="list-decimal list-inside">
+    {% for absence in absent_today_list %}
+    <li>{{absence.child.first_name}} {{absence.child.last_name}}</li>
+    {% endfor %}
+  </ol>
+  <button type="button" class="cancelBtn rounded-full border-2 mt-28
+    flex justify-center items-center px-3 py-2 bg-blue-300 hover:bg-blue-400 hover:shadow-md transition-all duration-300
+    uppercase font-semibold">Zamknij</button>
+</div>
+<div role="dialog" id="absent-tomorrow" aria-labelledby="absences-tomorrow" class="hidden" tabindex="-1">
+  <h2 id="absences-tomorrow">This is a heading</h2>
+  <p>This is some placeholder text within the modal.</p>
+  <button type="button" class="cancelBtn">Cancel</button>
+</div>
+{% endblock %}
+
+{% block footer %}
+<script src="{% static 'js/modal.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% comment %} <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"> {% endcomment %}
+    {% comment %} <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> {% endcomment %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <script src="{% static 'js/htmx.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_styles %}
+    {% endblock extra_styles %}
+{% comment %}  {% endcomment %}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-neutral-50 h-full">
+    {% block content %}
+    {% endblock content %}
+
+    {% block footer %}
+    {% endblock footer %}
+
+    <script>
+      document.body.addEventListener('htmx:configRequest', (event) => {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+      });
+
+      {% if debug %}
+      if (typeof window.htmx !== "undefined") {
+          htmx.on("htmx:afterSettle", function(detail) {
+              if (
+                  typeof window.djdt !== "undefined"
+                  && detail.target instanceof HTMLBodyElement
+              ) {
+                  djdt.show_toolbar();
+              }
+          });
+      }
+    {% endif %}
+    </script>
+
+    {% comment %} {% if debug %}
+    <script type="text/javascript">
+      window.setTimeout(function(){ document.location.reload(true); },
+      8000);
+    </script>
+    {% endif %} {% endcomment %}
+</body>
+</html>

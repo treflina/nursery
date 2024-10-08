@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+
+{% load render_table from django_tables2 %}
+
+{% load django_tables2 %}
+
+ {% block extra_styles %}
+<style>
+.wrapper {
+	overflow: scroll;
+  padding-bottom: .5rem;
+}
+
+table {
+	border-collapse: collapse;
+	width: max(65rem, 100%);
+	table-layout: fixed;
+}
+
+th,
+caption {
+	text-align: start;
+}
+
+caption {
+	margin-block: 0.75rem;
+}
+
+thead th:not(:first-child),
+td {
+	text-align: start;
+}
+
+thead {
+	background: whitesmoke;
+}
+
+
+th,
+td {
+	border: 1px solid lightgrey;
+	padding: 0.25rem 0.75rem;
+	vertical-align: baseline;
+}
+
+
+tbody th {
+	background: white;
+}
+
+thead th,
+tfoot th {
+	background: whitesmoke;
+}
+
+thead th {
+	vertical-align: bottom;
+}
+
+/* For the shadow: https://adrianroselli.com/2020/01/fixed-table-headers.html */
+div[tabindex="0"][aria-labelledby][role="region"] {
+  background:
+    linear-gradient(to right, transparent 30%, rgba(255,255,255,0)),
+    linear-gradient(to right, rgba(255,255,255,0), white 70%) 0 100%,
+    radial-gradient(farthest-side at 0% 50%, rgba(0,0,0,0.2), rgba(0,0,0,0)),
+    radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,0.2), rgba(0,0,0,0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: #fff;
+  background-size: 4em 100%, 4em 100%, 1.4em 100%, 1.4em 100%;
+  background-position: 0 0, 100%, 0 0, 100%;
+  background-attachment: local, local, scroll, scroll;
+}</style>
+{% endblock extra_styles %}
+
+
+
+{% block content %}
+<main class="container flex flex-col justify-center items-center">
+<h1>Zestawienie miesięczne</h1>
+
+<div class="table-top-container">
+  {# Bulk actions and search bar #}
+  <div class="flex flex-row justify-center">
+    <div class="">
+      <div>
+          <button id="activate" type="submit" name="activate"
+                  class="btn btn-secondary"
+                  hx-post="{% url 'billings:billings_update' %}"
+                  hx-target=".table-container"
+                  hx-indicator=".progress"
+                  hx-include="#bulk-actions, #id_query">
+          Activate
+        </button>
+        <button id="deactivate" type="submit" name="deactivate"
+                class="btn btn-secondary"
+                hx-post="{% url 'billings:billings_update' %}"
+                hx-target=".table-container"
+                hx-indicator=".progress"
+                hx-include="#bulk-actions, #id_query">
+        Deactivate
+        </button>
+        {% comment %} <form>
+           {{filter.form.month}}
+        </form> {% endcomment %}
+      </div>
+    </div>
+    {{filter.form.year}}
+
+     <div class="col-2">
+      <div class="form-inline">
+          <select name="month" class="form-control" id="id_month"
+                 hx-trigger="change"
+                 hx-get="{% url 'billings:billings' %}"
+                 hx-indicator=".progress"
+                 hx-target=".table-container"
+                 hx-include="[name='year'], [name='query']"
+                 x-data
+                 x-on:htmx:before-request="$dispatch('clear-pagination-and-sort')">
+            <option value="" selected="">---------</option>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+      </div>
+    </div>
+
+    <div class="col-4">
+      <div class="form-inline">
+        <div class="d-flex justify-content-end">
+          <input type="search" name="query" placeholder="Search..."
+                 class="searchinput form-control" id="id_query"
+                 hx-trigger="keyup changed delay:500ms, search"
+                 hx-get="{% url 'billings:billings' %}"
+                 hx-indicator=".progress"
+                 hx-target=".table-container"
+                hx-include="[name='month'], [name='year']"
+                 x-data
+                 x-on:htmx:before-request="$dispatch('clear-pagination-and-sort')">
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="wrapper max-w-[1200px]" tabindex="0">
+  {# Table header #}
+  <form id="bulk-actions"
+        hx-get="{% url 'billings:billings' %}"
+        hx-target=".table-container"
+        hx-trigger="sort-initiated, pagination-initiated"
+        hx-swap="outerHTML"
+        hx-include="#id_query"
+        hx-indicator=".progress"
+        x-data="{ sort_by: '',
+                  page_by: 1,
+                  select_all: false,
+                  last_checked: false }"
+        @clear-pagination-and-sort.window="page_by = 1; sort_by = ''"
+        x-on:htmx:after-swap="select_all = false">
+
+    {% csrf_token %}
+
+    {# Hidden input to store pagination page and column to sort by #}
+    <input type="hidden" name="sort" x-ref="sort_input" x-model="sort_by"
+           x-init="$watch('sort_by',
+                           () => $refs.sort_input.dispatchEvent(
+                                    new Event('sort-initiated',
+                                              { bubbles: true })))">
+
+    <input type="hidden" name="page" x-ref="paginate_input" x-model="page_by"
+           x-init="$watch('page_by',
+                           () => $refs.paginate_input.dispatchEvent(
+                                    new Event('pagination-initiated',
+                                              { bubbles: true })))">
+
+    <table class="table checkcolumn-table header">
+      <thead {{ table.attrs.thead.as_html }}>
+        <tr>
+          {% for column in table.columns %}
+            {% if column.name == 'selection' %}
+            <th {{ column.attrs.th.as_html }}
+                x-data="{ toggleSelection(event) {
+                  select_all = !select_all;
+                  let checkboxes = document.getElementsByName('selection');
+                  [...checkboxes].map((el) => {
+                    el.checked = select_all;
+                  })
+                }
+              }"
+              @click="toggleSelection()"
+              style="cursor: pointer;">
+              <input type="checkbox" x-model="select_all">
+            </th>
+            {% else %}
+              {% if column.orderable %}
+                <th {{ column.attrs.th.as_html }}
+                    x-data="{ col_name: '{{ column.order_by_alias }}',
+                    toggleSort(event) {
+                      this.col_name = this.col_name.startsWith('-') ? this.col_name.substring(1) : ('-' + this.col_name);
+                      sort_by = this.col_name;
+                    }
+                  }"
+                  @click="toggleSort()"
+                  :class="sort_by !== '' ? (sort_by === col_name ? (sort_by.startsWith('-') ? 'desc' : 'asc') : '') : ''"
+                  style="cursor: pointer;">
+                  {{ column.header }}
+                </th>
+              {% else %}
+                <th {{ column.attrs.th.as_html }}>{{ column.header }}</th>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </tr>
+      </thead>
+    </table>
+
+    {# Progress indicator #}
+    <div class="progress">
+      <div class="indeterminate"></div>
+    </div>
+
+    {# Content table #}
+    {% render_table table %}
+  </form>
+</div>
+</div>
+</main>
+{% endblock %}
+
+{% block footer %}
+<script>
+    // Set the checkbox to be checked from the start
+    // to end when the user presses the shift key.
+  function checkRange(event) {
+    let checkboxes = document.getElementsByName('selection');
+    let inBetween =  false;
+    if( event.shiftKey && event.target.checked ) {
+      checkboxes.forEach( checkbox => {
+        if( checkbox === event.target || checkbox === last_checked ) {
+          inBetween = !inBetween;
+        }
+        if( inBetween ) {
+          checkbox.checked = true;
+        }
+      });
+    }
+    last_checked = event.target;
+  }
+
+</script>
+{% endblock %}

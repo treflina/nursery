@@ -1,0 +1,17 @@
+{% load core_extras %}
+<li class="cal-day-item inline-block rounded-full shadow-md {{bg_color}} border-4 font-['Roboto']
+    border-transparent"
+    {% if num == 1 %}
+    style="grid-column-start: {{ first_day|add:1 }}"
+    {% endif %}>
+    {% url_date_format year month num as data %}
+    <a tabindex="0"
+    hx-get='{% url "info:day" chosendate=data %}'
+    hx-target="#info"
+    hx-push-url='{% url "core:day" chosendate=data %}'
+    class="cal-day block px-1 py-2 md:px-2 md:py-2  cursor-pointer rounded-sm text-lg
+    {% if num == day %}
+    font-bold
+    {% endif %}"
+    >{{ num }}</a>
+</li>

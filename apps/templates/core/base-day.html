@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<main id="main" class="w-full flex flex-col lg:flex-row lg:items-stretch lg:gap-8 ">
+    {% include 'includes/profile.html' %}
+    <div
+        class=" flex flex-col items-center lg:basis-1/3 w-full lg:min-h-dvh px-2 pb-5 pt-2 lg:pt-5 lg:px-10 bg-neutral-200 relative">
+        <div id="calendar"
+            hx-get="{% url 'core:calendar' year=chosendate.year month=chosendate.month day=chosendate.day %}"
+            hx-trigger="load" class="w-full">
+            {% include 'core/calendar.html' %}
+        </div>
+        <div id="buttons" class="pb-4 pt-8 flex gap-2 justify-center flex-wrap">
+            {% if children %}
+            <button id="btn-abs" hx-target="#info" hx-get="{% url 'absences:absence_create' %}" class="rounded-full border-2
+                px-6 pt-2 pb-3 bg-blue-300 hover:bg-blue-400 hover:shadow-md transition-all
+                duration-300
+                uppercase font-semibold">
+                Zgłoś nieobecność
+            </button>
+            {% endif %}
+            {% if billing %}
+            <button class="btn-bill rounded-full border-2
+                px-6 pt-2 pb-3 bg-blue-300 hover:bg-blue-400 hover:shadow-md transition-all duration-300
+                uppercase font-semibold" hx-get="{% url 'billings:billing' chosendate=chosendate %}" hx-target="#info">
+                Rozliczenie</button>
+            {% endif %}
+        </div>
+        <div class="ml-2 mt-2">
+            <div class="flex flex-row gap-2 items-center ">
+                <div class="w-4 h-4 rounded-full bg-[#92F398]"></div>
+                <p>obecność</p>
+            </div>
+            <div class="flex flex-row gap-2 items-center ">
+                <div class="w-4 h-4 rounded-full bg-[#FFF1BD]"></div>
+                <p>nieobecność zgłoszona</p>
+            </div>
+            <div class="flex flex-row gap-2 items-center ">
+                <div class="w-4 h-4 rounded-full bg-[#F3C892]"></div>
+                <p>pierwszy dzień nieobecności</p>
+            </div>
+            <div class="flex flex-row gap-2 items-center ">
+                <div class="w-4 h-4 rounded-full bg-red-300"></div>
+                <p>nieobecność niezgłoszona</p>
+            </div>
+            <div class="flex flex-row gap-2 items-center ">
+                <div class="w-4 h-4 rounded-full bg-neutral-100"></div>
+                <p>dzień wolny</p>
+            </div>
+        </div>
+    </div>
+    <div class="lg:basis-2/3 lg:max-w-[850px] lg:pl-8 pb-5 mt-7">
+        <div id="info" hx-get="{% url 'info:day' chosendate=chosendate %}" hx-trigger="load">
+            {% include 'info/infoday.html' %}
+        </div>
+    </div>
+</main>
+{% endblock content %}

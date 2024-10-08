@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div hx-get="/report/{{year}}/{{month}}/" hx-trigger="newReport from:body">
+{% for pos in data %}
+ {{pos}}
+{% endfor %}
+{{year}}
+{{month}}
+</div>
+
+<form hx-post="{% url 'core:generate_report' %}"" hx-swap="delete">
+    <input hidden name="year" value="{{year}}" />
+    <input hidden name="month" value="{{month}}" />
+    <button>Wylicz</button>
+</form>
+
+{% endblock content %}
+

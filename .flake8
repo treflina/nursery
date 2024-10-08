@@ -1,0 +1,10 @@
+[flake8]
+
+exclude =
+    .git,
+    */migrations,
+    */settings,
+    __pycache__,
+    build,
+    dist
+max-line-length = 88

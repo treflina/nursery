@@ -1,0 +1,57 @@
+
+{% load static core_extras %}
+{% block content %}
+
+<div class="flex gap-2 items-center justify-center pb-2">
+    <a tabindex="0"
+    hx-get="{% url 'core:day' %}{{prev_year}}-{{prev_month}}-{{prev_month_num_days}}"
+    hx-target="#main"
+    class="cursor-pointer font-bold text-2xl focus:text-sm"
+    title="Poprzedni miesiąc" >
+        <svg class="w-8 h-8"><use href="{% static 'img/sprite.svg' %}#arrow-left" /></svg>
+    </a>
+    <h1 class="font-semibold text-xl uppercase my-2">{{displayed_month|date:"F Y"}}</h1>
+    <a tabindex="0"
+        hx-get="{% url 'core:day' %}{{next_year}}-{{next_month}}-1"
+        hx-target="#main"
+        class="cursor-pointer font-bold text-2xl"
+        title="Następny miesiąc">
+        <svg class="w-8 h-8 rotate-180"><use href="{% static 'img/sprite.svg' %}#arrow-left" /></svg>
+    </a>
+</div>
+<div
+    class="calendar max-w-[405px] md:w-[480px] mx-auto p-2 border-gray-300 border-2 rounded-lg shadow-sm  bg-neutral-100  z-20 relative"
+    id="calendar"
+>
+    <ul
+        class="gap-1 text-center grid list-none py-1"
+        style="grid-template-columns: repeat(7, auto)"
+    >
+        <li class="cal-item">Pon</li>
+        <li class="cal-item">Wt</li>
+        <li class="cal-item">Śr</li>
+        <li class="cal-item">Czw</li>
+        <li class="cal-item">Pt</li>
+        <li class="cal-item">Sob</li>
+        <li class="cal-item">Nd</li>
+    </ul>
+    <ol
+        class="calendar-days gap-1 text-center grid list-none"
+        style="grid-template-columns: repeat(7, auto)">
+    {% for num in num_days %}
+        {% if num in days_off or num in not_enrolled %}
+            {% include 'core/includes/calendar-day.html' with bg_color='bg-neutral-100' year=year month=month day=day num=num %}
+        {% elif num in absences_nr %}
+            {% include 'core/includes/calendar-day.html' with bg_color='bg-red-300' year=year month=month day=day num=num %}
+        {% elif num in absences_fdr %}
+            {% include 'core/includes/calendar-day.html' with bg_color='bg-[#F3C892]' year=year month=month day=day num=num %}
+        {% elif num in absences_r %}
+            {% include 'core/includes/calendar-day.html' with bg_color='bg-[#FFF1BD]' year=year month=month day=day num=num %}
+        {% else %}
+            {% include 'core/includes/calendar-day.html' with bg_color='bg-[#92F398]' year=year month=month day=day num=num %}
+        {% endif %}
+     {% endfor %}
+    </ol>
+</div>
+
+{% endblock %}

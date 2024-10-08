@@ -1,0 +1,90 @@
+{% extends "django_tables2/table.html" %}
+
+{% load django_tables2 %}
+{% load i18n %}
+
+{% block table %}
+    <table {% render_attrs table.attrs %}>
+        {% block table.thead %}
+        {% if table.show_header %}
+            <thead {{ table.attrs.thead.as_html }}>
+                <tr>
+                {% for column in table.columns %}
+                    <th {{ column.attrs.th.as_html }}>
+                        {% if column.orderable %}
+                            <a href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}">{{ column.header }}</a>
+                        {% else %}
+                            {{ column.header }}
+                        {% endif %}
+                    </th>
+                {% endfor %}
+                </tr>
+            </thead>
+        {% endif %}
+        {% endblock table.thead %}
+        {% block table.tbody %}
+            <tbody {{ table.attrs.tbody.as_html }}>
+            {% for row in table.paginated_rows %}
+                {% block table.tbody.row %}
+                <tr {{ row.attrs.as_html }}>
+                    {% for column, cell in row.items %}
+                        <td {{ column.attrs.td.as_html }}>{% if column.localize == None %}{{ cell }}{% else %}{% if column.localize %}{{ cell|localize }}{% else %}{{ cell|unlocalize }}{% endif %}{% endif %}</td>
+                    {% endfor %}
+                </tr>
+                {% endblock table.tbody.row %}
+            {% empty %}
+                {% if table.empty_text %}
+                {% block table.tbody.empty_text %}
+                <tr><td colspan="{{ table.columns|length }}">{{ table.empty_text }}</td></tr>
+                {% endblock table.tbody.empty_text %}
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        {% endblock table.tbody %}
+        {% block table.tfoot %}
+        {% if table.has_footer %}
+        <tfoot {{ table.attrs.tfoot.as_html }}>
+            <tr>
+            {% for column in table.columns %}
+                <td {{ column.attrs.tf.as_html }}>{{ column.footer }}</td>
+            {% endfor %}
+            </tr>
+        </tfoot>
+        {% endif %}
+        {% endblock table.tfoot %}
+    </table>
+{% endblock table %}
+
+
+{% block pagination.previous %}
+    <li class="previous page-item">
+    <button role="button" @click.prevent="page_by = {{table.page.previous_page_number}}"
+            class="page-link">
+        <span aria-hidden="true">&laquo;</span>
+        {% trans 'previous' %}
+    </button>
+    </li>
+{% endblock pagination.previous %}
+
+{% block pagination.range %}
+    {% for p in table.page|table_page_range:table.paginator %}
+    <li class="page-item rounded-md flex justify-center items-center{% if table.page.number == p %} active bg-neutral-200{% endif %}">
+    <button x-ref="page{{p}}" class="page-link px-2 py-1 focus:border-2 focus:border-red-500" {% if p != '...' %}@click.prevent="page_by={{p}}"{% endif %}
+    {% if table.page.number == p %} aria-current="true" {% endif %}
+    >
+        {{ p }}
+    </button>
+    </li>
+    {% endfor %}
+{% endblock pagination.range %}
+
+{% block pagination.next %}
+    <li class="next page-item user-select">
+    <button @click.prevent="page_by = {{table.page.next_page_number}}; await $nextTick(); $refs.page{{table.page.next_page_number}}.focus();
+        console.log(document.activeElement);" class="page-link focus:border-2 focus:border-red-500">
+        {% trans 'next' %}
+        <span aria-hidden="true">&raquo;</span>
+    </button>
+    </li>
+{% endblock pagination.next %}
+
