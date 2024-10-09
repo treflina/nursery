@@ -12,6 +12,7 @@ class TimeUserStampedModel(models.Model):
         verbose_name=_("changed by"),
         on_delete=models.PROTECT,
         null=True,
+        blank=True
     )
 
     class Meta:

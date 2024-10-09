@@ -4,7 +4,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, UpdateView
 from django_filters.views import FilterView
@@ -33,13 +33,12 @@ class AbsencesView(SingleTableMixin, FilterView):
         if self.request.htmx:
             template_name = "tables/base_table_partial.html"
         else:
-            template_name = "absences/absence_list.html"
+            template_name = "absences/absences_list.html"
 
         return template_name
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         today = date.today()
 
         # check if weekend
@@ -120,8 +119,13 @@ class AbsenceUpdateView(SuccessMessageMixin, UpdateView):
     model = Absence
     fields = ["reason", "absence_type"]
     template_name = "absences/absence_update.html"
-    success_url = reverse_lazy("absences:absences_list")
     success_message = _("Data has been successfully changed")
+
+    def get_success_url(self):
+        res = reverse("absences:absences_list")
+        if 'next' in self.request.GET:
+            res = self.request.GET['next']
+        return res
 
 
 @get_parent_context

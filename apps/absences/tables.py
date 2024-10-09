@@ -11,12 +11,7 @@ class AbsencesTable(tables.Table):
     created_at = tables.DateTimeColumn(format="d-m-y H:i")
     reason = tables.Column(accessor="reason", orderable=False)
     absence_type = tables.Column(_("Payable"), accessor="absence_type", orderable=False)
-    accions = TemplateColumn(
-        template_code=(
-            '<a href="{% url "absences:absence_update" record.id %}" \
-            class="btn btn-success">Ver</a>'
-        )
-    )
+    accions = TemplateColumn(template_name="absences/absence_update_link.html")
 
     def render_absence_type(self, value):
         if value == "first day":
@@ -38,5 +33,6 @@ class AbsencesTable(tables.Table):
         model = Absence
         template_name = "tables/table_htmx.html"
         show_header = False
+        attrs = {"class": "relative"}
         exclude = ("changed_by", "id", "updated_at")
-        sequence = ("a_date", "child", "...", "created_at")
+        sequence = ("a_date", "child", "...", "created_at", "accions")

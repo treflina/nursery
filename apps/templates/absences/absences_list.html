@@ -152,7 +152,7 @@
   <h1 class="text-2xl font-semibold my-4">Zestawienie nieobecności</h1>
 
   <div class="table-top-container">
-    <div class="flex flex-wrap justify-center gap-3 mb-1 mt-2 p-2 border rounded-sm bg-neutral-100">
+    <div class="flex flex-wrap justify-center gap-3 mt-2 p-2 border rounded-sm bg-neutral-100">
       <div class="flex flex-wrap gap-3">
         <div class="flex flex-col gap-1">
           <label for="id_day" class="font-semibold text-sm text-neutral-800">Dzień</label>
@@ -160,7 +160,8 @@
         </div>
         <div class="flex flex-col gap-1">
           <label for="id_month" class="font-semibold text-sm text-neutral-800">Miesiąc</label>
-          <select name="month" class="form-control" id="id_month" hx-trigger="change" hx-get="{% url 'absences:absences_list' %}"
+          <select name="month" class="form-control" id="id_month" hx-trigger="change"
+            hx-get="{% url 'absences:absences_list' %}"
             hx-indicator=".progress" hx-target=".table-container"
             hx-include="[name='year'], [name='query'], [name='day']" x-data
             x-on:htmx:before-request="$dispatch('clear-pagination-and-sort')">
@@ -193,7 +194,12 @@
           x-on:htmx:before-request="$dispatch('clear-pagination-and-sort')">
       </div>
     </div>
-    <div class="absences wrapper max-w-[1200px]" tabindex="0">
+
+    <div x-data="{paginationClicked: false}" class="absences wrapper max-w-[1200px]" tabindex="0">
+           {# Progress indicator #}
+        <div class="progress">
+          <div class="indeterminate"></div>
+        </div>
       {# Table header #}
       <form id="bulk-actions" hx-get="{% url 'absences:absences_list' %}" hx-target=".table-container"
         hx-trigger="sort-initiated, pagination-initiated" hx-swap="outerHTML"
@@ -211,34 +217,6 @@
                                     new Event('pagination-initiated',
                                               { bubbles: true })))">
 
-        <table class="table table-header checkcolumn-table header">
-          <thead {{ table.attrs.thead.as_html }}>
-            <tr>
-              {% for column in table.columns %}
-
-              {% if column.orderable %}
-              <th {{ column.attrs.th.as_html }} x-data="{ col_name: '{{ column.order_by_alias }}',
-                    toggleSort(event) {
-                      this.col_name = this.col_name.startsWith('-') ? this.col_name.substring(1) : ('-' + this.col_name);
-                      sort_by = this.col_name;
-                    }
-                  }" @click="toggleSort()"
-                :class="sort_by !== '' ? (sort_by === col_name ? (sort_by.startsWith('-') ? 'desc' : 'asc') : '') : ''"
-                style="cursor: pointer;">
-                {{ column.header }}
-              </th>
-              {% else %}
-              <th {{ column.attrs.th.as_html }}>{{ column.header }}</th>
-              {% endif %}
-              {% endfor %}
-            </tr>
-          </thead>
-        </table>
-
-        {# Progress indicator #}
-        <div class="progress">
-          <div class="indeterminate"></div>
-        </div>
 
         {# Content table #}
         {% render_table table %}

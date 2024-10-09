@@ -2000,6 +2000,38 @@ input:checked + .toggle-bg {
   white-space: nowrap;
 }
 
+.skipnav {
+  line-height: 1.5;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+
+.skipnav a {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skipnav a:focus,
+.skipnav a:active {
+  position: absolute;
+  top: 0;
+  left: 3px;
+  width: auto;
+  height: auto;
+  padding: .75rem;
+  font-size: 1.2rem;
+  font-weight: semibold;
+  color: black;
+  background-color: #e0f6e2;
+  border: 2px solid #77ef7f;
+  overflow: visible;
+  outline: none;
+  z-index: 9999;
+}
+
 /* modal */
 
 [role="dialog"] {
