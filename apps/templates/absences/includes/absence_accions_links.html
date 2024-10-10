@@ -1,0 +1,28 @@
+<div class="flex gap-2">
+    <a href="{% url 'absences:absence_update' record.id %}?next={{ request.get_full_path|urlencode}}"
+    class="px-2 pt-0.7 py-0.5 border-2 border-neutral-300 rounded-md bg-neutral-100 hover:bg-neutral-200 focus:bg-neutral-200
+        duration-300 transition-colors">Edytuj</a>
+    <button class="openModal px-2 py-0.5 pb-0.8 border-2 border-red-300 rounded-md bg-neutral-100 hover:bg-red-200
+        focus:bg-red-200
+        duration-300 transition-colors"
+        data-target="#absence-delete{{ record.id }}">
+        Usuń
+    </button>
+    <div role="dialog" id="absence-delete{{ record.id }}" aria-labelledby="absence-delete-label"
+        class="no-inert hidden z-20 bg-neutral-50 rounded-md p-2 lg:p-6"
+        tabindex="-1">
+        <h2 id="absence-delete-label" class="font-semibold mb-2 text-lg">Czy ne pewno usunąć poniższą nieobecność z bazy?</h2>
+        <p>{{ record.child.first_name }} {{ record.child.last_name }} - {{ record.a_date }}</p>
+        <div class="flex gap-2 mt-10 items-center">
+            <button type="button" class="cancelBtn rounded-full border-2
+            flex justify-center items-center w-28 px-3 py-2 bg-neutral-200 hover:bg-neutral-300 hover:shadow-md
+            transition-all duration-300 uppercase font-semibold">Wróć</button>
+            <form action="{% url 'absences:absence_delete' record.id %}?next={{ request.get_full_path|urlencode}}"
+                method="post">{% csrf_token %}
+                <button type="submit" class="w-28 cursor-pointer rounded-full border-2
+                px-3 py-2 bg-blue-300 hover:bg-blue-400 hover:shadow-md transition-all duration-300
+                uppercase font-semibold">Usuń</button>
+            </form>
+        </div>
+    </div>
+</div>

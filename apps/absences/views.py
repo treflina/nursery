@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import DetailView, UpdateView, DeleteView
 from django_filters.views import FilterView
 from django_htmx.http import trigger_client_event
 from django_tables2 import SingleTableMixin
@@ -128,6 +128,17 @@ class AbsenceUpdateView(SuccessMessageMixin, UpdateView):
         return res
 
 
+class AbsenceDeleteView(SuccessMessageMixin, DeleteView):
+    model = Absence
+    success_message = _("Data has been successfully removed.")
+
+    def get_success_url(self):
+        res = reverse("absences:absences_list")
+        if 'next' in self.request.GET:
+            res = self.request.GET['next']
+        return res
+
+
 @get_parent_context
 def create_absence(request, selected_child, children, chosendate=None):
     if request.method == "POST":
@@ -139,6 +150,8 @@ def create_absence(request, selected_child, children, chosendate=None):
             reason = form.cleaned_data.get("reason")
             # TODO: Absences longer than 2 months should be
             # reported directly to nursery
+
+            # TODO Days off in between months
 
             days_off = get_holidays(date_from.year, date_from.month)[1]
 

@@ -1,3 +1,6 @@
+console.log("ggg");
+document.addEventListener("click", (e) => { console.log(e.target); })
+
 import Datepicker from "flowbite-datepicker/Datepicker";
 import DateRangePicker from "flowbite-datepicker/DateRangePicker";
 import pl from "../../node_modules/flowbite-datepicker/js/i18n/locales/pl"

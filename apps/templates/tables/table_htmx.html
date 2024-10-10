@@ -6,9 +6,9 @@
 {% block table %}
 <div class="relative">
     <div class="skipnav"><a href="#pagination">Przejdź do paginacji</a></div>
-    <table {% render_attrs table.attrs %} class="table table-header checkcolumn-table header">
+    <table {% render_attrs table.attrs %} class="table table-header checkcolumn-table header bg-white">
         {% block table.thead %}
-        <thead {{ table.attrs.thead.as_html }}>
+        <thead {{ table.attrs.thead.as_html }} class="bg-[#bdf3c1]">
             <tr>
               {% for column in table.columns %}
 
@@ -82,8 +82,9 @@
         {% if table.page.has_previous or table.page.has_next %}
             {% block pagination.range %}
                 {% for p in table.page|table_page_range:table.paginator %}
-                <li class="page-item rounded-md flex justify-center items-center{% if table.page.number == p %} active bg-neutral-200{% endif %}">
-                <button x-ref="page{{p}}" class="page-link px-2 py-1 focus:border-2 focus:border-red-500" {% if p != '...' %}@click.prevent="page_by={{p}}"{% endif %}
+                <li class="page-item flex justify-center items-center rounded-md {% if table.page.number == p %} active bg-neutral-200{% endif %}">
+                <button x-ref="page{{p}}" class="page-link px-2 py-1 rounded-md
+                border-2 border-transparent focus:border-[#77ef7f] active:border-[#77ef7f]" {% if p != '...' %}@click.prevent="page_by={{p}}"{% endif %}
                 {% if table.page.number == p %}
                 aria-current="true" :autofocus="paginationClicked ? 'true' : 'false'"
                 {% endif %}
@@ -98,7 +99,7 @@
         {% block pagination.next %}
             <li class="next page-item user-select">
             <button @click.prevent="page_by = {{table.page.next_page_number}}; await $nextTick(); $refs.page{{table.page.next_page_number}}.focus();"
-                class="page-link focus:border-2 focus:border-red-500">
+                class="page-link">
                 {% trans 'next' %}
                 <span aria-hidden="true">&raquo;</span>
             </button>

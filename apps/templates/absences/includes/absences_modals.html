@@ -1,0 +1,28 @@
+<div class="modalBackground hidden"></div>
+<div role="dialog" id="absent-today" aria-labelledby="absences-today" class="hidden bg-neutral-50 rounded-md p-2 lg:p-6"
+  tabindex="-1">
+  <h2 id="absences-today" class="font-semibold mb-2 text-lg">Dzieci nieobecne w dniu {{ today|date:"j.m.y" }}:</h2>
+  <ol class="list-decimal list-inside">
+    {% for absence in absent_today_list %}
+    <li>{{absence.child.first_name}} {{absence.child.last_name}}</li>
+    {% endfor %}
+  </ol>
+  <button type="button" class="cancelBtn rounded-full border-2 mt-10 w-28
+    flex justify-center items-center px-3 py-2 bg-blue-300 hover:bg-blue-400 hover:shadow-md transition-all duration-300
+    uppercase font-semibold">Zamknij</button>
+</div>
+
+<div role="dialog" id="absent-tomorrow" aria-labelledby="absences-tomorrow"
+  class="hidden bg-neutral-50 rounded-md p-2 z-30 lg:p-6"
+  tabindex="-1">
+  <h2 id="absences-tomorrow" class="font-semibold mb-2 text-lg">Dzieci nieobecne w dniu {{ tomorrow|date:"j.m.y" }}:</h2>
+  <ol class="list-decimal list-inside">
+    {% for absence in absent_tomorrow_list %}
+    <li>{{absence.child.first_name}} {{absence.child.last_name}}</li>
+    {% endfor %}
+  </ol>
+  <button type="button" class="cancelBtn rounded-full border-2 mt-10 w-28
+    flex justify-center items-center px-3 py-2 bg-blue-300 hover:bg-blue-400 hover:shadow-md transition-all duration-300
+    uppercase font-semibold">Zamknij</button>
+</div>
+

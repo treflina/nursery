@@ -23,6 +23,14 @@ class AbsencesFilter(BaseFilter):
         widget=Select(
             attrs={
                 "class": "form-control",
+                "id": "id_month",
+                "hx-trigger": "change",
+                "hx-get": "/absences",
+                "hx-indicator": ".progress",
+                "hx-target": ".table-container",
+                "hx-include": "[name='year'], [name='query'], [name='day']",
+                "x-data": "",
+                "x-on:htmx:before-request": "$dispatch('clear-pagination-and-sort')"
             }
         ),
     )
