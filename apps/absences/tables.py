@@ -12,9 +12,8 @@ class AbsencesTable(tables.Table):
     reason = tables.Column(accessor="reason", orderable=False)
     absence_type = tables.Column(_("Payable"), accessor="absence_type", orderable=False)
     accions = TemplateColumn(
-        template_name="absences/includes/absence_accions_links.html",
-        orderable=False
-        )
+        template_name="absences/includes/absence_accions_links.html", orderable=False
+    )
 
     def render_absence_type(self, value):
         if value == "first day":

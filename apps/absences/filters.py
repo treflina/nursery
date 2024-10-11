@@ -30,7 +30,7 @@ class AbsencesFilter(BaseFilter):
                 "hx-target": ".table-container",
                 "hx-include": "[name='year'], [name='query'], [name='day']",
                 "x-data": "",
-                "x-on:htmx:before-request": "$dispatch('clear-pagination-and-sort')"
+                "x-on:htmx:before-request": "$dispatch('clear-pagination-and-sort')",
             }
         ),
     )

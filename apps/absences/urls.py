@@ -5,7 +5,7 @@ from .views import (
     AbsenceDeleteView,
     AbsencesView,
     AbsenceUpdateView,
-    create_absence
+    create_absence,
 )
 
 app_name = "absences"

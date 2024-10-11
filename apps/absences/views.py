@@ -123,8 +123,8 @@ class AbsenceUpdateView(SuccessMessageMixin, UpdateView):
 
     def get_success_url(self):
         res = reverse("absences:absences_list")
-        if 'next' in self.request.GET:
-            res = self.request.GET['next']
+        if "next" in self.request.GET:
+            res = self.request.GET["next"]
         return res
 
 
@@ -134,13 +134,24 @@ class AbsenceDeleteView(SuccessMessageMixin, DeleteView):
 
     def get_success_url(self):
         res = reverse("absences:absences_list")
-        if 'next' in self.request.GET:
-            res = self.request.GET['next']
+        if "next" in self.request.GET:
+            res = self.request.GET["next"]
         return res
 
 
 @get_parent_context
 def create_absence(request, selected_child, children, chosendate=None):
+
+    child = None
+    if selected_child:
+        child = Child.objects.filter(id=selected_child).last()
+
+    if not child:
+        return HttpResponse(
+            "<h3>Przepraszamy, ale nie znaleźliśmy dziecka przypisanego \
+                    do Twojego konta.</h3>"
+        )
+
     if request.method == "POST":
         form = AbsenceForm(request.POST)
 
@@ -148,49 +159,45 @@ def create_absence(request, selected_child, children, chosendate=None):
             date_from = form.cleaned_data.get("a_date")
             date_to = form.cleaned_data.get("date_to")
             reason = form.cleaned_data.get("reason")
-            # TODO: Absences longer than 2 months should be
-            # reported directly to nursery
-
-            # TODO Days off in between months
 
             days_off = get_holidays(date_from.year, date_from.month)[1]
 
-            child = None
-            if selected_child:
-                child = Child.objects.get(id=selected_child)
+            if date_from.month != date_to.month:
+                days_off += get_holidays(date_to.year, date_to.month)[1]
 
-            if child:
-                if date_from.month != date_to.month:
-                    days_off += get_holidays(date_to.year, date_to.month)[1]
-
-                if date_from != date_to:
-                    for day in daterange(date_from + timedelta(days=1), date_to):
-                        if day not in days_off:
-                            abs = Absence(
-                                child=child, a_date=day, reason=reason, absence_type="R"
-                            )
-                            abs.save()
-                # TODO form validate first day if it's not in days off
+            if date_from not in days_off:
                 first_day_absence = Absence(
                     child=child, a_date=date_from, reason=reason, absence_type="FR"
                 )
                 first_day_absence.save()
 
-                resp = render(
-                    request,
-                    "core/base-day.html",
-                    context={"chosendate": date_from, "form": AbsenceForm()},
-                )
-                return trigger_client_event(resp, "success", after="settle")
+            if date_from != date_to:
+                for day in daterange(date_from + timedelta(days=1), date_to):
+                    if day not in days_off:
+                        absence = Absence(
+                            child=child, a_date=day, reason=reason, absence_type="R"
+                        )
+                        absence.save()
 
-            return HttpResponse(
-                "<h3>Przepraszamy, ale nie znaleźliśmy dziecka przypisanego \
-                    do Twojego konta.</h3>"
+            resp = render(
+                request,
+                "core/base-day.html",
+                context={"chosendate": date_from, "form": AbsenceForm()},
             )
+            return trigger_client_event(resp, "success", after="settle")
+
+        else:
+            resp = render(
+                request,
+                "absences/includes/absence_form.html",
+                {"form": form, "chosendate": chosendate, "child": child},
+            )
+            resp["HX-Retarget"] = "#absence-errors"
+            resp["HX-Reselect"] = "#absence-errors"
+            return resp
 
     else:
         chosendate = request.session.get("chosendate")
-
         if chosendate is None:
             chosendate = date.today()
         else:
@@ -198,11 +205,9 @@ def create_absence(request, selected_child, children, chosendate=None):
 
         form = AbsenceForm()
 
-    child = Child.objects.filter(id=selected_child).last()
-
     resp = render(
         request,
-        "core/includes/absence-modal.html",
+        "absences/includes/absence_form.html",
         {"form": form, "chosendate": chosendate, "child": child},
     )
     return trigger_client_event(resp, "createDatepickerForm", after="settle")
