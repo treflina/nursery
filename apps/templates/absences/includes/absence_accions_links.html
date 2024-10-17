@@ -17,11 +17,12 @@
             <button type="button" class="cancelBtn rounded-full border-2
             flex justify-center items-center w-28 px-3 py-2 bg-neutral-200 hover:bg-neutral-300 hover:shadow-md
             transition-all duration-300 uppercase font-semibold">Wróć</button>
-            <form action="{% url 'absences:absence_delete' record.id %}?next={{ request.get_full_path|urlencode}}"
-                method="post">{% csrf_token %}
-                <button type="submit" class="w-28 cursor-pointer rounded-full border-2
+            <form id="delete-absence" action="{% url 'absences:absence_delete' record.id %}?next={{ request.get_full_path|urlencode }}"
+                method="POST" class="bg-red">
+                {% csrf_token %}
+                <input type="submit" value="Usuń" class="w-28 cursor-pointer rounded-full border-2
                 px-3 py-2 bg-blue-300 hover:bg-blue-400 hover:shadow-md transition-all duration-300
-                uppercase font-semibold">Usuń</button>
+                uppercase font-semibold">
             </form>
         </div>
     </div>

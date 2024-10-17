@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import TimeUserStampedModel
@@ -24,3 +25,10 @@ class Absence(TimeUserStampedModel):
     reason = models.TextField(_("Reason"), null=True, blank=True)
 
     objects = AbsenceManager()
+
+    class Meta:
+        verbose_name = _("Absence")
+        verbose_name_plural = _("Absences")
+
+    def __str__(self):
+        return f"Absence {self.child} - {self.a_date}"

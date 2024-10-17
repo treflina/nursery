@@ -1,3 +1,4 @@
+from autocomplete import HTMXAutoComplete
 from debug_toolbar.toolbar import debug_toolbar_urls
 from django.conf import settings
 from django.contrib import admin
@@ -11,6 +12,7 @@ urlpatterns = [
     path("", include("apps.absences.urls")),
     path("", include("apps.billings.urls")),
     path("konto/", include("django.contrib.auth.urls")),
+    *HTMXAutoComplete.url_dispatcher('ac'),
 ]
 
 if not settings.TESTING:

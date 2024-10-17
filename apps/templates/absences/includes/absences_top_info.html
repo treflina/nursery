@@ -17,11 +17,15 @@
             rgb(254 243 199) {{ perc_present_today }}% 100%)">
                 <p>{{ present_today }}</p>
                 <div class="flex items-center gap-2 relative">
-                    <button class="openModal after:absolute after:inset-0" data-target="#absent-today">
-                        <svg class="w-5 h-5">
-                        <use href="{% static 'img/sprite.svg' %}#list" />
+                    {% if absent_today > 0 %}
+                    <button class="openModal after:absolute after:inset-0"
+                        data-target="#absent-today">
+                        <svg class="w-5 h-5" aria-hidden="true">
+                            <use href="{% static 'img/sprite.svg' %}#list" />
                         </svg>
                     </button>
+                    <span class="sr-only">Lista dzieci nieobecnych</span>
+                    {% endif %}
                     <p>{{ absent_today }}</p>
                 </div>
             </div>
@@ -38,9 +42,10 @@
                 <div class="flex items-center gap-2 relative">
                     {% if absent_tomorrow > 0 %}
                     <button class="openModal after:absolute after:inset-0" data-target="#absent-tomorrow">
-                        <svg class="w-5 h-5">
-                        <use href="{% static 'img/sprite.svg' %}#list" />
+                        <svg class="w-5 h-5" aria-hidden="true">
+                            <use href="{% static 'img/sprite.svg' %}#list" />
                         </svg>
+                        <span class="sr-only">Lista dzieci nieobecnych</span>
                     </button>
                     {% endif %}
                     <p>{{ absent_tomorrow }}</p>

@@ -19,6 +19,11 @@ class Child(models.Model):
     )
     local_subsidy = models.BooleanField(_("Local subsidy"), default=True)
 
+    @property
+    def full_name(self):
+        return f"{self.last_name} {self.first_name}"
+
+
     def __str__(self):
         return f"{self.last_name} {self.first_name}"
 

@@ -1051,6 +1051,18 @@ input:checked + .toggle-bg {
   }
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 .pointer-events-none {
   pointer-events: none;
 }
@@ -1149,6 +1161,11 @@ input:checked + .toggle-bg {
   margin-right: auto;
 }
 
+.my-1 {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
 .my-2 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
@@ -1209,10 +1226,6 @@ input:checked + .toggle-bg {
   margin-top: 0.5rem;
 }
 
-.mt-28 {
-  margin-top: 7rem;
-}
-
 .mt-4 {
   margin-top: 1rem;
 }
@@ -1251,6 +1264,10 @@ input:checked + .toggle-bg {
 
 .hidden {
   display: none;
+}
+
+.h-11 {
+  height: 2.75rem;
 }
 
 .h-4 {
@@ -1499,6 +1516,10 @@ input:checked + .toggle-bg {
 
 .overflow-hidden {
   overflow: hidden;
+}
+
+.rounded {
+  border-radius: 0.25rem;
 }
 
 .rounded-full {
@@ -1894,6 +1915,11 @@ input:checked + .toggle-bg {
   line-height: 2.25rem;
 }
 
+.text-black {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
 .text-blue-600 {
   --tw-text-opacity: 1;
   color: rgb(28 100 242 / var(--tw-text-opacity));
@@ -1919,6 +1945,11 @@ input:checked + .toggle-bg {
   color: rgb(17 24 39 / var(--tw-text-opacity));
 }
 
+.text-neutral-600 {
+  --tw-text-opacity: 1;
+  color: rgb(82 82 82 / var(--tw-text-opacity));
+}
+
 .text-neutral-800 {
   --tw-text-opacity: 1;
   color: rgb(38 38 38 / var(--tw-text-opacity));
@@ -1929,14 +1960,14 @@ input:checked + .toggle-bg {
   color: rgb(200 30 30 / var(--tw-text-opacity));
 }
 
-.text-red-800 {
-  --tw-text-opacity: 1;
-  color: rgb(155 28 28 / var(--tw-text-opacity));
-}
-
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.text-neutral-500 {
+  --tw-text-opacity: 1;
+  color: rgb(115 115 115 / var(--tw-text-opacity));
 }
 
 .opacity-0 {
@@ -2068,6 +2099,25 @@ input:checked + .toggle-bg {
   border: 2px solid #77ef7f;
   overflow: visible;
   z-index: 9999;
+}
+
+#form-abs .phac_aspc_form_autocomplete {
+  border: 2px solid transparent;
+}
+
+#form-abs .phac_aspc_form_autocomplete_focus_ring {
+  border: 2px solid rgb(147 197 253);
+  padding: 2px;
+  border-radius: 6px;
+  width: 100%;
+}
+
+#form-abs .phac_aspc_form_autocomplete_focus_ring.active {
+  border: 2px solid #77ef7f;
+}
+
+#form-abs .phac_aspc_form_autocomplete_focus_ring.active > div {
+  background-color: white;
 }
 
 /* modal */
@@ -2342,6 +2392,11 @@ ul.pagination {
   background-color: rgb(187 250 162 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-amber-200:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 230 138 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-blue-400:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(118 169 250 / var(--tw-bg-opacity));
@@ -2411,6 +2466,11 @@ ul.pagination {
 .focus\:border-blue-500:focus {
   --tw-border-opacity: 1;
   border-color: rgb(63 131 248 / var(--tw-border-opacity));
+}
+
+.focus\:bg-amber-200:focus {
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 230 138 / var(--tw-bg-opacity));
 }
 
 .focus\:bg-neutral-200:focus {
@@ -2592,6 +2652,11 @@ ul.pagination {
   --tw-ring-color: rgb(63 131 248 / var(--tw-ring-opacity));
 }
 
+.dark\:focus\:ring-blue-600:focus:is(.dark *) {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(28 100 242 / var(--tw-ring-opacity));
+}
+
 @media (min-width: 640px) {
   .sm\:w-auto {
     width: auto;
@@ -2600,11 +2665,23 @@ ul.pagination {
   .sm\:gap-3 {
     gap: 0.75rem;
   }
+
+  .sm\:p-6 {
+    padding: 1.5rem;
+  }
 }
 
 @media (min-width: 768px) {
   .md\:w-\[480px\] {
     width: 480px;
+  }
+
+  .md\:w-\[550px\] {
+    width: 550px;
+  }
+
+  .md\:justify-end {
+    justify-content: flex-end;
   }
 
   .md\:p-4 {
@@ -2649,6 +2726,10 @@ ul.pagination {
 
   .lg\:mb-4 {
     margin-bottom: 1rem;
+  }
+
+  .lg\:mb-8 {
+    margin-bottom: 2rem;
   }
 
   .lg\:mr-8 {
@@ -2720,6 +2801,16 @@ ul.pagination {
   .lg\:px-10 {
     padding-left: 2.5rem;
     padding-right: 2.5rem;
+  }
+
+  .lg\:px-12 {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+
+  .lg\:py-6 {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
   }
 
   .lg\:pl-8 {

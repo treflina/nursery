@@ -49,6 +49,26 @@
     z-index: 9999;
 }
 
+#form-abs .phac_aspc_form_autocomplete {
+    border: 2px solid transparent;
+
+}
+
+#form-abs .phac_aspc_form_autocomplete_focus_ring {
+    border: 2px solid rgb(147 197 253);
+    padding: 2px;
+    border-radius: 6px;
+    width: 100%;
+}
+
+#form-abs .phac_aspc_form_autocomplete_focus_ring.active {
+    border: 2px solid #77ef7f;
+}
+
+#form-abs .phac_aspc_form_autocomplete_focus_ring.active > div {
+    background-color: white;
+}
+
 /* modal */
 [role="dialog"] {
   position: absolute;

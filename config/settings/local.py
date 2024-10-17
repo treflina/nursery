@@ -21,6 +21,8 @@ SECRET_KEY = getenv(
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 
+TESTING = True
+
 if not TESTING:
     INSTALLED_APPS = [
         *INSTALLED_APPS,

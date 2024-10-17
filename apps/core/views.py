@@ -113,14 +113,11 @@ def day_details(request, selected_child, children, chosendate=None):
         date_month=date(chosendate.year, chosendate.month, 1)
     ).exists()
 
-    form = AbsenceForm()
-
     return render(
         request,
         "core/base-day.html",
         context={
             "chosendate": chosendate,
-            "form": form,
             "children": children,
             "billing": billing,
         },

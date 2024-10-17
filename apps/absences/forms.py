@@ -1,15 +1,17 @@
 from datetime import date, timedelta
 
+from autocomplete import widgets, HTMXAutoComplete
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from .models import Absence
+from apps.kids.models import Child
 
 
 class BaseAbsenceForm(forms.ModelForm):
 
-    date_to = forms.DateField()
+    date_to = forms.DateField(widget=forms.SelectDateWidget)
 
     class Meta:
         model = Absence
@@ -25,6 +27,71 @@ class BaseAbsenceForm(forms.ModelForm):
                 raise ValidationError(_("End date cannot be earlier than start date."))
 
         return cleaned_data
+
+
+class ChildHTMXAutocomplete(HTMXAutoComplete):
+    """Autocomplete component to select Data Sources from a library"""
+
+    name = "child"
+    model = Child
+
+    def get_items(self, search=None, values=None):
+        data = Child.objects.all()
+        if search is not None:
+            items = [
+                {"label": str(x), "value": str(x.id)}
+                for x in data
+                # Refactor so equality comparison is a function passed in?
+                if search == "" or str(search).upper() in f"{x}".upper()
+            ]
+            return items
+        if values is not None:
+            items = [
+                {"label": str(x), "value": str(x.id)}
+                for x in data
+                if str(x.id) in values
+            ]
+            return items
+
+        return []
+
+
+class NurseryAbsenceForm(BaseAbsenceForm):
+    first_day_paid = forms.BooleanField(
+        label=_("First day paid"),
+        required=False,
+        initial=False
+        )
+
+    TYPE_CHOICES = (
+        ("R", _("reported")), ("NR", _("not reported")), ("O", _("other"))
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['absence_type'].choices = self.TYPE_CHOICES
+
+
+    class Meta:
+        model = Absence
+        fields = ["a_date", "reason", "child", "absence_type"]
+        widgets = {
+            "child": widgets.Autocomplete(
+                name='child',
+
+                use_ac=ChildHTMXAutocomplete,
+                attrs={
+                    "component_id": f"id_child",  # I shouldn't have to do this
+                    "id": f"id_child__textinput",  # I shouldn't have to do this
+                },
+            ),
+            "absence_type": forms.Select(
+                attrs={
+                    "class": """border-2 border-blue-300 rounded-md w-full
+                    focus:ring-[#92F398] focus:border-[#92F398]"""
+                }
+            )
+        }
 
 
 class AbsenceForm(BaseAbsenceForm):

@@ -1,9 +1,10 @@
 from datetime import date, datetime, timedelta
 
+from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, UpdateView, DeleteView
@@ -17,7 +18,7 @@ from apps.kids.models import Child
 from apps.users.decorators import get_parent_context
 
 from .filters import AbsencesFilter
-from .forms import AbsenceForm
+from .forms import AbsenceForm, NurseryAbsenceForm
 from .models import Absence
 from .tables import AbsencesTable
 
@@ -30,7 +31,9 @@ class AbsencesView(SingleTableMixin, FilterView):
     paginate_by = 10
 
     def get_template_names(self):
-        if self.request.htmx:
+        if self.request.htmx and (
+            self.request.headers.get("HX-Target") != "absences-main"
+            ):
             template_name = "tables/base_table_partial.html"
         else:
             template_name = "absences/absences_list.html"
@@ -165,24 +168,40 @@ def create_absence(request, selected_child, children, chosendate=None):
             if date_from.month != date_to.month:
                 days_off += get_holidays(date_to.year, date_to.month)[1]
 
-            if date_from not in days_off:
-                first_day_absence = Absence(
-                    child=child, a_date=date_from, reason=reason, absence_type="FR"
-                )
-                first_day_absence.save()
 
-            if date_from != date_to:
-                for day in daterange(date_from + timedelta(days=1), date_to):
-                    if day not in days_off:
-                        absence = Absence(
-                            child=child, a_date=day, reason=reason, absence_type="R"
+            days_range = daterange(date_from, date_to + timedelta(days=1))
+            for idx, day in enumerate(days_range):
+                if Absence.objects.filter(child=child, a_date=day).exists():
+                    form.add_error(
+                        None,
+                        _("Check if there hasn't already been reported an absence \
+    for the submitted date.")
                         )
+                    resp = render(
+                        request,
+                        "absences/includes/absence_form.html",
+                        {"form": form, "chosendate": chosendate, "child": child},
+                    )
+                    resp["HX-Retarget"] = "#absence-errors"
+                    resp["HX-Reselect"] = "#absence-errors"
+                    return resp
+
+                if day not in days_off :
+                    if not idx:
+                        absence = Absence(
+                                child=child, a_date=day, reason=reason, absence_type="FR"
+                            )
+                        absence.save()
+                    else:
+                        absence = Absence(
+                                child=child, a_date=day, reason=reason, absence_type="R"
+                            )
                         absence.save()
 
             resp = render(
                 request,
                 "core/base-day.html",
-                context={"chosendate": date_from, "form": AbsenceForm()},
+                context={"chosendate": date_from, "children": children, "form": AbsenceForm()},
             )
             return trigger_client_event(resp, "success", after="settle")
 
@@ -210,4 +229,79 @@ def create_absence(request, selected_child, children, chosendate=None):
         "absences/includes/absence_form.html",
         {"form": form, "chosendate": chosendate, "child": child},
     )
-    return trigger_client_event(resp, "createDatepickerForm", after="settle")
+    return trigger_client_event(resp, "createAbsenceForm", after="settle")
+
+
+def nursery_create_absence(request):
+
+    if request.method == "POST":
+        form = NurseryAbsenceForm(request.POST)
+
+        if form.is_valid():
+            date_from = form.cleaned_data.get("a_date")
+            date_to = form.cleaned_data.get("date_to")
+            reason = form.cleaned_data.get("reason")
+            child = form.cleaned_data.get("child")
+            absence_type = form.cleaned_data.get("absence_type")
+            first_day_paid = form.cleaned_data.get("first_day_paid")
+
+            days_off = get_holidays(date_from.year, date_from.month)[1]
+
+            if date_from.month != date_to.month:
+                days_off += get_holidays(date_to.year, date_to.month)[1]
+
+
+            days_range = daterange(date_from, date_to + timedelta(days=1))
+            for idx, day in enumerate(days_range):
+                if Absence.objects.filter(child=child, a_date=day).exists():
+                    form.add_error(
+                        None,
+                        _("Check if there hasn't already been reported an absence \
+    for the submitted date.")
+                        )
+                    resp = render(
+                        request,
+                        "absences/includes/absence_form_nursery.html",
+                        {"form": form},
+                    )
+                    resp["HX-Retarget"] = "#absence-errors"
+                    resp["HX-Reselect"] = "#absence-errors"
+                    return resp
+
+                if day not in days_off :
+                    if not idx and first_day_paid:
+                        absence = Absence(
+                                child=child, a_date=day, reason=reason, absence_type="FR"
+                            )
+                        absence.save()
+                    else:
+                        absence = Absence(
+                                child=child,
+                                a_date=day,
+                                reason=reason,
+                                absence_type=absence_type
+                            )
+                        absence.save()
+            messages.success(request, _("Absence's data has been successfully submitted."))
+
+            return redirect("absences:absences_list")
+
+        else:
+            resp = render(
+                request,
+                "absences/includes/absence_form.html",
+                {"form": form},
+            )
+            resp["HX-Retarget"] = "#absence-errors"
+            resp["HX-Reselect"] = "#absence-errors"
+            return resp
+
+    else:
+        form = NurseryAbsenceForm()
+
+    resp = render(
+        request,
+        "absences/includes/absence_form_nursery.html",
+        {"form": form},
+    )
+    return trigger_client_event(resp, "createAbsenceForm", after="settle")

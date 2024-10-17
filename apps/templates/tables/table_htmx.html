@@ -4,7 +4,7 @@
 {% load i18n %}
 
 {% block table %}
-<div class="relative">
+
     <div class="skipnav"><a href="#pagination">Przejdź do paginacji</a></div>
     <table {% render_attrs table.attrs %} class="table table-header checkcolumn-table header bg-white">
         {% block table.thead %}
@@ -61,7 +61,6 @@
         {% endif %}
         {% endblock table.tfoot %}
     </table>
-</div>
 {% endblock table %}
 
 {% block pagination %}

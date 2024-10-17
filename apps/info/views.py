@@ -15,7 +15,6 @@ def get_info_about_day(request, selected_child, children, chosendate=None):
         chosendate = date.today()
 
     request.session["chosendate"] = chosendate.strftime("%Y-%m-%d")
-    print(chosendate, "chosendate from info")
 
     menu = Menu.objects.filter(menu_date=chosendate).last()
     activities = Activities.objects.filter(day=chosendate).last()

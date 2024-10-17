@@ -14,12 +14,14 @@ DJANGO_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.forms",
 ]
 
 THIRD_PARTY_APPS = [
     "django_htmx",
     "django_tables2",
     "django_filters",
+    "autocomplete",
 ]
 
 LOCAL_APPS = [
@@ -31,7 +33,9 @@ LOCAL_APPS = [
     "apps.users",
 ]
 
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = DJANGO_APPS  + LOCAL_APPS + THIRD_PARTY_APPS
+
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
