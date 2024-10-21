@@ -3,7 +3,6 @@ from datetime import date, datetime
 
 from django.shortcuts import render
 
-from apps.absences.forms import AbsenceForm
 from apps.absences.models import Absence
 from apps.billings.models import Billing
 from apps.kids.models import Child

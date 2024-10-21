@@ -12,7 +12,7 @@ urlpatterns = [
     path("", include("apps.absences.urls")),
     path("", include("apps.billings.urls")),
     path("konto/", include("django.contrib.auth.urls")),
-    *HTMXAutoComplete.url_dispatcher('ac'),
+    *HTMXAutoComplete.url_dispatcher("ac"),
 ]
 
 if not settings.TESTING:

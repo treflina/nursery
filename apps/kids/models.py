@@ -23,7 +23,6 @@ class Child(models.Model):
     def full_name(self):
         return f"{self.last_name} {self.first_name}"
 
-
     def __str__(self):
         return f"{self.last_name} {self.first_name}"
 

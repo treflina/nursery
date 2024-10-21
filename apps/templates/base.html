@@ -13,13 +13,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     <script src="{% static 'js/htmx.min.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
+
+    {% comment %} <script src="{% static 'js/swal.js' %}" defer></script> {% endcomment %}
+
     {% block extra_styles %}
     {% endblock extra_styles %}
 {% comment %}  {% endcomment %}
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class="bg-neutral-50 h-full">
+<body class="relative h-full w-full  bg-neutral-50">
     {% block content %}
     {% endblock content %}
 
@@ -44,6 +46,8 @@
       }
     {% endif %}
     </script>
+    <script src="{% static 'js/main.js' %}" defer></script>
+    <script src="{% static 'js/modal.js' %}" defer></script>
 
     {% comment %} {% if debug %}
     <script type="text/javascript">

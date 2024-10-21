@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
 {% if children %}
 <form method="post" class="flex gap-2 max-w-sm ml-auto">{% csrf_token %}
   <label for="children" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Wybierz dziecko:</label>
@@ -10,3 +12,4 @@
   <button type="submit">Zmień</button>
 </form>
 {% endif %}
+{% endblock %}

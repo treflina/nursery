@@ -6,8 +6,8 @@
 
 {% block content %}
 <main id="absences-main" class="modal-wrapper flex flex-col justify-center items-center w-full">
+  <div class="modalBackground hidden"></div>
   {% include 'absences/includes/absences_top_info.html' %}
-
   {% if messages %}
   <div x-data="{showMsg : true}" @click.outside="showMsg = false" class="fixed top-3 right-3">
     <div x-show="showMsg" class="relative pr-5 pl-3 pb-4 bg-[#e0f6e2] rounded-md border-2 border-[#77ef7f] shadow-sm">
@@ -19,7 +19,7 @@
     </div>
   </div>
   {% endif %}
-  <section id="absences" class="my-8 px-1">
+  <section id="absences" class="my-8 px-1 relative">
     <h1 class="text-2xl font-semibold mb-8 text-center">Zestawienie nieobecności</h1>
     {% comment %} Filters {% endcomment %}
     <div class="table-top-container">
@@ -46,8 +46,8 @@
               hx-target=".table-container" hx-include="[name='month'], [name='year'], [name='day'] " x-data
               x-on:htmx:before-request="$dispatch('clear-pagination-and-sort')">
           </div>
-          <button id="btn-abs-nursery" class="flex items-center h-11 px-2 gap-1 border-2 border-neutral-300 rounded-md
-            bg-amber-100 hover:bg-amber-200 focus:bg-amber-200
+          <button id="btn-abs-nursery" class="flex items-center h-11 px-2 gap-1 border-2 border-neutral-300
+              rounded-md bg-amber-100 hover:bg-amber-200 focus:bg-amber-200
               duration-300 transition-colors"
               hx-target="#absences"
               hx-get="{% url 'absences:absence_create_nursery' %}?next={{ request.get_full_path|urlencode}}"
@@ -68,7 +68,7 @@
 
         {# Table header #}
         <form id="bulk-actions" hx-get="{% url 'absences:absences_list' %}" hx-target=".table-container"
-          hx-trigger="sort-initiated, pagination-initiated" hx-swap="outerHTML"
+          hx-trigger="sort-initiated, pagination-initiated" hx-swap="outerHTML" hx-push-url="true"
           hx-include="#id_query, #id_year, #id_month, #id_day" hx-indicator=".progress" x-data="{ sort_by: '',
                     page_by: 1}" @clear-pagination-and-sort.window="page_by = 1; sort_by = ''">
 
@@ -92,7 +92,7 @@
   </section>
 </main>
 {% include 'absences/includes/absences_modals.html' %}
+ {% comment %} <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> {% endcomment %}
 {% endblock %}
 {% block footer %}
-<script src="{% static 'js/modal.js' %}"></script>
 {% endblock %}

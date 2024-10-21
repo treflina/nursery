@@ -58,31 +58,25 @@ class ChildHTMXAutocomplete(HTMXAutoComplete):
 
 class NurseryAbsenceForm(BaseAbsenceForm):
     first_day_paid = forms.BooleanField(
-        label=_("First day paid"),
-        required=False,
-        initial=False
-        )
+        label=_("First day paid"), required=False, initial=False
+    )
 
-    TYPE_CHOICES = (
-        ("R", _("reported")), ("NR", _("not reported")), ("O", _("other"))
-        )
+    TYPE_CHOICES = (("R", _("reported")), ("NR", _("not reported")), ("O", _("other")))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['absence_type'].choices = self.TYPE_CHOICES
-
+        self.fields["absence_type"].choices = self.TYPE_CHOICES
 
     class Meta:
         model = Absence
         fields = ["a_date", "reason", "child", "absence_type"]
         widgets = {
             "child": widgets.Autocomplete(
-                name='child',
-
+                name="child",
                 use_ac=ChildHTMXAutocomplete,
                 attrs={
-                    "component_id": f"id_child",  # I shouldn't have to do this
-                    "id": f"id_child__textinput",  # I shouldn't have to do this
+                    "component_id": "id_child",
+                    "id": "id_child__textinput",
                 },
             ),
             "absence_type": forms.Select(
@@ -90,7 +84,7 @@ class NurseryAbsenceForm(BaseAbsenceForm):
                     "class": """border-2 border-blue-300 rounded-md w-full
                     focus:ring-[#92F398] focus:border-[#92F398]"""
                 }
-            )
+            ),
         }
 
 
