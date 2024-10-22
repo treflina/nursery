@@ -1239,6 +1239,10 @@ input:checked + .toggle-bg {
   margin-bottom: 1rem;
 }
 
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
 .mb-8 {
   margin-bottom: 2rem;
 }
@@ -1593,6 +1597,10 @@ input:checked + .toggle-bg {
   gap: 1rem;
 }
 
+.gap-2\.5 {
+  gap: 0.625rem;
+}
+
 .space-x-2 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
   margin-right: calc(0.5rem * var(--tw-space-x-reverse));
@@ -1846,11 +1854,6 @@ input:checked + .toggle-bg {
   background-color: rgb(255 255 255 / 0.5);
 }
 
-.\!bg-amber-100 {
-  --tw-bg-opacity: 1 !important;
-  background-color: rgb(254 243 199 / var(--tw-bg-opacity)) !important;
-}
-
 .\!p-0 {
   padding: 0px !important;
 }
@@ -2034,9 +2037,9 @@ input:checked + .toggle-bg {
   line-height: 1.5rem !important;
 }
 
-.\!text-sm {
-  font-size: 0.875rem !important;
-  line-height: 1.25rem !important;
+.\!text-xl {
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
 }
 
 .text-2xl {
@@ -2062,11 +2065,6 @@ input:checked + .toggle-bg {
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
-}
-
-.\!text-xl {
-  font-size: 1.25rem !important;
-  line-height: 1.75rem !important;
 }
 
 .\!font-semibold {
@@ -2101,9 +2099,9 @@ input:checked + .toggle-bg {
   line-height: 2.25rem;
 }
 
-.\!text-gray-500 {
+.\!text-gray-800 {
   --tw-text-opacity: 1 !important;
-  color: rgb(107 114 128 / var(--tw-text-opacity)) !important;
+  color: rgb(31 41 55 / var(--tw-text-opacity)) !important;
 }
 
 .\!text-gray-900 {
@@ -2164,11 +2162,6 @@ input:checked + .toggle-bg {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.\!text-gray-800 {
-  --tw-text-opacity: 1 !important;
-  color: rgb(31 41 55 / var(--tw-text-opacity)) !important;
 }
 
 .opacity-0 {
@@ -2243,6 +2236,12 @@ input:checked + .toggle-bg {
   transition-duration: 150ms !important;
 }
 
+.\!transition-colors {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke !important;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition-duration: 150ms !important;
+}
+
 .transition {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
@@ -2275,18 +2274,12 @@ input:checked + .toggle-bg {
   transition-duration: 150ms;
 }
 
-.\!transition-colors {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke !important;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
-  transition-duration: 150ms !important;
+.\!duration-300 {
+  transition-duration: 300ms !important;
 }
 
 .duration-300 {
   transition-duration: 300ms;
-}
-
-.\!duration-300 {
-  transition-duration: 300ms !important;
 }
 
 .ease-out {
@@ -2423,6 +2416,11 @@ thead th {
 .absences .table-container td:nth-child(1),
 .absences .table-header th:nth-child(1)  {
   width: 6rem;
+}
+
+.absences .table-container td:nth-child(2),
+.absences .table-header th:nth-child(2)  {
+  width: 14rem;
 }
 
 .absences .table-container td:nth-child(3),
@@ -2675,11 +2673,6 @@ ul.pagination {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.hover\:\!bg-amber-200:hover {
-  --tw-bg-opacity: 1 !important;
-  background-color: rgb(253 230 138 / var(--tw-bg-opacity)) !important;
-}
-
 .hover\:text-blue-600:hover {
   --tw-text-opacity: 1;
   color: rgb(28 100 242 / var(--tw-text-opacity));
@@ -2729,11 +2722,6 @@ ul.pagination {
 .focus\:bg-red-200:focus {
   --tw-bg-opacity: 1;
   background-color: rgb(251 213 213 / var(--tw-bg-opacity));
-}
-
-.focus\:\!bg-amber-200:focus {
-  --tw-bg-opacity: 1 !important;
-  background-color: rgb(253 230 138 / var(--tw-bg-opacity)) !important;
 }
 
 .focus\:text-sm:focus {
@@ -3019,6 +3007,10 @@ ul.pagination {
     justify-content: space-between;
   }
 
+  .md\:p-10 {
+    padding: 2.5rem;
+  }
+
   .md\:p-4 {
     padding: 1rem;
   }
@@ -3063,16 +3055,16 @@ ul.pagination {
     margin-bottom: 1rem;
   }
 
-  .lg\:mb-8 {
-    margin-bottom: 2rem;
-  }
-
   .lg\:mr-8 {
     margin-right: 2rem;
   }
 
   .lg\:mt-2 {
     margin-top: 0.5rem;
+  }
+
+  .lg\:mt-8 {
+    margin-top: 2rem;
   }
 
   .lg\:h-28 {
@@ -3118,6 +3110,10 @@ ul.pagination {
 
   .lg\:bg-transparent {
     background-color: transparent;
+  }
+
+  .lg\:p-12 {
+    padding: 3rem;
   }
 
   .lg\:p-6 {

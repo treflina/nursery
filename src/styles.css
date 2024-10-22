@@ -132,6 +132,11 @@ text-align: left;
     width: 6rem;
 }
 
+.absences .table-container td:nth-child(2),
+.absences .table-header th:nth-child(2)  {
+    width: 14rem;
+}
+
 .absences .table-container td:nth-child(3),
 .absences .table-header th:nth-child(3) {
     width: 6rem;

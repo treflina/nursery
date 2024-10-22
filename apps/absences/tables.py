@@ -26,8 +26,8 @@ class AbsencesTable(tables.Table):
             return _("No (Other)")
 
     def render_reason(self, value):
-        if len(value) > 30:
-            return f"{value[:30]}..."
+        if len(value) > 130:
+            return f"{value[:130]}..."
         else:
             return value
 

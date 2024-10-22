@@ -1,15 +1,15 @@
 {% load static %}
-<button class="rounded-full border-2 mb-4 lg:mb-8
-    px-6 pt-2 pb-3 bg-blue-300 hover:bg-blue-400 hover:shadow-md transition-all duration-300
-    uppercase font-semibold"
-    hx-get="{% url 'absences:absences_list' %}"
-    hx-target="#absences-main">< Powrót</button>
+
 <div id="absence-form-wrapper" class="px-2 mx-auto w-full ">
-    <form id="form-abs" hx-target="#absences-main" hx-swap="outerHTML" hx-post="{% url 'absences:absence_create_nursery' %}"
+    <h1 class="text-2xl font-semibold mb-8 text-center">Dodaj nieobecność</h1>
+    <form id="form-abs"
+        hx-target="#absences-main"
+        hx-swap="outerHTML"
+        hx-post="{% url 'absences:absence_create_nursery' %}"
+        hx-disabled-elt="this"
         class="flex flex-col items-start justify-start bg-neutral-100 border-2 border-neutral-300 rounded-md
-        p-4 sm:p-6 lg:px-12 lg:py-6 w-full my-1 md:w-[550px] shadow-md">
+        p-4 sm:p-6 md:p-10 lg:p-12 w-full my-1 md:w-[550px] shadow-md">
         {% csrf_token %}
-        <h2 class="font-semibold text-left mb-8 text-xl">Dodaj nieobecność</h2>
         <div id="absence-errors">
             {% if messages %}
                 {% for message in messages %}
@@ -29,13 +29,13 @@
                 <div class="mb-4 text-red-700 font-semibold">{{ form.non_field_errors }}</div>
             {% endif %}
         </div>
-        <div class="w-full flex gap-2 items-center">
+        <div class="w-full flex flex-col items-start gap-2.5">
             <label for="id_child__textinput">Dziecko:</label>
             {{form.child}}
         </div>
         <div class="daterangepicker flex flex-wrap items-center justify-center md:justify-between w-full gap-2 my-3 ">
             <div class="flex flex-wrap justify-center items-center my-2">
-                <label for="id_a_date" class="mr-2">Od:</label>
+                <label for="id_a_date" class="mr-2">od:</label>
                 <div class="relative max-w-72">
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
@@ -72,7 +72,7 @@
             </div>
         </div>
         <label for="id_reason" class="mb-2">Powód:</label>
-        <textarea id="id_reason" name="reason" placeholder="Opcjonalnie"
+        <textarea id="id_reason" name="reason" placeholder="Opcjonalnie" maxlength="130"
             class="border-2 border-blue-300 rounded-md w-full focus:ring-[#92F398] focus:border-[#92F398] mb-2"></textarea>
         <div class="flex flex-wrap gap-2 justify-between w-full">
             <div class="flex gap-2 items-center my-2">
@@ -84,13 +84,17 @@
                         class="w-4 h-4 text-blue-600 bg-white border-gray-300 rounded
                         focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2">
                 <label for="id_first_day_paid" class="first-day-label text-neutral-500">Pierwszy dzień płatny</label>
-
             </div>
         </div>
-        {% comment %} <input hidden type="text" value="{% now 'Y,m,d G i' %}" name="timestamp"> {% endcomment %}
-        {% comment %} {{ form.request_timestamp }} {% endcomment %}
-        <button type="submit" class="self-end rounded-full border-2 mt-6
-            px-6 pt-2 pb-3 bg-[#92F398] hover:bg-[#bbfaa2] hover:shadow-md transition-all duration-300
-            uppercase font-semibold">Wyślij</button>
+        <div class="flex gap-2 justify-end items-center w-full mt-4 lg:mt-8">
+            <button type="button" class="rounded-md border-2
+                px-4 pt-2 pb-2 bg-amber-100 hover:bg-amber-200 hover:shadow-md transition-all duration-300
+                uppercase font-semibold"
+                hx-get="{% url 'absences:absences_list' %}"
+                hx-target="#absences-main">Wróć</button>
+            <button type="submit" class="self-end rounded-md border-2
+                px-4 pt-2 pb-2 bg-blue-300 hover:bg-blue-400 hover:shadow-md transition-all duration-300
+                uppercase font-semibold">Dodaj</button>
+        </div>
     </form>
 </div>

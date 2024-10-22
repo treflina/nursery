@@ -83,7 +83,10 @@
                 {% for p in table.page|table_page_range:table.paginator %}
                 <li class="page-item flex justify-center items-center rounded-md {% if table.page.number == p %} active bg-neutral-200{% endif %}">
                 <button x-ref="page{{p}}" class="page-link px-2 py-1 rounded-md
-                border-2 border-transparent focus:border-[#77ef7f] active:border-[#77ef7f]" {% if p != '...' %}@click.prevent="page_by={{p}}"{% endif %}
+                border-2 border-transparent focus:border-[#77ef7f] active:border-[#77ef7f]"
+                {% if p != '...' %}
+                @click.prevent="page_by={{p}};"
+                {% endif %}
                 {% if table.page.number == p %}
                 aria-current="true" :autofocus="paginationClicked ? 'true' : 'false'"
                 {% endif %}

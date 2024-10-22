@@ -1,12 +1,13 @@
 from datetime import date, timedelta
 
-from autocomplete import widgets, HTMXAutoComplete
+from autocomplete import HTMXAutoComplete, widgets
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from .models import Absence
 from apps.kids.models import Child
+
+from .models import Absence
 
 
 class BaseAbsenceForm(forms.ModelForm):
@@ -16,6 +17,16 @@ class BaseAbsenceForm(forms.ModelForm):
     class Meta:
         model = Absence
         fields = ["a_date", "reason"]
+        widgets = {
+            "reason": forms.Textarea(
+                attrs={
+                    "class": """my-2 border-2 border-blue-300 rounded-md w-full
+                    focus:ring-[#92F398] focus:border-[#92F398]""",
+                    "rows": "2",
+                    "maxlength": "130",
+                }
+            )
+        }
 
     def clean(self):
         cleaned_data = super().clean()
@@ -130,3 +141,26 @@ class AbsenceForm(BaseAbsenceForm):
                     )
                 )
         return cleaned_data
+
+
+class UpdateAbsenceForm(forms.ModelForm):
+
+    class Meta:
+        model = Absence
+        fields = ["reason", "absence_type"]
+        widgets = {
+            "absence_type": forms.Select(
+                attrs={
+                    "class": """my-2 border-2 border-blue-300 rounded-md w-full
+                    focus:ring-[#92F398] focus:border-[#92F398]"""
+                }
+            ),
+            "reason": forms.Textarea(
+                attrs={
+                    "class": """my-2 border-2 border-blue-300 rounded-md w-full
+                    focus:ring-[#92F398] focus:border-[#92F398]""",
+                    "rows": "2",
+                    "maxlength": "130",
+                }
+            ),
+        }

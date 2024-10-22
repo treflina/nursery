@@ -100,16 +100,4 @@ import pl from "../../node_modules/flowbite-datepicker/js/i18n/locales/pl"
             }
         })
     })
-
-    document.addEventListener("success", function (evt) {
-
-        const formContainer = document.querySelector("#absence-form")
-        const successMsg = document.createElement("h3")
-
-        successMsg.innerHTML = "Thank you for submitting!"
-
-        formContainer.appendChild(successMsg)
-
-        console.log("success")
-    })
 })();

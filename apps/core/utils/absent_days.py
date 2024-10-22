@@ -2,7 +2,7 @@ import calendar
 from datetime import date, timedelta
 
 from dateutil import easter
-from dateutil.relativedelta import relativedelta, TH
+from dateutil.relativedelta import TH, relativedelta
 
 from apps.absences.models import Absence
 

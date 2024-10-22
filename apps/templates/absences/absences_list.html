@@ -5,11 +5,12 @@
 {% load static django_tables2 %}
 
 {% block content %}
-<main id="absences-main" class="modal-wrapper flex flex-col justify-center items-center w-full">
-  <div class="modalBackground hidden"></div>
+<main id="absences-main"
+  class="modal-wrapper flex flex-col justify-center items-center w-full">
+  {% comment %} <div class="modalBackground hidden"></div> {% endcomment %}
   {% include 'absences/includes/absences_top_info.html' %}
   {% if messages %}
-  <div x-data="{showMsg : true}" @click.outside="showMsg = false" class="fixed top-3 right-3">
+  <div x-data="{showMsg : true}" @click.outside="showMsg = false" class="fixed top-3 right-3 z-10">
     <div x-show="showMsg" class="relative pr-5 pl-3 pb-4 bg-[#e0f6e2] rounded-md border-2 border-[#77ef7f] shadow-sm">
       <button @click="showMsg = false" class="ml-auto -mr-4 flex justify-center items-center px-2 rounded-md after:absolute after:inset-0"
       aria-label="Zamknij"><span aria-hidden="true">x</span></button>
@@ -69,8 +70,10 @@
         {# Table header #}
         <form id="bulk-actions" hx-get="{% url 'absences:absences_list' %}" hx-target=".table-container"
           hx-trigger="sort-initiated, pagination-initiated" hx-swap="outerHTML" hx-push-url="true"
-          hx-include="#id_query, #id_year, #id_month, #id_day" hx-indicator=".progress" x-data="{ sort_by: '',
-                    page_by: 1}" @clear-pagination-and-sort.window="page_by = 1; sort_by = ''">
+          hx-include="#id_query, #id_year, #id_month, #id_day" hx-indicator=".progress" x-data="{
+                    page_by: new URLSearchParams(location.search).get('page') || 1,
+                    sort_by: new URLSearchParams(location.search).get('sort') || ''}"
+                    @clear-pagination-and-sort.window="page_by = 1; sort_by = ''">
 
           {# Hidden input to store pagination page and column to sort by #}
           <input type="hidden" name="sort" x-ref="sort_input" x-model="sort_by" x-init="$watch('sort_by',
@@ -92,7 +95,6 @@
   </section>
 </main>
 {% include 'absences/includes/absences_modals.html' %}
- {% comment %} <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> {% endcomment %}
 {% endblock %}
 {% block footer %}
 {% endblock %}
