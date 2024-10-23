@@ -129,7 +129,7 @@ class AbsenceForm(BaseAbsenceForm):
                 raise ValidationError(
                     _(
                         "If you plan an absence in over six month, \
-    inform the nursery directly."
+inform the nursery directly."
                     )
                 )
 
@@ -137,7 +137,7 @@ class AbsenceForm(BaseAbsenceForm):
                 raise ValidationError(
                     _(
                         "Inform the nursery directly if you plan your child's absence \
-    lasting longer than 4 weeks."
+lasting longer than 4 weeks."
                     )
                 )
         return cleaned_data

@@ -125,7 +125,7 @@ def create_absence(request, selected_child, children, chosendate=None):
                         None,
                         _(
                             "Check if there hasn't already been reported an absence \
-    for the submitted date."
+for the submitted date."
                         ),
                     )
                     return resp_err(
@@ -207,7 +207,7 @@ def nursery_create_absence(request):
                         None,
                         _(
                             "Check if there hasn't already been reported an absence \
-    for the submitted date."
+for the submitted date."
                         ),
                     )
                     return resp_err(

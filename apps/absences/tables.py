@@ -8,11 +8,15 @@ from .models import Absence
 class AbsencesTable(tables.Table):
 
     a_date = tables.DateColumn(format="d-m-y")
-    created_at = tables.DateTimeColumn(format="d-m-y H:i")
+    created_at = tables.DateTimeColumn(verbose_name=_("Created at"), format="d-m-y H:i")
     reason = tables.Column(accessor="reason", orderable=False)
-    absence_type = tables.Column(_("Payable"), accessor="absence_type", orderable=False)
+    absence_type = tables.Column(
+        verbose_name=_("Type"), accessor="absence_type", orderable=False
+    )
     accions = TemplateColumn(
-        template_name="absences/includes/absence_accions_links.html", orderable=False
+        verbose_name=_("Accions"),
+        template_name="absences/includes/absence_accions_links.html",
+        orderable=False,
     )
 
     def render_absence_type(self, value):

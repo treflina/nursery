@@ -15,7 +15,7 @@ class Absence(TimeUserStampedModel):
         FIRST_REP = "FR", _("first day")
         OTHER = "O", _("other")
 
-    child = models.ForeignKey(Child, on_delete=models.CASCADE)
+    child = models.ForeignKey(Child, verbose_name=_("Child"), on_delete=models.CASCADE)
     a_date = models.DateField(_("Date"))
     absence_type = models.CharField(
         _("Type of absence"), choices=TYPE_CHOICES, default="NR", max_length=20

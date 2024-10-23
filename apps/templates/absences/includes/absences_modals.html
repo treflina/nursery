@@ -1,6 +1,7 @@
+{% load i18n %}
 <template id="absent-today-info">
   <swal-title>
-    Dzieci nieobecne w dniu {{ today|date:"j.m.y" }}:
+    {% translate 'Children absent' %} {{ today|date:"j.m.y" }}:
   </swal-title>
   <swal-html>
     <ol class="list-decimal list-inside !text-base">
@@ -13,7 +14,7 @@
 
 <template id="absent-tomorrow-info">
   <swal-title>
-    Dzieci nieobecne w dniu {{ tomorrow|date:"j.m.y" }}:
+     {% translate 'Children absent' %}  {{ tomorrow|date:"j.m.y" }}:
   </swal-title>
   <swal-html>
     <ol class="list-decimal list-inside !text-base">

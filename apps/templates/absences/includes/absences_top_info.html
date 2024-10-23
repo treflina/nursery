@@ -1,9 +1,9 @@
-{% load static %}
+{% load static i18n %}
 <div id="top-info" hx-get="{% url 'absences:absences_top_info' %}" hx-trigger="absenceDeleted from:body" hx-swap="outerHTML" class="flex flex-wrap justify-center items-center gap-4 py-4 bg-neutral-200 w-full">
     {% if not today_off or not tomorrow_off %}
         <div class="font-semibold">
-            <p>Liczba dzieci <span class="px-2 py-1 bg-[#92F398] rounded-md shadow-md">obecnych</span> /
-            <span class="px-2 py-1 bg-amber-100 rounded-md shadow-md">nieobecnych</span> :
+            <p>{% translate 'Number of children' %} <span class="px-2 py-1 bg-[#92F398] rounded-md shadow-md">{% translate 'present' %}</span> /
+            <span class="px-2 py-1 bg-amber-100 rounded-md shadow-md">{% translate 'absent' %}</span> :
             </p>
         </div>
     {% endif %}
@@ -24,7 +24,7 @@
                             <use href="{% static 'img/sprite.svg' %}#list" />
                         </svg>
                     </button>
-                    <span class="sr-only">Lista dzieci nieobecnych</span>
+                    <span class="sr-only">{% translate 'Absent children list' %} </span>
                     {% endif %}
                     <p>{{ absent_today }}</p>
                 </div>
@@ -45,7 +45,7 @@
                         <svg class="w-5 h-5" aria-hidden="true">
                             <use href="{% static 'img/sprite.svg' %}#list" />
                         </svg>
-                        <span class="sr-only">Lista dzieci nieobecnych</span>
+                        <span class="sr-only"> {% translate 'Absent children list' %} </span>
                     </button>
                     {% endif %}
                     <p>{{ absent_tomorrow }}</p>

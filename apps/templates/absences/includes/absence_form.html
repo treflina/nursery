@@ -4,14 +4,14 @@
     px-6 pt-2 pb-3 bg-blue-300 hover:bg-blue-400 hover:shadow-md transition-all duration-300
     uppercase font-semibold"
     hx-get="{% url 'info:day' %}{{chosendate.year}}-{{chosendate.month}}-{{chosendate.day}}"
-    hx-target="#info">< Powrót</button>
+    hx-target="#info">< {% translate 'Back' %}</button>
     <form id="form-abs" hx-target="#main" hx-swap="outerHTML" hx-post="{% url 'absences:absence_create' %}"
         class="flex flex-col items-start justify-start border-2 border-neutral-200 rounded-md p-2 md:p-6 lg:p-8">
         {% csrf_token %}
         <h2 class="font-semibold text-lg text-left">{{child.first_name}} {{child.last_name}} będzie nieobecny w dniach</h2>
         <div class="daterangepicker flex flex-wrap items-center gap-2 my-3 ">
             <div class="flex flex-wrap justify-center items-center my-2">
-                <label for="id_a_date" class="mr-2">od:</label>
+                <label for="id_a_date" class="mr-2">{% translate 'from' %}:</label>
                 <div class="relative max-w-72">
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
@@ -29,7 +29,7 @@
             </div>
             <div class="flex flex-col gap-1">
                 <div class="flex flex-wrap justify-center items-center my-2">
-                    <label for="id_date_to" class="mr-2 ">do:</label>
+                    <label for="id_date_to" class="mr-2 ">{% translate 'to' %}:</label>
                     <div class="relative max-w-sm">
                         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
@@ -47,8 +47,8 @@
                 </div>
             </div>
         </div>
-        <label for="id_reason" class="mb-2">Powód:</label>
-        <textarea id="id_reason" name="reason" placeholder="Opcjonalnie"
+        <label for="id_reason" class="mb-2">{% translate 'Reason' %}</label>
+        <textarea id="id_reason" name="reason" placeholder="{% translate 'Optionally' %}"
             class="border-2 border-blue-300 rounded-md w-full focus:ring-[#92F398] focus:border-[#92F398]"></textarea>
         <div id="absence-errors">
             {% if messages %}
@@ -57,13 +57,13 @@
                 {% endfor %}
             {% endif %}
             {% if form.a_date.errors %}
-                <div class="flex gap-1 text-red-700 my- font-semibold"><p>(Pole "od")</p>{{form.a_date.errors}}</div>
+                <div class="flex gap-1 text-red-700 my- font-semibold"><p>({% translate 'Field "from":' %})</p>{{form.a_date.errors}}</div>
             {% endif %}
             {% if form.date_to.errors %}
-                <div class="flex gap-1 text-red-700 my-4 font-semibold"><p>(Pole "do")</p>{{form.date_to.errors}}</div>
+                <div class="flex gap-1 text-red-700 my-4 font-semibold"><p>({% translate 'Field "to":' %})</p>{{form.date_to.errors}}</div>
             {% endif %}
             {% if form.reason.errors %}
-                <div class="flex gap-1 text-red-700 my-4 font-semibold"><p>(Pole "Powód")</p>{{form.reason.errors}}</div>
+                <div class="flex gap-1 text-red-700 my-4 font-semibold"><p>({% translate 'Field "reason":' %})</p>{{form.reason.errors}}</div>
             {% endif %}
             {% if form.non_field_errors %}
                 <div class="my-4 text-red-700 font-semibold">{{ form.non_field_errors }}</div>
@@ -73,6 +73,6 @@
         {% comment %} {{ form.request_timestamp }} {% endcomment %}
         <button type="submit" class="self-end rounded-full border-2 mt-6
             px-6 pt-2 pb-3 bg-[#92F398] hover:bg-[#bbfaa2] hover:shadow-md transition-all duration-300
-            uppercase font-semibold">Wyślij</button>
+            uppercase font-semibold">{% translate 'Send' %}</button>
     </form>
 </div>

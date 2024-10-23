@@ -2,7 +2,7 @@
 
 {% load render_table from django_tables2 %}
 
-{% load static django_tables2 %}
+{% load static django_tables2 i18n %}
 
 {% block content %}
 <main id="absences-main"
@@ -21,27 +21,27 @@
   </div>
   {% endif %}
   <section id="absences" class="my-8 px-1 relative">
-    <h1 class="text-2xl font-semibold mb-8 text-center">Zestawienie nieobecności</h1>
+    <h1 class="text-2xl font-semibold mb-8 text-center">{% translate 'Absences list' %}</h1>
     {% comment %} Filters {% endcomment %}
     <div class="table-top-container">
       <div class="flex flex-wrap justify-center items-end gap-3 mt-2 p-2 border-2 rounded-sm bg-neutral-200 border-neutral-300">
         <div class="flex flex-wrap justify-center w-full sm:w-auto gap-1 sm:gap-3">
           <div class="flex flex-col gap-1">
-            <label for="id_day" class="font-semibold text-sm text-neutral-800">Dzień</label>
+            <label for="id_day" class="font-semibold text-sm text-neutral-800">{% translate 'Day' %}</label>
             {{filter.form.day}}
           </div>
           <div class="flex flex-col gap-1">
-            <label for="id_month" class="font-semibold text-sm text-neutral-800">Miesiąc</label>
+            <label for="id_month" class="font-semibold text-sm text-neutral-800">{% translate 'Month' %}</label>
             {{filter.form.month}}
           </div>
           <div class="flex flex-col gap-1">
-            <label for="id_year" class="font-semibold text-sm text-neutral-800">Rok</label>
+            <label for="id_year" class="font-semibold text-sm text-neutral-800">{% translate 'Year' %}</label>
             {{filter.form.year}}
           </div>
         </div>
         <div class="flex gap-2 items-end">
           <div class="w-full max-w-[300px] sm:w-auto flex flex-col gap-1">
-            <label for="id_day" class="font-semibold text-sm text-neutral-800">Dziecko</label>
+            <label for="id_day" class="font-semibold text-sm text-neutral-800">{% translate 'Child' %}</label>
             <input type="search" name="query" placeholder="Nazwisko imię" class="searchinput form-control" id="id_query"
               hx-trigger="keyup changed delay:500ms, search" hx-get="{% url 'absences:absences_list' %}" hx-indicator=".progress"
               hx-target=".table-container" hx-include="[name='month'], [name='year'], [name='day'] " x-data
@@ -56,7 +56,7 @@
             <svg class="w-5 h-5" aria-hidden="true">
               <use href="{% static 'img/sprite.svg' %}#plus" />
             </svg>
-            Dodaj
+            {% translate 'Add' %}
           </button>
         </div>
       </div>

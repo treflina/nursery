@@ -1,0 +1,392 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-23 17:28+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n"
+"%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
+"%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+#: .\apps\absences\forms.py:38
+msgid "End date cannot be earlier than start date."
+msgstr ""
+
+#: .\apps\absences\forms.py:72
+#: .\apps\templates\absences\includes\absence_form_nursery.html:86
+msgid "First day paid"
+msgstr "Pierwszy dzień płatny"
+
+#: .\apps\absences\forms.py:75 .\apps\absences\models.py:13
+msgid "reported"
+msgstr "Zgłoszona"
+
+#: .\apps\absences\forms.py:75 .\apps\absences\models.py:14
+msgid "not reported"
+msgstr "Niezgłoszona"
+
+#: .\apps\absences\forms.py:75 .\apps\absences\models.py:16
+msgid "other"
+msgstr "Inna niepłatna"
+
+#: .\apps\absences\forms.py:110
+msgid "You can't submit past end date."
+msgstr "Nie można wprowadzić przeszłej daty 'do'."
+
+#: .\apps\absences\forms.py:118
+msgid "You can't submit past start date."
+msgstr "Nie można wprowadzić przeszłej daty 'od'."
+
+#: .\apps\absences\forms.py:131
+#, fuzzy
+#| msgid ""
+#| "If you plan an absence in over six month,     inform the nursery directly."
+msgid "If you plan an absence in over six month, inform the nursery directly."
+msgstr ""
+"W przypadku nieobecności dziecka za ponad 6 miesięcy, prosimy o bezpośrednie "
+"poinformowanie żłobka."
+
+#: .\apps\absences\forms.py:139
+#, fuzzy
+#| msgid ""
+#| "Inform the nursery directly if you plan your child's absence     lasting "
+#| "longer than 4 weeks."
+msgid ""
+"Inform the nursery directly if you plan your child's absence lasting longer "
+"than 4 weeks."
+msgstr ""
+"Prosimy o zgłaszanie nieobecności trwających ponad 4 tygodnie bezopśrednio "
+"do żłobka."
+
+#: .\apps\absences\models.py:15
+msgid "first day"
+msgstr "Pierwszy dzień"
+
+#: .\apps\absences\models.py:18 .\apps\kids\models.py:30
+#: .\apps\templates\absences\absence_update.html:22
+#: .\apps\templates\absences\absences_list.html:46
+#: .\apps\templates\absences\includes\absence_form_nursery.html:33
+msgid "Child"
+msgstr "Dziecko"
+
+#: .\apps\absences\models.py:19 .\apps\info\models.py:10
+#: .\apps\info\models.py:22 .\apps\info\models.py:44
+#: .\apps\templates\absences\absence_update.html:24
+msgid "Date"
+msgstr "Data"
+
+#: .\apps\absences\models.py:21
+msgid "Type of absence"
+msgstr "Rodzaj nieobecności"
+
+#: .\apps\absences\models.py:24
+#: .\apps\templates\absences\includes\absence_form.html:50
+#: .\apps\templates\absences\includes\absence_form_nursery.html:74
+msgid "Reason"
+msgstr "Powód"
+
+#: .\apps\absences\models.py:29
+msgid "Absence"
+msgstr "Nieobecność"
+
+#: .\apps\absences\models.py:30
+msgid "Absences"
+msgstr "Nieobecności"
+
+#: .\apps\absences\tables.py:11
+#: .\apps\templates\absences\absence_update.html:26
+msgid "Created at"
+msgstr "Wprowadzono"
+
+#: .\apps\absences\tables.py:13 .\apps\users\models.py:15
+msgid "Type"
+msgstr "Rodzaj"
+
+#: .\apps\absences\tables.py:15
+msgid "Accions"
+msgstr "Działania"
+
+#: .\apps\absences\tables.py:22
+msgid "Yes (PD)"
+msgstr "Tak (PD)"
+
+#: .\apps\absences\tables.py:24
+msgid "Yes (NZ)"
+msgstr "Tak (NZ)"
+
+#: .\apps\absences\tables.py:26
+msgid "No"
+msgstr "Nie"
+
+#: .\apps\absences\tables.py:28
+msgid "No (Other)"
+msgstr "Nie (Inne)"
+
+#: .\apps\absences\views.py:69
+msgid "Data has been successfully changed"
+msgstr "Informacje o nieobecności zostały zmienione."
+
+#: .\apps\absences\views.py:127 .\apps\absences\views.py:209
+#, fuzzy
+#| msgid ""
+#| "Check if there hasn't already been reported an absence     for the "
+#| "submitted date."
+msgid ""
+"Check if there hasn't already been reported an absence for the submitted "
+"date."
+msgstr "Istnieje już wprowadzona nieobecność w podanym okresie."
+
+#: .\apps\absences\views.py:160 .\apps\absences\views.py:239
+msgid "Chosen days are already off."
+msgstr "W wybranym okresie żłobek jest zamknięty."
+
+#: .\apps\absences\views.py:235
+msgid "Absence's data has been successfully submitted."
+msgstr "Informacja o nieobecności została zapisana."
+
+#: .\apps\billings\filters.py:23 .\apps\billings\models.py:10
+#: .\apps\templates\absences\absences_list.html:36
+msgid "Month"
+msgstr "Miesiąc"
+
+#: .\apps\billings\filters.py:30
+#: .\apps\templates\absences\absences_list.html:40
+msgid "Year"
+msgstr "Rok"
+
+#: .\apps\billings\models.py:13
+msgid "Food price"
+msgstr "Stawka wyżywienia"
+
+#: .\apps\billings\models.py:16
+msgid "Food total"
+msgstr "Wyżywienie (suma)"
+
+#: .\apps\billings\models.py:19
+msgid "Monthly payment"
+msgstr "Miesięczna opłata"
+
+#: .\apps\billings\models.py:21
+msgid "Payable days count"
+msgstr "Liczba dni odpłatnych"
+
+#: .\apps\billings\models.py:22
+msgid "ZUS"
+msgstr "ZUS"
+
+#: .\apps\billings\models.py:23
+msgid "Paid"
+msgstr "Zapłacone"
+
+#: .\apps\core\models.py:12
+msgid "changed by"
+msgstr "zmienione przez"
+
+#: .\apps\core\models.py:24
+msgid "Name"
+msgstr "Nazwa"
+
+#: .\apps\core\models.py:25
+msgid "Amount"
+msgstr "Ilość"
+
+#: .\apps\info\models.py:11
+msgid "Breakfast"
+msgstr "Śniadanie"
+
+#: .\apps\info\models.py:12
+msgid "Soup"
+msgstr "Zupa"
+
+#: .\apps\info\models.py:13
+msgid "Lunch"
+msgstr "II danie"
+
+#: .\apps\info\models.py:14
+msgid "Teatime"
+msgstr "Podwieczorek"
+
+#: .\apps\info\models.py:24
+msgid "Content"
+msgstr "Treść"
+
+#: .\apps\info\models.py:31
+msgid "Description"
+msgstr "Opis"
+
+#: .\apps\info\models.py:37
+msgid "Main Topic"
+msgstr "Główny temat"
+
+#: .\apps\info\models.py:38
+msgid "Main Topics"
+msgstr "Główne tematy"
+
+#: .\apps\info\models.py:48
+msgid "Topic"
+msgstr "Temat dnia"
+
+#: .\apps\info\models.py:49
+msgid "Kids activity"
+msgstr "Aktywność dziecka"
+
+#: .\apps\info\models.py:50
+msgid "Motor activity"
+msgstr "Aktywność ruchowa"
+
+#: .\apps\info\models.py:51
+msgid "Musical activity"
+msgstr "Aktywność muzyczna"
+
+#: .\apps\info\models.py:52
+msgid "Art activity"
+msgstr "Aktywność plastyczna"
+
+#: .\apps\info\models.py:53
+msgid "Inne"
+msgstr "Inne"
+
+#: .\apps\kids\models.py:11
+msgid "First name"
+msgstr "Imię"
+
+#: .\apps\kids\models.py:12
+msgid "Last name"
+msgstr "Nazwisko"
+
+#: .\apps\kids\models.py:13
+msgid "Date of birth"
+msgstr "Data urodzenia"
+
+#: .\apps\kids\models.py:14
+msgid "Admission date"
+msgstr "Data przyjęcia"
+
+#: .\apps\kids\models.py:15
+msgid "Leave date"
+msgstr "Data zakończenia"
+
+#: .\apps\kids\models.py:20
+msgid "Local subsidy"
+msgstr "Dopłata"
+
+#: .\apps\kids\models.py:31
+msgid "Children"
+msgstr "Dzieci"
+
+#: .\apps\templates\absences\absence_update.html:19
+msgid "Edit absence"
+msgstr "Edytuj nieobecność"
+
+#: .\apps\templates\absences\absence_update.html:41
+#: .\apps\templates\absences\includes\absence_form.html:7
+#: .\apps\templates\absences\includes\absence_form_nursery.html:94
+msgid "Back"
+msgstr "Wróć"
+
+#: .\apps\templates\absences\absence_update.html:45
+msgid "Change"
+msgstr "Zmień"
+
+#: .\apps\templates\absences\absences_list.html:25
+msgid "Absences list"
+msgstr "Zestawienie nieobecności"
+
+#: .\apps\templates\absences\absences_list.html:32
+msgid "Day"
+msgstr "Dzień"
+
+#: .\apps\templates\absences\absences_list.html:61
+#: .\apps\templates\absences\includes\absence_form_nursery.html:97
+msgid "Add"
+msgstr "Dodaj"
+
+#: .\apps\templates\absences\includes\absence_accions_links.html:7
+msgid "Edit"
+msgstr "Edytuj"
+
+#: .\apps\templates\absences\includes\absence_accions_links.html:14
+msgid "Delete"
+msgstr "Usuń"
+
+#: .\apps\templates\absences\includes\absence_form.html:14
+#: .\apps\templates\absences\includes\absence_form_nursery.html:38
+msgid "from"
+msgstr "od"
+
+#: .\apps\templates\absences\includes\absence_form.html:32
+#: .\apps\templates\absences\includes\absence_form_nursery.html:56
+msgid "to"
+msgstr "do"
+
+#: .\apps\templates\absences\includes\absence_form.html:51
+msgid "Optionally"
+msgstr "Opcjonalnie"
+
+#: .\apps\templates\absences\includes\absence_form.html:60
+#: .\apps\templates\absences\includes\absence_form_nursery.html:20
+msgid "Field \"from\":"
+msgstr "Pole 'od':"
+
+#: .\apps\templates\absences\includes\absence_form.html:63
+#: .\apps\templates\absences\includes\absence_form_nursery.html:23
+msgid "Field \"to\":"
+msgstr "Pole 'do':"
+
+#: .\apps\templates\absences\includes\absence_form.html:66
+#: .\apps\templates\absences\includes\absence_form_nursery.html:26
+msgid "Field \"reason\":"
+msgstr "Pole 'powód':"
+
+#: .\apps\templates\absences\includes\absence_form.html:78
+msgid "Send"
+msgstr "Wyślij"
+
+#: .\apps\templates\absences\includes\absence_form_nursery.html:4
+msgid "Add absence"
+msgstr "Dodaj nieobecność"
+
+#: .\apps\templates\absences\includes\absences_modals.html:4
+#: .\apps\templates\absences\includes\absences_modals.html:17
+msgid "Children absent"
+msgstr "Dzieci nieobecne w dniu"
+
+#: .\apps\templates\absences\includes\absences_top_info.html:5
+msgid "Number of children"
+msgstr "Liczba dzieci"
+
+#: .\apps\templates\absences\includes\absences_top_info.html:5
+msgid "present"
+msgstr "obecnych"
+
+#: .\apps\templates\absences\includes\absences_top_info.html:6
+msgid "absent"
+msgstr "nieobecnych"
+
+#: .\apps\templates\absences\includes\absences_top_info.html:27
+#: .\apps\templates\absences\includes\absences_top_info.html:48
+msgid "Absent children list"
+msgstr "Lista dzieci nieobecnych"
+
+#: .\apps\templates\tables\table_htmx.html:76
+msgid "previous"
+msgstr "poprzednia"
+
+#: .\apps\templates\tables\table_htmx.html:105
+msgid "next"
+msgstr "następna"
+
+#~ msgid "Payable"
+#~ msgstr "Płatna"

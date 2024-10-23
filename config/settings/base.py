@@ -46,6 +46,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
+    # "django.middleware.locale.LocaleMiddleware"
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -113,6 +114,8 @@ TIME_ZONE = "Europe/Warsaw"
 USE_I18N = True
 
 USE_TZ = True
+
+LOCALE_PATHS = [str(BASE_DIR / "locale")]
 
 STATIC_URL = "/static/"
 
