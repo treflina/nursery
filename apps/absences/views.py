@@ -7,7 +7,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import UpdateView
 from django_filters.views import FilterView
 from django_htmx.http import trigger_client_event
 from django_tables2 import SingleTableMixin
@@ -44,6 +44,11 @@ class AbsencesView(SingleTableMixin, FilterView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         absence_context = get_top_absence_info_context()
+
+        # get recently updated absence id to set focus
+        updated_obj = self.request.session.pop("updated_obj", None)
+
+        absence_context["updated_obj"] = updated_obj
         context.update(**absence_context)
         return context
 
@@ -55,12 +60,6 @@ def top_info_about_absences(request):
     resp = render(request, "absences/includes/absences_top_info.html", context=context)
     resp["HX-Trigger"] = "get_top_info"
     return resp
-
-
-class AbsenceDetailView(DetailView):
-    model = Absence
-    template_name = "absences/absence_detail.html"
-    # context_object_name = "absence"
 
 
 class AbsenceUpdateView(SuccessMessageMixin, UpdateView):
@@ -76,18 +75,18 @@ class AbsenceUpdateView(SuccessMessageMixin, UpdateView):
         return context
 
     def get_success_url(self):
-        res = reverse("absences:absences_list")
+        self.request.session["updated_obj"] = self.kwargs.get("pk")
+        url = reverse("absences:absences_list")
         if "next" in self.request.GET:
-            res = self.request.GET["next"]
-        return res
+            url = self.request.GET["next"]
+        return url
 
 
 @require_http_methods(["DELETE"])
 def delete_absence(request, pk):
     if request.htmx:
         Absence.objects.filter(pk=pk).delete()
-        resp = HttpResponse("")
-        return trigger_client_event(resp, "absenceDeleted")
+        return HttpResponse("")
 
 
 @get_parent_context

@@ -99,5 +99,5 @@ import pl from "../../node_modules/flowbite-datepicker/js/i18n/locales/pl"
                 day.classList.remove("font-bold")
             }
         })
-    })
+    });
 })();

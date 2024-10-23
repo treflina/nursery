@@ -2,8 +2,13 @@ from django.urls import path, register_converter
 
 from apps.core.converters import DateConverter
 
-from .views import (BillingListView, BillingsReportsView, billing,
-                    billing_response_updateview, generate_report)
+from .views import (
+    BillingListView,
+    BillingsReportsView,
+    billing,
+    billing_response_updateview,
+    generate_report,
+)
 
 register_converter(DateConverter, "date")
 
