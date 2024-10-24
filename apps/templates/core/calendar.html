@@ -47,6 +47,8 @@
             {% include 'core/includes/calendar-day.html' with bg_color='bg-[#F3C892]' year=year month=month day=day num=num %}
         {% elif num in absences_r %}
             {% include 'core/includes/calendar-day.html' with bg_color='bg-[#FFF1BD]' year=year month=month day=day num=num %}
+        {% elif num in absences_o %}
+            {% include 'core/includes/calendar-day.html' with bg_color='bg-[#CEE8BC]' year=year month=month day=day num=num %}
         {% else %}
             {% include 'core/includes/calendar-day.html' with bg_color='bg-[#92F398]' year=year month=month day=day num=num %}
         {% endif %}

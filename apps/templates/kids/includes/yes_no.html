@@ -1,0 +1,16 @@
+{% load static i18n %}
+{% if record.local_subsidy is True %}
+<div class="flex gap-2 items-center">
+    <p class="sr-only">{% translate 'yes' %}</p>
+    <svg class="w-5 h-5 fill-green-500" aria-hidden="true">
+        <use href="{% static 'img/sprite.svg' %}#yes" />
+    </svg>
+</div>
+{% elif record.local_subsidy is False %}
+<div class="flex gap-2 items-center">
+    <p class="sr-only">{% translate 'no' %}</p>
+    <svg class="w-5 h-5 fill-neutral-600" aria-hidden="true">
+        <use href="{% static 'img/sprite.svg' %}#no" />
+    </svg>
+</div>
+{% endif %}

@@ -152,6 +152,10 @@ text-align: left;
     width: 10rem;
 }
 
+.children .table-container td:nth-child(1),
+.children .table-header th:nth-child(1)  {
+    width: 14rem;
+}
 /*
 
 .checkcolumn-table td:nth-child(1),

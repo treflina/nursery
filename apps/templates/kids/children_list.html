@@ -5,7 +5,7 @@
 {% load static django_tables2 i18n %}
 
 {% block content %}
-<main id="absences-main"
+<main id="children-main"
   class="modal-wrapper flex flex-col justify-center items-center w-full">
   {% comment %} <div class="modalBackground hidden"></div> {% endcomment %}
   {% include 'absences/includes/absences_top_info.html' %}
@@ -20,37 +20,23 @@
     </div>
   </div>
   {% endif %}
-  <section id="absences" class="my-8 px-1 relative">
-    <h1 class="text-2xl font-semibold mb-8 text-center">{% translate 'Absences list' %}</h1>
+  <section id="children" class="my-8 px-1 relative">
+    <h1 class="text-2xl font-semibold mb-8 text-center">{% translate 'Children list' %}</h1>
     {% comment %} Filters {% endcomment %}
     <div class="table-top-container">
       <div class="flex flex-wrap justify-center items-end gap-3 mt-2 p-2 border-2 rounded-sm bg-neutral-200 border-neutral-300">
-        <div class="flex flex-wrap justify-center w-full sm:w-auto gap-1 sm:gap-3">
-          <div class="flex flex-col gap-1">
-            <label for="id_day" class="font-semibold text-sm text-neutral-800">{% translate 'Day' %}</label>
-            {{filter.form.day}}
-          </div>
-          <div class="flex flex-col gap-1">
-            <label for="id_month" class="font-semibold text-sm text-neutral-800">{% translate 'Month' %}</label>
-            {{filter.form.month}}
-          </div>
-          <div class="flex flex-col gap-1">
-            <label for="id_year" class="font-semibold text-sm text-neutral-800">{% translate 'Year' %}</label>
-            {{filter.form.year}}
-          </div>
-        </div>
         <div class="flex gap-2 items-end">
           <div class="w-full max-w-[300px] sm:w-auto flex flex-col gap-1">
             <label for="id_query" class="font-semibold text-sm text-neutral-800">{% translate 'Child' %}</label>
             <input type="search" name="query" placeholder="Nazwisko imię" class="searchinput form-control" id="id_query"
-              hx-trigger="keyup changed delay:500ms, search" hx-get="{% url 'absences:absences_list' %}" hx-indicator=".progress"
-              hx-target=".table-container" hx-include="[name='month'], [name='year'], [name='day'] " x-data
+              hx-trigger="keyup changed delay:500ms, search" hx-get="{% url 'kids:children_list' %}" hx-indicator=".progress"
+              hx-target=".table-container" x-data
               x-on:htmx:before-request="$dispatch('clear-pagination-and-sort')">
           </div>
           <button id="btn-abs-nursery" class="flex items-center h-11 px-2 gap-1 border-2 border-neutral-300
               rounded-md bg-amber-100 hover:bg-amber-200 focus:bg-amber-200
               duration-300 transition-colors"
-              hx-target="#absences"
+              hx-target="#children"
               hx-get="{% url 'absences:absence_create_nursery' %}?next={{ request.get_full_path|urlencode}}"
               hx-swap="innerHTML">
             <svg class="w-5 h-5" aria-hidden="true">
@@ -61,16 +47,16 @@
         </div>
       </div>
 
-      <div x-data="{paginationClicked: false}" class="absences scroll-wrapper" tabindex="0">
+      <div x-data="{paginationClicked: false}" class="children scroll-wrapper" tabindex="0">
             {# Progress indicator #}
           <div class="progress">
             <div class="indeterminate"></div>
           </div>
 
         {# Table header #}
-        <form id="bulk-actions" hx-get="{% url 'absences:absences_list' %}" hx-target=".table-container"
+        <form id="bulk-actions" hx-get="{% url 'kids:children_list' %}" hx-target=".table-container"
           hx-trigger="sort-initiated, pagination-initiated" hx-swap="outerHTML" hx-push-url="true"
-          hx-include="#id_query, #id_year, #id_month, #id_day" hx-indicator=".progress" x-data="{
+          hx-include="#id_query" hx-indicator=".progress" x-data="{
                     page_by: new URLSearchParams(location.search).get('page') || 1,
                     sort_by: new URLSearchParams(location.search).get('sort') || ''}"
                     @clear-pagination-and-sort.window="page_by = 1; sort_by = ''">
@@ -94,7 +80,6 @@
     </div>
   </section>
 </main>
-{% include 'absences/includes/absences_modals.html' %}
 {% endblock %}
 {% block footer %}
 {% endblock %}

@@ -22,7 +22,7 @@ class TimeUserStampedModel(models.Model):
 class FoodPrice(models.Model):
 
     name = models.CharField(_("Name"), max_length=255, null=False, blank=False)
-    amount = models.DecimalField(_("Amount"), max_digits=5, decimal_places=2)
+    price = models.DecimalField(_("Price"), max_digits=5, decimal_places=2, default=0)
 
     def __str__(self):
-        return f"{self.name}: {self.amount} zł"
+        return f"{self.name}: {self.price} zł"

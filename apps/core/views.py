@@ -2,6 +2,7 @@ import calendar
 from datetime import date, datetime
 
 from django.shortcuts import render
+from django.views.generic import CreateView
 
 from apps.absences.models import Absence
 from apps.billings.models import Billing
@@ -9,6 +10,7 @@ from apps.kids.models import Child
 from apps.users.decorators import get_parent_context
 from apps.users.models import Parent
 
+from .models import FoodPrice
 from .utils.absent_days import get_holidays, get_not_enrolled_days
 from .utils.helpers import get_next_prev_month
 
@@ -69,10 +71,14 @@ def display_calendar(
     absences_first_day = Absence.objects.filter(
         child=child, a_date__month=month, a_date__year=year, absence_type="FR"
     )
+    absences_other = Absence.objects.filter(
+        child=child, a_date__month=month, a_date__year=year, absence_type="O"
+    )
 
     anr_days = [absence.a_date.day for absence in absences_not_reported]
     ar_days = [absence.a_date.day for absence in absences_reported]
     afd_days = [absence.a_date.day for absence in absences_first_day]
+    ao_days = [absence.a_date.day for absence in absences_other]
 
     days_off = get_holidays(year, month)[0]
 
@@ -92,6 +98,7 @@ def display_calendar(
         "absences_fdr": afd_days,
         "absences_r": ar_days,
         "absences_nr": anr_days,
+        "absences_o": ao_days,
         "not_enrolled": not_enrolled_days,
     }
 
@@ -121,3 +128,16 @@ def day_details(request, selected_child, children, chosendate=None):
             "billing": billing,
         },
     )
+
+def main_settings(self):
+    pass
+
+
+class FoodPrice(CreateView):
+    model = FoodPrice
+    template_name = "core/foodprice.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["objects"] = self.model.objects.all()
+        return context

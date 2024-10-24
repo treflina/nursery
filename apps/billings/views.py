@@ -66,7 +66,7 @@ def generate_report(request):
     for child in children:
         absent_days = get_all_absent_days(child, year, month)
         days_to_pay_count = num_days_in_month - len(absent_days)
-        food_price_day = child.food_price.amount
+        food_price_day = child.food_price.price
         to_pay = days_to_pay_count * food_price_day
 
         obj = Billing.objects.filter(date_month=report_date, child=child).last()

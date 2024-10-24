@@ -15,5 +15,6 @@ urlpatterns = [
     path("calendar/", display_calendar, name="calendar"),
     path("day/<date:chosendate>/", day_details, name="day"),
     path("day/", day_details, name="day"),
+    path("settings/", day_details, name="settings"),
     path("", home, name="home"),
 ]

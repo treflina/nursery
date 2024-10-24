@@ -27,7 +27,7 @@ from .utils import get_top_absence_info_context, resp_err
 class AbsencesView(SingleTableMixin, FilterView):
 
     table_class = AbsencesTable
-    queryset = Absence.objects.all()
+    queryset = Absence.objects.all().order_by("-created_at")
     filterset_class = AbsencesFilter
     paginate_by = 10
 

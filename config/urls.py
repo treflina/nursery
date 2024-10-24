@@ -11,6 +11,7 @@ urlpatterns = [
     path("", include("apps.kids.urls")),
     path("", include("apps.absences.urls")),
     path("", include("apps.billings.urls")),
+    path("", include("apps.users.urls")),
     path("konto/", include("django.contrib.auth.urls")),
     *HTMXAutoComplete.url_dispatcher("ac"),
 ]

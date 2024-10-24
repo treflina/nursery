@@ -1589,16 +1589,16 @@ input:checked + .toggle-bg {
   gap: 0.5rem;
 }
 
+.gap-2\.5 {
+  gap: 0.625rem;
+}
+
 .gap-3 {
   gap: 0.75rem;
 }
 
 .gap-4 {
   gap: 1rem;
-}
-
-.gap-2\.5 {
-  gap: 0.625rem;
 }
 
 .space-x-2 > :not([hidden]) ~ :not([hidden]) {
@@ -1756,6 +1756,11 @@ input:checked + .toggle-bg {
   background-color: rgb(146 243 152 / var(--tw-bg-opacity));
 }
 
+.bg-\[\#CEE8BC\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(206 232 188 / var(--tw-bg-opacity));
+}
+
 .bg-\[\#F3C892\] {
   --tw-bg-opacity: 1;
   background-color: rgb(243 200 146 / var(--tw-bg-opacity));
@@ -1852,6 +1857,27 @@ input:checked + .toggle-bg {
 
 .bg-white\/50 {
   background-color: rgb(255 255 255 / 0.5);
+}
+
+.bg-stone-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(120 113 108 / var(--tw-bg-opacity));
+}
+
+.fill-slate-900 {
+  fill: #0f172a;
+}
+
+.fill-green-500 {
+  fill: #0E9F6E;
+}
+
+.fill-green-400 {
+  fill: #31C48D;
+}
+
+.fill-neutral-600 {
+  fill: #525252;
 }
 
 .\!p-0 {
@@ -2436,6 +2462,11 @@ thead th {
 .absences .table-container td:nth-child(6),
 .absences .table-header th:nth-child(6)  {
   width: 10rem;
+}
+
+.children .table-container td:nth-child(1),
+.children .table-header th:nth-child(1)  {
+  width: 14rem;
 }
 
 /*
