@@ -1,16 +1,16 @@
 {% load static i18n %}
 <div class="flex gap-2" hx-push-url="false">
-    <a  href="{% url 'absences:absence_update' record.id %}?next={{ request.get_full_path|urlencode}}"
+    <a  href="{% url 'kids:update' record.id %}?next={{ request.get_full_path|urlencode}}"
     class="px-2 pt-0.7 py-0.5 border-2 border-neutral-300 rounded-md bg-neutral-100 hover:bg-neutral-200
     focus:bg-neutral-200 duration-300 transition-colors"
     {% if updated_obj == record.id %} autofocus {% endif %}
     >{% translate 'Edit' %}</a>
     <button type="button" class="openModal px-2 py-0.5 pb-0.8 border-2 border-red-300 rounded-md
       bg-neutral-100 hover:bg-red-200 focus:bg-red-200 duration-300 transition-colors"
-        hx-delete="{% url 'absences:absence_delete' record.id %}"
+        hx-delete="{% url 'kids:delete' record.id %}"
         hx-target="closest tr"
         hx-swap="outerHTML"
-        confirm-swal="nieobecność: {{ record.child.first_name }} {{ record.child.last_name }} - {{ record.a_date }}">
+        confirm-swal="dziecko: {{ record.first_name }} {{ record.last_name }}">
         {% translate 'Delete' %}
     </button>
 </div>

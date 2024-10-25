@@ -1,6 +1,6 @@
 {% load static i18n %}
 
-<div id="absence-form-wrapper" class="px-2 mx-auto w-full ">
+<div id="absence-form-wrapper" class="px-2 w-full ">
     <h1 class="text-2xl font-semibold mb-8 text-center">{% translate 'Add absence' %}</h1>
     <form id="form-abs"
         hx-target="#absences-main"
@@ -76,7 +76,7 @@
             class="border-2 border-blue-300 rounded-md w-full focus:ring-[#92F398] focus:border-[#92F398] mb-2"></textarea>
         <div class="flex flex-wrap gap-2 justify-between w-full">
             <div class="flex gap-2 items-center my-2">
-                <label for="id_absence_type"  class="absence-type-label text-black">Rodzaj:</label>
+                <label for="id_absence_type"  class="absence-type-label text-black">{% translate 'Type' %}:</label>
                 {{form.absence_type}}
             </div>
             <div class="flex gap-2 items-center my-2">

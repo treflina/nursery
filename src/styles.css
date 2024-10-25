@@ -49,24 +49,34 @@
     z-index: 9999;
 }
 
-#form-abs .phac_aspc_form_autocomplete {
+.errorlist {
+    color: rgb(200,30,30);
+    font-weight: bolder;
+}
+
+form .phac_aspc_form_autocomplete {
     border: 2px solid transparent;
 
 }
 
-#form-abs .phac_aspc_form_autocomplete_focus_ring {
+form .phac_aspc_form_autocomplete_focus_ring {
     border: 2px solid rgb(147 197 253);
     padding: 2px;
     border-radius: 6px;
     width: 100%;
 }
 
-#form-abs .phac_aspc_form_autocomplete_focus_ring.active {
+form .phac_aspc_form_autocomplete_focus_ring.active {
     border: 2px solid #77ef7f;
 }
 
-#form-abs .phac_aspc_form_autocomplete_focus_ring.active > div {
+form .phac_aspc_form_autocomplete_focus_ring.active > div {
     background-color: white;
+}
+
+#children label {
+    font-weight: 600;
+    color: #525252;
 }
 
 /* modal */

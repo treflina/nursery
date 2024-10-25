@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-23 17:28+0200\n"
+"POT-Creation-Date: 2024-10-25 12:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,52 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n"
 "%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
 "%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+#: .\apps\absences\filters.py:17
+msgid "January"
+msgstr ""
+
+#: .\apps\absences\filters.py:18
+msgid "February"
+msgstr ""
+
+#: .\apps\absences\filters.py:19
+msgid "March"
+msgstr ""
+
+#: .\apps\absences\filters.py:20
+msgid "April"
+msgstr ""
+
+#: .\apps\absences\filters.py:21
+#, fuzzy
+#| msgid "Day"
+msgid "May"
+msgstr "Dzień"
+
+#: .\apps\absences\filters.py:22
+msgid "June"
+msgstr ""
+
+#: .\apps\absences\filters.py:23
+msgid "July"
+msgstr ""
+
+#: .\apps\absences\filters.py:24
+msgid "September"
+msgstr ""
+
+#: .\apps\absences\filters.py:25
+msgid "October"
+msgstr ""
+
+#: .\apps\absences\filters.py:26
+msgid "November"
+msgstr ""
+
+#: .\apps\absences\filters.py:27
+msgid "December"
+msgstr ""
 
 #: .\apps\absences\forms.py:38
 msgid "End date cannot be earlier than start date."
@@ -78,6 +124,7 @@ msgstr "Pierwszy dzień"
 #: .\apps\templates\absences\absence_update.html:22
 #: .\apps\templates\absences\absences_list.html:46
 #: .\apps\templates\absences\includes\absence_form_nursery.html:33
+#: .\apps\templates\kids\children_list.html:31
 msgid "Child"
 msgstr "Dziecko"
 
@@ -110,27 +157,29 @@ msgstr "Nieobecności"
 msgid "Created at"
 msgstr "Wprowadzono"
 
-#: .\apps\absences\tables.py:13 .\apps\users\models.py:15
+#: .\apps\absences\tables.py:14
+#: .\apps\templates\absences\includes\absence_form_nursery.html:79
+#: .\apps\users\models.py:15
 msgid "Type"
 msgstr "Rodzaj"
 
-#: .\apps\absences\tables.py:15
+#: .\apps\absences\tables.py:17 .\apps\kids\tables.py:23
 msgid "Accions"
 msgstr "Działania"
 
-#: .\apps\absences\tables.py:22
+#: .\apps\absences\tables.py:24
 msgid "Yes (PD)"
 msgstr "Tak (PD)"
 
-#: .\apps\absences\tables.py:24
+#: .\apps\absences\tables.py:26
 msgid "Yes (NZ)"
 msgstr "Tak (NZ)"
 
-#: .\apps\absences\tables.py:26
+#: .\apps\absences\tables.py:28
 msgid "No"
 msgstr "Nie"
 
-#: .\apps\absences\tables.py:28
+#: .\apps\absences\tables.py:30
 msgid "No (Other)"
 msgstr "Nie (Inne)"
 
@@ -166,7 +215,7 @@ msgstr "Miesiąc"
 msgid "Year"
 msgstr "Rok"
 
-#: .\apps\billings\models.py:13
+#: .\apps\billings\models.py:13 .\apps\kids\forms.py:80
 msgid "Food price"
 msgstr "Stawka wyżywienia"
 
@@ -199,8 +248,8 @@ msgid "Name"
 msgstr "Nazwa"
 
 #: .\apps\core\models.py:25
-msgid "Amount"
-msgstr "Ilość"
+msgid "Price"
+msgstr ""
 
 #: .\apps\info\models.py:11
 msgid "Breakfast"
@@ -258,6 +307,26 @@ msgstr "Aktywność plastyczna"
 msgid "Inne"
 msgstr "Inne"
 
+#: .\apps\kids\forms.py:49
+msgid "No results found"
+msgstr "Brak wyników"
+
+#: .\apps\kids\forms.py:72
+msgid "Leave date can't be earlier than admission date."
+msgstr "Data odejścia nie może być wcześniejsza od przyjęcia."
+
+#: .\apps\kids\forms.py:77 .\apps\kids\tables.py:11
+msgid "Admission"
+msgstr "Przyjęcie"
+
+#: .\apps\kids\forms.py:78 .\apps\kids\tables.py:12
+msgid "Leave"
+msgstr "Odejście"
+
+#: .\apps\kids\forms.py:79
+msgid "Access account"
+msgstr "Konto rodzica/opiekuna"
+
 #: .\apps\kids\models.py:11
 msgid "First name"
 msgstr "Imię"
@@ -276,15 +345,19 @@ msgstr "Data przyjęcia"
 
 #: .\apps\kids\models.py:15
 msgid "Leave date"
-msgstr "Data zakończenia"
+msgstr "Data odejścia"
 
-#: .\apps\kids\models.py:20
+#: .\apps\kids\models.py:20 .\apps\kids\tables.py:17
 msgid "Local subsidy"
 msgstr "Dopłata"
 
 #: .\apps\kids\models.py:31
 msgid "Children"
 msgstr "Dzieci"
+
+#: .\apps\kids\tables.py:14
+msgid "Food"
+msgstr "Wyż."
 
 #: .\apps\templates\absences\absence_update.html:19
 msgid "Edit absence"
@@ -293,6 +366,7 @@ msgstr "Edytuj nieobecność"
 #: .\apps\templates\absences\absence_update.html:41
 #: .\apps\templates\absences\includes\absence_form.html:7
 #: .\apps\templates\absences\includes\absence_form_nursery.html:94
+#: .\apps\templates\kids\child_create.html:64
 msgid "Back"
 msgstr "Wróć"
 
@@ -308,16 +382,24 @@ msgstr "Zestawienie nieobecności"
 msgid "Day"
 msgstr "Dzień"
 
+#: .\apps\templates\absences\absences_list.html:47
+#: .\apps\templates\kids\children_list.html:32
+msgid "Enter child"
+msgstr "Wpisz nazwisko imię"
+
 #: .\apps\templates\absences\absences_list.html:61
 #: .\apps\templates\absences\includes\absence_form_nursery.html:97
+#: .\apps\templates\kids\children_list.html:47
 msgid "Add"
 msgstr "Dodaj"
 
 #: .\apps\templates\absences\includes\absence_accions_links.html:7
+#: .\apps\templates\kids\includes\child_accions_links.html:7
 msgid "Edit"
 msgstr "Edytuj"
 
 #: .\apps\templates\absences\includes\absence_accions_links.html:14
+#: .\apps\templates\kids\includes\child_accions_links.html:14
 msgid "Delete"
 msgstr "Usuń"
 
@@ -380,6 +462,33 @@ msgstr "nieobecnych"
 msgid "Absent children list"
 msgstr "Lista dzieci nieobecnych"
 
+#: .\apps\templates\kids\child_create.html:23
+#, fuzzy
+#| msgid "Enter child"
+msgid "Edit child"
+msgstr "Wpisz nazwisko imię"
+
+#: .\apps\templates\kids\child_create.html:25
+msgid "Add child"
+msgstr "Dodaj dziecko"
+
+#: .\apps\templates\kids\child_create.html:67
+#: .\apps\templates\users\parent_create.html:7
+msgid "Ready"
+msgstr "Gotowe"
+
+#: .\apps\templates\kids\children_list.html:24
+msgid "Children list"
+msgstr "Lista dzieci"
+
+#: .\apps\templates\kids\includes\yes_no.html:4
+msgid "yes"
+msgstr "tak"
+
+#: .\apps\templates\kids\includes\yes_no.html:11
+msgid "no"
+msgstr "nie"
+
 #: .\apps\templates\tables\table_htmx.html:76
 msgid "previous"
 msgstr "poprzednia"
@@ -387,6 +496,13 @@ msgstr "poprzednia"
 #: .\apps\templates\tables\table_htmx.html:105
 msgid "next"
 msgstr "następna"
+
+#: .\apps\users\forms.py:24
+msgid "Passwords don't match"
+msgstr "Wprowadzone hasła nie są identyczne."
+
+#~ msgid "Amount"
+#~ msgstr "Cena"
 
 #~ msgid "Payable"
 #~ msgstr "Płatna"

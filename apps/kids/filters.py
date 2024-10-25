@@ -17,8 +17,7 @@ class ChildFilter(BaseFilter):
             reduce(
                 operator.and_,
                 (
-                    Q(first_name__icontains=word)
-                    | Q(last_name__icontains=word)
+                    Q(first_name__icontains=word) | Q(last_name__icontains=word)
                     for word in query_words
                 ),
             )

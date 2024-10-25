@@ -129,6 +129,7 @@ def day_details(request, selected_child, children, chosendate=None):
         },
     )
 
+
 def main_settings(self):
     pass
 

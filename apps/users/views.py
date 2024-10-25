@@ -19,4 +19,3 @@ class ParentCreate(CreateView):
     template_name = "users/parent_create.html"
     form_class = ParentForm
     success_url = reverse_lazy("kids:children")
-

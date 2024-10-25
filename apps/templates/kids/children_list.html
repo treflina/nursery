@@ -8,7 +8,6 @@
 <main id="children-main"
   class="modal-wrapper flex flex-col justify-center items-center w-full">
   {% comment %} <div class="modalBackground hidden"></div> {% endcomment %}
-  {% include 'absences/includes/absences_top_info.html' %}
   {% if messages %}
   <div x-data="{showMsg : true}" @click.outside="showMsg = false" class="fixed top-3 right-3 z-10">
     <div x-show="showMsg" class="relative pr-5 pl-3 pb-4 bg-[#e0f6e2] rounded-md border-2 border-[#77ef7f] shadow-sm">
@@ -28,8 +27,8 @@
         <div class="flex gap-2 items-end">
           <div class="w-full max-w-[300px] sm:w-auto flex flex-col gap-1">
             <label for="id_query" class="font-semibold text-sm text-neutral-800">{% translate 'Child' %}</label>
-            <input type="search" name="query" placeholder="Nazwisko imię" class="searchinput form-control" id="id_query"
-              hx-trigger="keyup changed delay:500ms, search" hx-get="{% url 'kids:children_list' %}" hx-indicator=".progress"
+            <input type="search" name="query" placeholder="{% translate 'Enter child' %}" class="searchinput form-control" id="id_query"
+              hx-trigger="keyup changed delay:500ms, search" hx-get="{% url 'kids:children' %}" hx-indicator=".progress"
               hx-target=".table-container" x-data
               x-on:htmx:before-request="$dispatch('clear-pagination-and-sort')">
           </div>
@@ -37,8 +36,9 @@
               rounded-md bg-amber-100 hover:bg-amber-200 focus:bg-amber-200
               duration-300 transition-colors"
               hx-target="#children"
-              hx-get="{% url 'absences:absence_create_nursery' %}?next={{ request.get_full_path|urlencode}}"
-              hx-swap="innerHTML">
+              hx-select="#children"
+              hx-get="{% url 'kids:create' %}?next={{ request.get_full_path|urlencode}}"
+              hx-swap="outerHTML">
             <svg class="w-5 h-5" aria-hidden="true">
               <use href="{% static 'img/sprite.svg' %}#plus" />
             </svg>
@@ -54,7 +54,7 @@
           </div>
 
         {# Table header #}
-        <form id="bulk-actions" hx-get="{% url 'kids:children_list' %}" hx-target=".table-container"
+        <form id="bulk-actions" hx-get="{% url 'kids:children' %}" hx-target=".table-container"
           hx-trigger="sort-initiated, pagination-initiated" hx-swap="outerHTML" hx-push-url="true"
           hx-include="#id_query" hx-indicator=".progress" x-data="{
                     page_by: new URLSearchParams(location.search).get('page') || 1,

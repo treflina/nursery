@@ -61,7 +61,7 @@ import Swal from 'sweetalert2';
                         </svg>`;
         Swal.fire({
             title: "Ostrzeżenie",
-            text: `Czy na pewno usunąć nieobecność: ${question}?`,
+            text: `Czy na pewno usunąć ${question}?`,
             showCancelButton: true,
             cancelButtonText: "Wróć",
             confirmButtonText: "Tak",

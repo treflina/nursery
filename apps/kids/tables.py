@@ -17,12 +17,12 @@ class ChildrenTable(tables.Table):
         verbose_name=_("Local subsidy"),
         accessor="local_subsidy",
         template_name="kids/includes/yes_no.html",
-        orderable=False
+        orderable=False,
     )
     accions = TemplateColumn(
         verbose_name=_("Accions"),
-        template_name="absences/includes/absence_accions_links.html",
-        orderable=False
+        template_name="kids/includes/child_accions_links.html",
+        orderable=False,
     )
 
     def render_food_price(self, value):
@@ -31,12 +31,9 @@ class ChildrenTable(tables.Table):
     def render_last_name(self, value, record):
         return f"{value} {record.first_name}"
 
-
-
-
     class Meta:
         model = Child
         template_name = "tables/table_htmx.html"
         show_header = False
-        exclude = ("id","parent", "first_name")
+        exclude = ("id", "parent", "first_name")
         sequence = ("last_name", "...")

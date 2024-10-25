@@ -7,14 +7,12 @@ from .models import Parent
 
 class ParentForm(forms.ModelForm):
 
-    password2 = forms.CharField(widget= forms.PasswordInput)
+    password2 = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = Parent
         fields = ["username", "password", "password2", "is_active"]
-        widgets = {
-            "password": forms.PasswordInput()
-        }
+        widgets = {"password": forms.PasswordInput()}
 
     def clean(self):
         cleaned_data = super().clean()
@@ -26,7 +24,7 @@ class ParentForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.set_password(self.cleaned_data['password'])
+        user.set_password(self.cleaned_data["password"])
         if commit:
             user.save()
         return user

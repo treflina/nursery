@@ -42,7 +42,7 @@
         <div class="flex gap-2 items-end">
           <div class="w-full max-w-[300px] sm:w-auto flex flex-col gap-1">
             <label for="id_query" class="font-semibold text-sm text-neutral-800">{% translate 'Child' %}</label>
-            <input type="search" name="query" placeholder="Nazwisko imię" class="searchinput form-control" id="id_query"
+            <input type="search" name="query" placeholder="{% translate 'Enter child' %}" class="searchinput form-control" id="id_query"
               hx-trigger="keyup changed delay:500ms, search" hx-get="{% url 'absences:absences_list' %}" hx-indicator=".progress"
               hx-target=".table-container" hx-include="[name='month'], [name='year'], [name='day'] " x-data
               x-on:htmx:before-request="$dispatch('clear-pagination-and-sort')">
