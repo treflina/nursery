@@ -1,13 +1,12 @@
 from datetime import date, datetime
 
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.urls import reverse, reverse_lazy
+from django.views.decorators.http import require_http_methods
+from django.views.generic import CreateView, UpdateView
 from django_filters.views import FilterView
 from django_tables2 import SingleTableMixin
-
-from django.http import HttpResponse
-from django.views.generic import CreateView, UpdateView
-from django.views.decorators.http import require_http_methods
-from django.urls import reverse_lazy, reverse
-from django.shortcuts import render
 
 from apps.billings.models import Billing
 from apps.users.decorators import get_parent_context
@@ -82,6 +81,11 @@ class ChildCreateView(CreateView):
     template_name = "kids/child_form.html"
     success_url = reverse_lazy("kids:children")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["creating"] = True
+        return context
+
 
 class ChildUpdateView(UpdateView):
     model = Child
@@ -103,7 +107,12 @@ class ChildUpdateView(UpdateView):
 
 
 @require_http_methods(["DELETE"])
-def delete_absence(request, pk):
+def delete_child(request, pk):
     if request.htmx:
-        Child.objects.filter(pk=pk).delete()
+        child_to_delete = Child.objects.filter(pk=pk).last()
+        parent = child_to_delete.parent
+        if parent.child_set.count() == 1:
+            parent.delete()
+        child_to_delete.delete()
+
         return HttpResponse("")

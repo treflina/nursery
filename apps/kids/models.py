@@ -13,7 +13,7 @@ class Child(models.Model):
     birth_date = models.DateField(_("Date of birth"), blank=True, null=True)
     admission_date = models.DateField(_("Admission date"), default=date.today)
     leave_date = models.DateField(_("Leave date"), blank=True, null=True)
-    parent = models.ForeignKey(Parent, blank=True, null=True, on_delete=models.PROTECT)
+    parent = models.ForeignKey(Parent, blank=True, null=True, on_delete=models.SET_NULL)
     food_price = models.ForeignKey(
         "core.FoodPrice", on_delete=models.PROTECT, blank=True, null=True
     )

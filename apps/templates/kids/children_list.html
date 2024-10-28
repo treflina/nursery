@@ -6,7 +6,7 @@
 
 {% block content %}
 <main id="children-main"
-  class="modal-wrapper flex flex-col justify-center items-center w-full">
+  class="modal-wrapper flex flex-col justify-center items-center w-full {% if not updating %}bg-cyan-50 {% endif %}">
   {% comment %} <div class="modalBackground hidden"></div> {% endcomment %}
   {% if messages %}
   <div x-data="{showMsg : true}" @click.outside="showMsg = false" class="fixed top-3 right-3 z-10">

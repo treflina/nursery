@@ -1,8 +1,60 @@
 import Swal from 'sweetalert2';
 
 (() => {
+    let wrapper, modalBackground, modal;
+
+    const closeModal = () => {
+        console.log("closing");
+        modal.classList.add("hidden");
+        modal.innerHTML = "";
+        modalBackground.classList.add("hidden");
+        wrapper.removeAttribute("inert");
+    }
+
+    const openModal = (e) => {
+        modal.classList.remove("hidden");
+        modalBackground.classList.remove("hidden");
+        modal.focus();
+        !modal.classList.contains("no-inert") && wrapper.setAttribute("inert", "");
+    }
+
+    // htmx.logAll();
+
+    document.addEventListener("htmx:beforeSwap", (e) => {
+        if (e.detail.target.id == "modal" && !e.detail.xhr.response) {
+            console.log("beforeSwap closing")
+            closeModal()
+            e.detail.shouldSwap = false
+        }
+    })
+
+    document.addEventListener("htmx:afterSettle", (e) => {
+
+        const cancelBtns = document.querySelectorAll(".cancelBtn");
+
+        if (e.detail.target.id === "modal") {
+            openModal()
+        }
+
+        cancelBtns?.forEach((btn) =>
+            btn.addEventListener("click", closeModal)
+        );
+
+        modalBackground?.addEventListener("click", closeModal)
+        window.addEventListener("keyup", (e) => {
+            if (e.key === "Escape" && !modal?.classList.contains("hidden")) {
+                closeModal()
+            }
+        })
+    })
+
     document.addEventListener("htmx:load", () => {
-        // Show pop-up info about absent children
+
+        wrapper = document.querySelector(".modal-wrapper")
+        modalBackground = document.querySelector(".modalBackground");
+        modal = document.querySelector("#modal");
+
+         // Show pop-up info about absent children
         const absentTodayInfoBtn = document.querySelector(".absentToday");
         const absentTomorrowInfoBtn = document.querySelector(".absentTomorrow");
 
@@ -39,7 +91,6 @@ import Swal from 'sweetalert2';
         }
         );
     });
-
 
     // Delete absence confirmation
     document.addEventListener('htmx:confirm', function (evt) {
@@ -85,49 +136,5 @@ import Swal from 'sweetalert2';
             }
         });
     });
-
-
-    // // Show pop-up info about absent children ver.0
-    // let modal, targetModal;
-    // const wrapper = document.querySelector(".modal-wrapper")
-    // const openModalBtns = document.getElementsByClassName("openModal");
-    // let cancelBtns = document.getElementsByClassName("cancelBtn");
-    // const modalBackground = document.querySelector(".modalBackground");
-
-    // const openModal = (e) => {
-    //     targetModal = e.currentTarget.getAttribute("data-target");
-    //     modal = document.querySelector(`${targetModal}`);
-    //     modal.classList.remove("hidden");
-    //     modalBackground.classList.remove("hidden");
-    //     modal.focus();
-    //     !modal.classList.contains("no-inert") && wrapper.setAttribute("inert", "");
-    // }
-
-    // const closeModal = () => {
-    //     modal.classList.add("hidden");
-    //     modalBackground.classList.add("hidden");
-    //     wrapper.removeAttribute("inert")
-    //     const openModalBtn = document.querySelector(`[data-target="${targetModal}"]`)
-    //     openModalBtn.focus()
-    // }
-
-    // ([...openModalBtns]).forEach((btn) =>
-    //     btn.addEventListener("click", openModal)
-    // );
-
-
-
-    // ([...cancelBtns]).forEach((btn) =>
-    //     btn.addEventListener("click", closeModal)
-    // );
-
-    // modalBackground.addEventListener("click", closeModal)
-    // window.addEventListener("keyup", (e) => {
-    //     if (e.key === "Escape" && !modal.classList.contains("hidden")) {
-    //         closeModal()
-    //     }
-    // })
-
-    // document.addEventListener("absenceDeleted", closeModal)
 
 })();
