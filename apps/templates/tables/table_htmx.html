@@ -4,14 +4,12 @@
 {% load i18n %}
 
 {% block table %}
-
     <div class="skipnav"><a href="#pagination">Przejdź do paginacji</a></div>
     <table {% render_attrs table.attrs %} class="table table-header checkcolumn-table header bg-white">
         {% block table.thead %}
         <thead {{ table.attrs.thead.as_html }} class="bg-[#bdf3c1]">
             <tr>
               {% for column in table.columns %}
-
               {% if column.orderable %}
               <th scope="col" {{ column.attrs.th.as_html }} x-data="{ col_name: '{{ column.order_by_alias }}',
                     toggleSort(event) {

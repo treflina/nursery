@@ -1,16 +1,22 @@
 {% load static i18n %}
-<div id="top-info" hx-get="{% url 'absences:absences_top_info' %}" hx-trigger="absenceDeleted from:body" hx-swap="outerHTML" class="flex flex-wrap justify-center items-center gap-4 py-4 bg-neutral-200 w-full">
+<div id="top-info" hx-get="{% url 'absences:absences_top_info' %}" hx-trigger="absenceDeleted from:body" hx-swap="outerHTML"
+    class="flex flex-wrap justify-center items-center gap-4 py-1 bg-sky-700 w-full ">
+    <div class="h-[70px] bg-neutral-50 rounded-md border-2 border-neutral-300 mx-2">
+      <img class="h-full w-full" src="{% static 'img/logozlobeknobg.png' %}" alt="logo">
+    </div>
     {% if not today_off or not tomorrow_off %}
         <div class="font-semibold">
-            <p>{% translate 'Number of children' %} <span class="px-2 py-1 bg-[#92F398] rounded-md shadow-md">{% translate 'present' %}</span> /
-            <span class="px-2 py-1 bg-amber-100 rounded-md shadow-md">{% translate 'absent' %}</span> :
+            <p class="text-white">{% translate 'Number of children' %}
+            <span class="px-2 py-1 bg-neutral-50 rounded-md shadow-md text-black" title="{% translate 'Total today' %}">{{ num_children_today }}</span>
+            <span class="px-2 py-1 bg-[#92F398] rounded-md shadow-md text-black">{% translate 'present' %}</span> /
+            <span class="px-2 py-1 bg-amber-100 rounded-md shadow-md text-black">{% translate 'absent' %}</span> :
             </p>
         </div>
     {% endif %}
     <div class="flex flex-wrap gap-4 justify-center">
         {% if not today_off %}
             <div class="flex gap-2 items-center">
-            <p>{{ today|date:"l (j.m)"}}</p>
+            <p class="text-white">{{ today|date:"l (j.m)"}}</p>
             <div class="w-40 flex justify-between px-2 py-1 rounded-lg shadow-md font-semibold"
             style="background: linear-gradient(to right,
             #92F398 {{ perc_present_today }}%,
@@ -33,7 +39,7 @@
         {% endif %}
         {% if not tomorrow_off %}
             <div class="flex items-center gap-2">
-            <p>{{ tomorrow|date:"l (j.m)"}}</p>
+            <p class="text-white">{{ tomorrow|date:"l (j.m)"}}</p>
             <div class="w-40 flex justify-between px-2 py-1 rounded-lg shadow-md font-semibold"
                 style="background: linear-gradient(to right,
                 #92F398 {{ perc_present_tomorrow }}%,

@@ -56,9 +56,9 @@ class ChildrenList(SingleTableMixin, FilterView):
     paginate_by = 10
 
     def get_template_names(self):
-        print(self.request.headers.get("HX-Target"))
         if self.request.htmx and (
-            self.request.headers.get("HX-Target") != "children-main"
+            self.request.headers.get("HX-Target")
+            not in ["children-main", "children", "children-wrapper"]
         ):
             template_name = "tables/base_table_partial.html"
         else:

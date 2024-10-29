@@ -34,5 +34,5 @@ class ChildrenTable(tables.Table):
         model = Child
         template_name = "tables/table_htmx.html"
         show_header = False
-        exclude = ("id", "parent", "first_name")
+        exclude = ("id", "parent", "first_name", "birth_date")
         sequence = ("last_name", "...")

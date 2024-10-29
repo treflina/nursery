@@ -5,8 +5,10 @@
 {% load static django_tables2 i18n %}
 
 {% block content %}
+<div id="children-wrapper">
+{% include 'absences/includes/absences_top_info.html' %}
 <main id="children-main"
-  class="modal-wrapper flex flex-col justify-center items-center w-full {% if not updating %}bg-cyan-50 {% endif %}">
+class="modal-wrapper flex flex-col justify-center items-center w-full {% if creating or updating %}bg-cyan-50 {% endif %}">
   {% comment %} <div class="modalBackground hidden"></div> {% endcomment %}
   {% if messages %}
   <div x-data="{showMsg : true}" @click.outside="showMsg = false" class="fixed top-3 right-3 z-10">
@@ -25,8 +27,8 @@
     <div class="table-top-container">
       <div class="flex flex-wrap justify-center items-end gap-3 mt-2 p-2 border-2 rounded-sm bg-neutral-200 border-neutral-300">
         <div class="flex gap-2 items-end">
-          <div class="w-full max-w-[300px] sm:w-auto flex flex-col gap-1">
-            <label for="id_query" class="font-semibold text-sm text-neutral-800">{% translate 'Child' %}</label>
+          <div class="w-full max-w-[300px] sm:w-auto flex gap-2 flex-wrap items-center">
+            <label for="id_query" class="font-semibold text-neutral-800">{% translate 'Find child' %}</label>
             <input type="search" name="query" placeholder="{% translate 'Enter child' %}" class="searchinput form-control" id="id_query"
               hx-trigger="keyup changed delay:500ms, search" hx-get="{% url 'kids:children' %}" hx-indicator=".progress"
               hx-target=".table-container" x-data
@@ -80,6 +82,8 @@
     </div>
   </section>
 </main>
+</div>
+{% include 'absences/includes/absences_modals.html' %}
 {% endblock %}
 {% block footer %}
 {% endblock %}

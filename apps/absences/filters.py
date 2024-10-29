@@ -21,13 +21,14 @@ class AbsencesFilter(BaseFilter):
         _("May"),
         _("June"),
         _("July"),
+        _("October"),
         _("September"),
         _("October"),
         _("November"),
         _("December"),
     ]
     # MONTH_CHOICES = [(i, calendar.month_name[i]) for i in range(1, 13)]
-    MONTH_CHOICES = [(month[0] + 1, month[1]) for month in enumerate(MONTH_NAMES)]
+    MONTH_CHOICES = [(month[0], month[1]) for month in enumerate(MONTH_NAMES, start=1)]
     YEAR_CHOICES = [(i, i) for i in range(2024, year_end_range)]
 
     month = django_filters.ChoiceFilter(

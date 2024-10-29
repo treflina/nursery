@@ -11,7 +11,7 @@ class AbsencesTable(tables.Table):
     created_at = tables.DateTimeColumn(verbose_name=_("Created at"), format="d-m-y H:i")
     reason = tables.Column(accessor="reason", orderable=False)
     absence_type = tables.Column(
-        verbose_name=_("Type"), accessor="absence_type", orderable=False
+        verbose_name=_("Payable"), accessor="absence_type", orderable=False
     )
     accions = TemplateColumn(
         verbose_name=_("Accions"),
@@ -19,12 +19,12 @@ class AbsencesTable(tables.Table):
         orderable=False,
     )
 
-    def render_absence_type(self, value):
-        if value == "first day":
-            return _("Yes (PD)")
-        elif value == "not reported":
-            return _("Yes (NZ)")
-        elif value == "reported":
+    def render_absence_type(self, value, record):
+        if record.absence_type == "FR":
+            return _("Yes (pd)")
+        elif record.absence_type == "NR":
+            return _("Yes (nz)")
+        elif record.absence_type == "R":
             return _("No")
         else:
             return _("No (Other)")

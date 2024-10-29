@@ -64,6 +64,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "apps.core.context_processors.session_child",
                 "apps.core.context_processors.children_count",
+                "utils.context_processors.nav_info",
             ],
         },
     },

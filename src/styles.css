@@ -51,7 +51,6 @@
 
 .errorlist {
     color: rgb(200,30,30);
-    font-weight: bolder;
 }
 
 form .phac_aspc_form_autocomplete {
@@ -139,7 +138,7 @@ text-align: left;
 /* Table column width */
 .absences .table-container td:nth-child(1),
 .absences .table-header th:nth-child(1)  {
-    width: 6rem;
+    width: 5.5rem;
 }
 
 .absences .table-container td:nth-child(2),
@@ -154,17 +153,17 @@ text-align: left;
 
 .absences .table-container td:nth-child(5),
 .absences .table-header th:nth-child(5)  {
-    width: 8.5rem;
+    width: 10rem;
 }
 
 .absences .table-container td:nth-child(6),
 .absences .table-header th:nth-child(6)  {
-    width: 10rem;
+    width: 9rem;
 }
 
 .children .table-container td:nth-child(1),
 .children .table-header th:nth-child(1)  {
-    width: 14rem;
+    width: 30%;
 }
 /*
 

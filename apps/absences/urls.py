@@ -1,8 +1,13 @@
 from django.urls import path
 
-from .views import (AbsencesView, AbsenceUpdateView, create_absence,
-                    delete_absence, nursery_create_absence,
-                    top_info_about_absences)
+from .views import (
+    AbsencesView,
+    AbsenceUpdateView,
+    create_absence,
+    delete_absence,
+    nursery_create_absence,
+    top_info_about_absences,
+)
 
 app_name = "absences"
 

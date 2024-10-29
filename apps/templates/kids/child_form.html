@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load static i18n %}
 {% block content %}
-
+<div id="children-wrapper">
+{% include 'absences/includes/absences_top_info.html' %}
 <main id="children-main"
-  class="modal-wrapper flex flex-col items-center w-full min-h-dvh">
+class="modal-wrapper flex flex-col items-center w-full min-h-dvh">
   {% if messages %}
   <div x-data="{showMsg : true}" @click.outside="showMsg = false" class="fixed top-3 right-3 z-10">
     <div x-show="showMsg" class="relative pr-5 pl-3 pb-4 bg-[#e0f6e2] rounded-md border-2 border-[#77ef7f] shadow-sm">
@@ -24,7 +25,7 @@
         {% endif %}
     </h1>
     <form method="post"
-    class="flex flex-col gap-2 items-start justify-start bg-neutral-100 border-2 border-neutral-300 rounded-md
+        class="flex flex-col gap-2 items-start justify-start bg-neutral-100 border-2 border-neutral-300 rounded-md
         p-4 sm:p-6 md:p-10 lg:px-12 lg:py:8 my-1 w-full  md:w-[600px] shadow-md"> {% csrf_token %}
         {{ form.non_field_errors }}
         <div class="flex flex-wrap gap-2 w-full">
@@ -74,6 +75,15 @@
                     <span class="sr-only">{% translate 'Change password' %}</span>
                 </a>
                 <a class="openModal cursor-pointer flex items-center text-sm gap-1"
+                    hx-get="{% url 'users:parent_email' %}"
+                    hx-target="#modal"
+                    title="{% translate 'Change email' %}">
+                    <svg class="w-4 h-4 fill-neutral-700" alt="" aria-hidden="true">
+                        <use href="{% static 'img/sprite.svg' %}#at" />
+                    </svg>
+                    <span class="sr-only">{% translate 'Delete' %}</span>
+                </a>
+                <a class="openModal cursor-pointer flex items-center text-sm gap-1"
                     hx-get="{% url 'users:parent_delete' %}"
                     hx-target="#modal"
                     title="{% translate 'Delete' %}">
@@ -90,11 +100,17 @@
             <button type="button" class="rounded-md border-2
                 px-4 pt-2 pb-2 bg-amber-100 hover:bg-amber-200 hover:shadow-md transition-all duration-300
                 uppercase font-semibold"
-                hx-get="{% url 'kids:children' %}"
-                hx-target="#children-main"
-                hx-swap="outerHTML">{% translate 'Back' %}</button>
-            <button type="submit" class="self-end rounded-md border-2
-                px-4 pt-2 pb-2 bg-blue-300 hover:bg-blue-400 hover:shadow-md transition-all duration-300
+                onclick="history.back()">
+                {% translate 'Back' %}</button>
+            <button type="submit"
+                {% if creating %}
+                hx-post="{{ request.path }}"
+                hx-target="#children-wrapper"
+                hx-swap="outerHTML"
+                {% endif %}
+                class="self-end rounded-md border-2
+                px-4 pt-2 pb-2 bg-sky-700 text-white hover:bg-sky-600 hover:shadow-md
+                transition-all duration-300
                 uppercase font-semibold">{% translate 'Ready' %}</button>
         </div>
     </form>
@@ -109,4 +125,8 @@
     </div>
 </section>
 </main>
+</div>
+{% if updating %}
+{% include 'absences/includes/absences_modals.html' %}
+{% endif %}
 {% endblock content%}

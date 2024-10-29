@@ -37,6 +37,11 @@ class Parent(User):
     class Meta:
         proxy = True
 
+    def __str__(self):
+        if self.email != "":
+            return f"{self.username} ({self.email})"
+        return self.username
+
 
 class EmployeeManager(BaseUserManager):
 

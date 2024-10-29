@@ -5,6 +5,8 @@
     {% translate 'Add parental account' %}
     {% elif update %}
     {% translate 'Change password' %}
+     {% elif change_email %}
+    {% translate 'Enter/Change e-mail address' %}
     {% elif delete %}
     {% translate 'Delete parental account' %}
     {% endif %}
@@ -17,6 +19,13 @@
         {{ form2.username.errors }}
         {{ form2.username }}
       </div>
+      {% if not update %}
+      <div class="flex flex-col gap-1 w-full">
+        <label for="id_username">{{ form2.email.label }}</label>
+        {{ form2.email.errors }}
+        {{ form2.email }}
+      </div>
+      {% endif %}
       {% if form2.password %}
       <div class="flex flex-col gap-1 w-full">
         {{ form2.password.as_field_group }}
@@ -39,12 +48,14 @@
               px-4 pt-2 pb-2 bg-amber-100 hover:bg-amber-200 hover:shadow-md transition-all duration-300
               uppercase font-semibold">{% translate 'Back' %}</button>
           <button type="submit" class="self-end rounded-md border-2
-              px-4 pt-2 pb-2 bg-blue-300 hover:bg-blue-400 hover:shadow-md transition-all duration-300
+              px-4 pt-2 pb-2 text-white bg-sky-700 hover:bg-sky-600 hover:shadow-md transition-all duration-300
               uppercase font-semibold">
               {% if add %}
               {% translate 'Add' %}
               {% elif update %}
               {% translate 'Change' %}
+              {% elif change_email %}
+              {% translate 'Ready' %}
               {% elif delete %}
               {% translate 'Delete' %}
               {% endif %}

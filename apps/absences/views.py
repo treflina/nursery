@@ -21,7 +21,7 @@ from .filters import AbsencesFilter
 from .forms import AbsenceForm, NurseryAbsenceForm, UpdateAbsenceForm
 from .models import Absence
 from .tables import AbsencesTable
-from .utils import get_top_absence_info_context, resp_err
+from .utils import resp_err
 
 
 class AbsencesView(SingleTableMixin, FilterView):
@@ -43,21 +43,16 @@ class AbsencesView(SingleTableMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        absence_context = get_top_absence_info_context()
 
         # get recently updated absence id to set focus
         updated_obj = self.request.session.pop("updated_obj", None)
-
-        absence_context["updated_obj"] = updated_obj
-        context.update(**absence_context)
+        context["updated_obj"] = updated_obj
         return context
 
 
 def top_info_about_absences(request):
 
-    context = get_top_absence_info_context()
-
-    resp = render(request, "absences/includes/absences_top_info.html", context=context)
+    resp = render(request, "absences/includes/absences_top_info.html")
     resp["HX-Trigger"] = "get_top_info"
     return resp
 
@@ -67,12 +62,6 @@ class AbsenceUpdateView(SuccessMessageMixin, UpdateView):
     form_class = UpdateAbsenceForm
     template_name = "absences/absence_update.html"
     success_message = _("Data has been successfully changed")
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        absence_context = get_top_absence_info_context()
-        context.update(**absence_context)
-        return context
 
     def get_success_url(self):
         self.request.session["updated_obj"] = self.kwargs.get("pk")
@@ -86,7 +75,7 @@ class AbsenceUpdateView(SuccessMessageMixin, UpdateView):
 def delete_absence(request, pk):
     if request.htmx:
         Absence.objects.filter(pk=pk).delete()
-        return HttpResponse("")
+        return HttpResponse("", headers={"HX-Trigger": "absenceDeleted"})
 
 
 @get_parent_context

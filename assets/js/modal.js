@@ -49,12 +49,12 @@ import Swal from 'sweetalert2';
     })
 
     document.addEventListener("htmx:load", () => {
-
+        // for parent form modals (not swal)
         wrapper = document.querySelector(".modal-wrapper")
         modalBackground = document.querySelector(".modalBackground");
         modal = document.querySelector("#modal");
 
-         // Show pop-up info about absent children
+         // Show swal pop-up info about absent children
         const absentTodayInfoBtn = document.querySelector(".absentToday");
         const absentTomorrowInfoBtn = document.querySelector(".absentTomorrow");
 

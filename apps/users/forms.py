@@ -1,9 +1,39 @@
+from autocomplete import HTMXAutoComplete, widgets
 from django import forms
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from .models import Parent
+
+
+class ParentHTMXAutocomplete(HTMXAutoComplete):
+    """Autocomplete component to select Data Sources from a library"""
+
+    name = "username"
+    model = Parent
+    minimum_search_length = 2
+    placeholder = _("Start typing to search")
+
+    def get_items(self, search=None, values=None):
+        data = Parent.objects.all()
+        if search is not None:
+            items = [
+                {"label": str(x), "value": x.username}
+                for x in data
+                # Refactor so equality comparison is a function passed in?
+                if search == "" or str(search).upper() in f"{x}".upper()
+            ]
+            return items
+        if values is not None:
+            items = [
+                {"label": str(x), "value": x.username}
+                for x in data
+                if x.username in values
+            ]
+            return items
+
+        return []
 
 
 class ParentForm(forms.ModelForm):
@@ -22,12 +52,13 @@ class ParentForm(forms.ModelForm):
 
     class Meta:
         model = Parent
-        fields = ["username", "password", "password2"]
+        fields = ["username", "email", "password", "password2"]
         base_class = """border-2 border-blue-300 rounded-md
                 focus:ring-[#92F398] focus:border-[#92F398] bg-white"""
         widgets = {
             "username": forms.TextInput(attrs={"class": base_class}),
             "password": forms.PasswordInput(attrs={"class": base_class}),
+            "email": forms.EmailInput(attrs={"class": base_class}),
         }
 
     def clean(self):
@@ -51,16 +82,59 @@ class ParentForm(forms.ModelForm):
         return user
 
 
-class ParentUpdateForm(forms.ModelForm):
+class ParentChangeEmailForm(forms.ModelForm):
 
-    base_class = """border-2 border-blue-300 rounded-md
+    username = forms.CharField(
+        widget=widgets.Autocomplete(
+            name="username",
+            use_ac=ParentHTMXAutocomplete,
+            attrs={
+                "component_id": "id_username",
+                "id": "id_username__textinput",
+                "autocomplete": "off",
+            },
+        )
+    )
+
+    class Meta:
+        model = Parent
+        fields = ["email"]
+        base_class = """border-2 border-blue-300 rounded-md
                 focus:ring-[#92F398] focus:border-[#92F398] bg-white"""
+        widgets = {
+            # "username":
+            "email": forms.EmailInput(attrs={"class": base_class}),
+        }
 
-    username = forms.CharField(widget=forms.TextInput(attrs={"class": base_class}))
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        if not Parent.objects.filter(username=username).exists():
+            raise ValidationError(_("Username is invalid."))
+        return username
+
+
+class ParentChangePasswordForm(forms.ModelForm):
+
+    username = forms.CharField(
+        widget=widgets.Autocomplete(
+            name="username",
+            use_ac=ParentHTMXAutocomplete,
+            attrs={
+                "component_id": "id_username",
+                "id": "id_username__textinput",
+                "autocomplete": "off",
+            },
+        )
+    )
 
     password2 = forms.CharField(
         label=_("Repeat password"),
-        widget=forms.PasswordInput(attrs={"class": base_class}),
+        widget=forms.PasswordInput(
+            attrs={
+                "class": """border-2 border-blue-300 rounded-md
+                focus:ring-[#92F398] focus:border-[#92F398] bg-white"""
+            }
+        ),
     )
 
     class Meta:
@@ -69,7 +143,6 @@ class ParentUpdateForm(forms.ModelForm):
         base_class = """border-2 border-blue-300 rounded-md
                 focus:ring-[#92F398] focus:border-[#92F398] bg-white"""
         widgets = {
-            "username": forms.TextInput(attrs={"class": base_class}),
             "password": forms.PasswordInput(attrs={"class": base_class}),
         }
 
