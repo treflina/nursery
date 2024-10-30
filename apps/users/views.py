@@ -1,9 +1,9 @@
-from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
+from django_htmx.http import trigger_client_event
 
 from .forms import (
     GetParentForm,
@@ -27,7 +27,9 @@ def create_parent(request):
         form = ParentForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponse(status=204)
+            resp = HttpResponse(status=204)
+            msg = _("User's account has been created.")
+            return trigger_client_event(resp, "showToast", {"msg": msg})
     else:
         form = ParentForm()
 
@@ -42,8 +44,10 @@ def change_password_parent(request):
             parent = Parent.objects.filter(username=username).last()
             parent.set_password(form.cleaned_data["password"])
             parent.save()
-            messages.success(request, _("User's password has been changed."))
-            return HttpResponse(status=204, headers={"HX-Trigger": "passwordChanged"})
+            # messages.success(request, )
+            resp = HttpResponse(status=204)
+            msg = _("User's password has been changed.")
+            return trigger_client_event(resp, "showToast", {"msg": msg})
     else:
         form = ParentChangePasswordForm()
 
@@ -57,8 +61,9 @@ def change_email_parent(request):
             username = form.cleaned_data["username"]
             email = form.cleaned_data["email"]
             Parent.objects.filter(username=username).update(email=email)
-            messages.success(request, _("User's email has been changed."))
-            return HttpResponse(status=204)
+            resp = HttpResponse(status=204)
+            msg = _("User's email has been changed.")
+            return trigger_client_event(resp, "showToast", {"msg": msg})
     else:
         form = ParentChangeEmailForm()
 
@@ -73,8 +78,10 @@ def delete_parent(request):
         if form.is_valid():
             username = form.cleaned_data.get("username")
             Parent.objects.filter(username=username).delete()
-            messages.success(request, _("User's account has been deleted."))
-            return HttpResponse(status=204)
+            resp = HttpResponse(status=204)
+            msg = _("User's account has been deleted.")
+            return trigger_client_event(resp, "showToast", {"msg": msg})
+
     else:
         form = GetParentForm()
     return render(request, "users/parent_form.html", {"form2": form, "delete": True})

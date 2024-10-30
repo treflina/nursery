@@ -1,5 +1,5 @@
 {% load static i18n %}
-<div id="top-info" hx-get="{% url 'absences:absences_top_info' %}" hx-trigger="absenceDeleted from:body" hx-swap="outerHTML"
+<div id="top-info" hx-get="{% url 'absences:absences_top_info' %}" hx-trigger="absenceDeleted from:body, childDeleted from:body, updateTopNav from:body" hx-swap="outerHTML"
     class="flex flex-wrap justify-center items-center gap-4 py-1 bg-sky-700 w-full ">
     <div class="h-[70px] bg-neutral-50 rounded-md border-2 border-neutral-300 mx-2">
       <img class="h-full w-full" src="{% static 'img/logozlobeknobg.png' %}" alt="logo">

@@ -1,7 +1,5 @@
 from datetime import date, datetime, timedelta
 
-from django.contrib import messages
-from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -49,6 +47,17 @@ class AbsencesView(SingleTableMixin, FilterView):
         context["updated_obj"] = updated_obj
         return context
 
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+
+        created_abs = self.request.session.pop("created_absence", None)
+        if created_abs:
+            msg = _("Absence has been added.")
+            trigger_client_event(response, "updateTopNav")
+            return trigger_client_event(response, "showToast", {"msg": msg})
+
+        return response
+
 
 def top_info_about_absences(request):
 
@@ -57,11 +66,11 @@ def top_info_about_absences(request):
     return resp
 
 
-class AbsenceUpdateView(SuccessMessageMixin, UpdateView):
+class AbsenceUpdateView(UpdateView):
     model = Absence
     form_class = UpdateAbsenceForm
     template_name = "absences/absence_update.html"
-    success_message = _("Data has been successfully changed")
+    # success_message = _("Data has been successfully changed")
 
     def get_success_url(self):
         self.request.session["updated_obj"] = self.kwargs.get("pk")
@@ -220,9 +229,7 @@ for the submitted date."
 
             if absences_list:
                 Absence.objects.bulk_create(absences_list)
-                messages.success(
-                    request, _("Absence's data has been successfully submitted.")
-                )
+                request.session["created_absence"] = True
                 return redirect(reverse("absences:absences_list"))
             else:
                 form.add_error(None, _("Chosen days are already off."))

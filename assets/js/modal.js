@@ -3,6 +3,19 @@ import Swal from 'sweetalert2';
 (() => {
     let wrapper, modalBackground, modal;
 
+    const Toast = Swal.mixin({
+            toast: true,
+            timerProgressBar: true,
+            timer: 3000,
+            position: "bottom-end",
+            background: "#e0f6e2",
+            showConfirmButton: false,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        })
+
     const closeModal = () => {
         console.log("closing");
         modal.classList.add("hidden");
@@ -137,4 +150,10 @@ import Swal from 'sweetalert2';
         });
     });
 
+    document.addEventListener("showToast", function (evt) {
+        const message = evt.detail.msg
+        Toast.fire({
+            text: message || "Data has been successfully changed.",
+        })
+    })
 })();

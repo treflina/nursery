@@ -4,6 +4,7 @@ from .views import (
     ChildCreateView,
     ChildrenList,
     ChildUpdateView,
+    # create_child,
     delete_child,
     switch_child_profile,
 )
@@ -15,5 +16,6 @@ urlpatterns = [
     path("children/", ChildrenList.as_view(), name="children"),
     path("children/delete/<int:pk>/", delete_child, name="delete"),
     path("children/create", ChildCreateView.as_view(), name="create"),
+    # path("children/create", create_child, name="create"),
     path("children/update/<int:pk>/", ChildUpdateView.as_view(), name="update"),
 ]
