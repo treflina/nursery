@@ -1,7 +1,14 @@
 from django.urls import path, register_converter
 
 from .converters import DateConverter
-from .views import day_details, display_calendar, home
+from .views import (
+    create_additional_day_off,
+    day_details,
+    delete_additional_day_off,
+    display_calendar,
+    home,
+    main_settings
+)
 
 register_converter(DateConverter, "date")
 
@@ -15,6 +22,8 @@ urlpatterns = [
     path("calendar/", display_calendar, name="calendar"),
     path("day/<date:chosendate>/", day_details, name="day"),
     path("day/", day_details, name="day"),
-    path("settings/", day_details, name="settings"),
+    path("settings/", main_settings, name="settings"),
+    path("settings/createday/", create_additional_day_off, name="day_create" ),
+    path("settings/deleteday/<int:pk>/", delete_additional_day_off, name="day_delete" ),
     path("", home, name="home"),
 ]

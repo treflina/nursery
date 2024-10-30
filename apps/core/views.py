@@ -1,8 +1,12 @@
 import calendar
 from datetime import date, datetime
 
+from django.http import HttpResponse
 from django.shortcuts import render
+from django.utils.translation import gettext_lazy as _
+from django.views.decorators.http import require_http_methods
 from django.views.generic import CreateView
+from django_htmx.http import trigger_client_event
 
 from apps.absences.models import Absence
 from apps.billings.models import Billing
@@ -10,7 +14,8 @@ from apps.kids.models import Child
 from apps.users.decorators import get_parent_context
 from apps.users.models import Parent
 
-from .models import FoodPrice
+from .forms import AdditionalDayOffForm
+from .models import FoodPrice, AdditionalDayOff
 from .utils.absent_days import get_holidays, get_not_enrolled_days
 from .utils.helpers import get_next_prev_month
 
@@ -130,8 +135,36 @@ def day_details(request, selected_child, children, chosendate=None):
     )
 
 
-def main_settings(self):
-    pass
+def main_settings(request):
+    today = date.today()
+    additional_days_off = AdditionalDayOff.objects.filter(day__gte=today)
+    context = {}
+    context["additional_days_off"] = additional_days_off
+
+    return render(request, "core/settings.html", context=context)
+
+
+def create_additional_day_off(request):
+    if request.method == "POST":
+        form = AdditionalDayOffForm(request.POST)
+        if form.is_valid():
+            form.save()
+            resp = HttpResponse(status=204)
+            msg = _("Additional day off has been saved.")
+            trigger_client_event(resp, "dayOffAdded")
+            return trigger_client_event(resp, "showToast", {"msg": msg})
+    else:
+        form = AdditionalDayOffForm()
+    return render(request, "core/settings_form.html", {"form": form, "add": True})
+
+
+@require_http_methods(["DELETE"])
+def delete_additional_day_off(request, pk):
+    if request.htmx:
+        AdditionalDayOff.objects.filter(pk=pk).delete()
+        resp = HttpResponse("")
+        msg = _("Day off has been deleted.")
+        return trigger_client_event(resp, "showToast", {"msg": msg})
 
 
 class FoodPrice(CreateView):

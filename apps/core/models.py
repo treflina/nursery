@@ -19,6 +19,18 @@ class TimeUserStampedModel(models.Model):
         abstract = True
 
 
+class AdditionalDayOff(models.Model):
+
+    day = models.DateField()
+
+    def __str__(self):
+        return f"{self.day}"
+
+    class Meta:
+        verbose_name = _("Additional day off")
+        verbose_name_plural = _("Additional days off")
+
+
 class FoodPrice(models.Model):
 
     name = models.CharField(_("Name"), max_length=255, null=False, blank=False)

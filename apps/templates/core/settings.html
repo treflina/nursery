@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% block content %}
+<div id="settings-wrapper">
+    {% include 'absences/includes/absences_top_info.html' %}
+    <main id="settings-main"
+        class="modal-wrapper flex flex-col justify-center items-center w-full">
+        {% if messages %}
+        <div x-data="{showMsg : true}" @click.outside="showMsg = false" class="fixed top-3 right-3 z-10">
+            <div x-show="showMsg" class="relative pr-5 pl-3 pb-4 bg-[#e0f6e2] rounded-md border-2 border-[#77ef7f] shadow-sm">
+            <button @click="showMsg = false" class="ml-auto -mr-4 flex justify-center items-center px-2 rounded-md after:absolute after:inset-0"
+            aria-label="Zamknij"><span aria-hidden="true">x</span></button>
+            {% for m in messages %}
+            <p {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ m }}</p>
+            {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        <section id="settings" class="my-8 px-1 relative">
+            <h1 class="text-2xl font-semibold mb-8 text-center">{% translate 'Settings' %}</h1>
+            <div id="days-off">
+                <div class="flex flex-wrap gap-3 items-center mb-4">
+                    <h2 class="text-xl font-semibold">{% translate 'Additional days off' %}</h2>
+                    <a id="parent_add"
+                        class="openModal cursor-pointer flex items-center text-sm gap-1 text-blue-700 font-semibold"
+                        hx-target="#modal"
+                        hx-get="{% url 'core:day_create' %}"
+                        >
+                        <svg class="w-4 h-4 fill-blue-700" alt="" aria-hidden="true">
+                            <use href="{% static 'img/sprite.svg' %}#plus2" />
+                        </svg>
+                        {% translate 'Add' %}
+                    </a>
+                </div>
+                <div id="days-off-content" class="flex flex-wrap gap-3"
+                    hx-get="{% url 'core:settings' %}"
+                    hx-select="#days-off-content"
+                    hx-target="#days-off-content"
+                    hx-swap="outerHTML"
+                    hx-trigger="dayOffAdded from:body">
+                    {% for item in additional_days_off %}
+                        <div class="flex gap-2 items-center px-4 py-2 bg-neutral-100 border-2 border-neutral-200 rounded-md">
+                            {{ item.day|date:"d-m-Y" }}
+                            <a class="openModal cursor-pointer flex items-center text-sm gap-1"
+                                hx-delete="{% url 'core:day_delete' item.id %}"
+                                hx-target="closest div"
+                                hx-swap="outerHTML"
+                                confirm-swal="dodatkowy dzień wolny: {{ item.day|date:'d-m-Y' }}"
+                                title="{% translate 'Delete' %}">
+                                <svg class="w-4 h-4 fill-red-700" alt="" aria-hidden="true">
+                                    <use href="{% static 'img/sprite.svg' %}#trash" />
+                                </svg>
+                                <span class="sr-only">{% translate 'Delete' %}</span>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="modalBackground hidden"></div>
+            <div id="parent-form-wrapper">
+            <div role="dialog" id="modal" aria-labelledby="modal-title"
+                hx-target="this"
+                class="no-inert modalbox hidden bg-neutral-50 rounded-md lg:w-96
+                px-2 py-3 md::p-6 lg:px-12 lg:py-6"
+                tabindex="-1">
+            </div>
+        </div>
+        </section>
+    </main>
+</div>
+{% endblock content %}

@@ -1,0 +1,30 @@
+{% load i18n %}
+
+  <h2 id="modal-title" class="font-semibold mb-4 text-lg">
+    {% if add %}
+    {% translate 'Add additional day off' %}
+    {% endif %}
+  </h2>
+  <form method="post" hx-post="{{ request.path }}" id="settings-form"
+      class="flex flex-col gap-3"> {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="flex flex-col gap-1 w-full">
+        <label for="id_day">{{ form.day.label }}</label>
+        {{ form.day.errors }}
+        {{ form.day }}
+      </div>
+      <div class="flex gap-2 justify-center items-center w-full mt-4 lg:mt-8">
+          <button type="button" class="cancelBtn rounded-md border-2
+              px-4 pt-2 pb-2 bg-amber-100 hover:bg-amber-200 hover:shadow-md transition-all duration-300
+              uppercase font-semibold">{% translate 'Back' %}</button>
+          <button type="submit" class="self-end rounded-md border-2
+              px-4 pt-2 pb-2 text-white bg-sky-700 hover:bg-sky-600 hover:shadow-md transition-all duration-300
+              uppercase font-semibold">
+              {% if add %}
+              {% translate 'Add' %}
+              {% else %}
+              {% translate 'Ready' %}
+              {% endif %}
+            </button>
+      </div>
+  </form>

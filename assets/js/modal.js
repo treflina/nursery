@@ -116,7 +116,7 @@ import Swal from 'sweetalert2';
         const nextElementToFocus = (
             evt.detail.elt.closest('tr')?.nextElementSibling?.querySelector("a")
         ) ?? (evt.detail.elt.closest('tr')?.previousElementSibling?.querySelector("button")
-            ) ?? document?.querySelector(".pagination").querySelector("button");
+            ) ?? document.querySelector(".pagination")?.querySelector("button");
 
         evt.preventDefault();
 
