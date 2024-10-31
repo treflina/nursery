@@ -7,6 +7,16 @@
     {% translate 'Add food price' %}
     {% elif update_food_price %}
     {% translate 'Change food price' %}
+    {% elif update_monthly_payment %}
+    {% translate 'Change monthly payment price' %}
+     {% elif add_monthly %}
+    {% translate 'Add monthly payment' %}
+    {% elif update_local %}
+    {% translate 'Change local subsidy amount' %}
+    {% elif add_local %}
+    {% translate 'Add local subsidy' %}
+    {% else %}
+    {% translate 'Edit subsidy' %}
     {% endif %}
   </h2>
   <form method="post" hx-post="{{ request.path }}"
@@ -19,17 +29,35 @@
         {{ form.day }}
       </div>
       {% endif %}
-      {% if add_food_price or update_food_price %}
+      {% if add_food_price or update_food_price or update_monthly_payment or add_monthly %}
       <div class="flex flex-col gap-3">
+          {% if not update_monthly_payment or add_monthly %}
           <div class="flex flex-col gap-1 w-full">
             <label for="id_name">{{ form.name.label }}</label>
             {{ form.name.errors }}
             {{ form.name }}
           </div>
+          {% endif %}
           <div class="flex flex-col gap-1 w-full">
             <label for="id_price">{{ form.price.label }}</label>
             {{ form.price.errors }}
             {{ form.price }}
+          </div>
+      </div>
+      {% endif %}
+       {% if update_other or gov or update_local or add_local %}
+      <div class="flex flex-col gap-3">
+          {% if not update_local %}
+          <div class="flex flex-col gap-1 w-full">
+            <label for="id_name">{{ form.name.label }}</label>
+            {{ form.name.errors }}
+            {{ form.name }}
+          </div>
+          {% endif %}
+          <div class="flex flex-col gap-1 w-full">
+            <label for="id_price">{{ form.amount.label }}</label>
+            {{ form.amount.errors }}
+            {{ form.amount }}
           </div>
       </div>
       {% endif %}
@@ -40,7 +68,7 @@
           <button type="submit" class="self-end rounded-md border-2
               px-4 pt-2 pb-2 text-white bg-sky-700 hover:bg-sky-600 hover:shadow-md transition-all duration-300
               uppercase font-semibold">
-              {% if add %}
+              {% if add or add_monthly or add_local %}
               {% translate 'Add' %}
               {% else %}
               {% translate 'Ready' %}

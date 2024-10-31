@@ -2,12 +2,12 @@ from datetime import date, datetime
 
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.utils.translation import gettext_lazy as _
 from django.urls import reverse, reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from django.views.generic import CreateView, UpdateView
-from django_htmx.http import trigger_client_event
 from django_filters.views import FilterView
+from django_htmx.http import trigger_client_event
 from django_tables2 import SingleTableMixin
 
 from apps.billings.models import Billing

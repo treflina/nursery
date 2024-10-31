@@ -38,3 +38,49 @@ class FoodPrice(models.Model):
 
     def __str__(self):
         return f"{self.name}: {self.price} zł"
+
+
+class MonthlyPayment(models.Model):
+
+    price = models.DecimalField(_("Amount"), max_digits=6, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f"Monthly payment {self.price} zł"
+
+
+class LocalSubsidy(models.Model):
+
+    amount = models.DecimalField(_("Amount"), max_digits=6, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f"Local subsidy {self.amount} zł"
+
+    class Meta:
+        verbose_name = _("Local subsidy")
+        verbose_name_plural = _("Local subsidies")
+
+
+class GovernmentSubsidy(models.Model):
+
+    name = models.CharField(_("Name"), max_length=255)
+    amount = models.DecimalField(_("Amount"), max_digits=6, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f"{self.name}: {self.amount} zł"
+
+    class Meta:
+        verbose_name = _("Government subsidy")
+        verbose_name_plural = _("Government subsidies")
+
+
+class OtherSubsidy(models.Model):
+
+    name = models.CharField(_("Name"), max_length=255)
+    amount = models.DecimalField(_("Amount"), max_digits=6, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f"{self.name}: {self.amount} zł"
+
+    class Meta:
+        verbose_name = _("Other subsidy")
+        verbose_name_plural = _("Other subsidies")

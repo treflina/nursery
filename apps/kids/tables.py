@@ -13,16 +13,34 @@ class ChildrenTable(tables.Table):
         verbose_name=_("Food"), accessor="food_price", orderable=False
     )
     local_subsidy = TemplateColumn(
-        verbose_name=_("Local subsidy"),
+        verbose_name=_("Gm.Turawa"),
         accessor="local_subsidy",
         template_name="kids/includes/yes_no.html",
         orderable=False,
+    )
+    gov_subsidy = tables.Column(
+        verbose_name=_("Subsidies"),
+        accessor="gov_subsidy",
+        orderable=False,
+        empty_values=[],
     )
     accions = TemplateColumn(
         verbose_name=_("Accions"),
         template_name="kids/includes/child_accions_links.html",
         orderable=False,
     )
+
+    def render_gov_subsidy(self, value, record):
+        if not value:
+            amount = "-"
+        else:
+            amount = value.amount
+        other = record.other_subsidies_sum
+        if other == 0:
+            other = "-"
+        if amount == "-" and other == "-":
+            return "-"
+        return f"{amount} | {other}"
 
     def render_food_price(self, value):
         return value.price

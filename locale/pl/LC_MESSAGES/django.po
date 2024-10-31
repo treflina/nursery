@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-30 17:59+0100\n"
+"POT-Creation-Date: 2024-10-31 12:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -169,10 +169,8 @@ msgid "Yes (pd)"
 msgstr "Tak (PD)"
 
 #: .\apps\absences\tables.py:26
-#, fuzzy
-#| msgid "Yes (PD)"
 msgid "Yes (nz)"
-msgstr "Tak (PD)"
+msgstr "Tak (nz)"
 
 #: .\apps\absences\tables.py:28
 msgid "No"
@@ -218,7 +216,7 @@ msgstr "Stawka wyżywienia"
 msgid "Food total"
 msgstr "Wyżywienie (suma)"
 
-#: .\apps\billings\models.py:19
+#: .\apps\billings\models.py:19 .\apps\templates\core\settings.html:118
 msgid "Monthly payment"
 msgstr "Miesięczna opłata"
 
@@ -234,7 +232,7 @@ msgstr "ZUS"
 msgid "Paid"
 msgstr "Zapłacone"
 
-#: .\apps\core\forms.py:9
+#: .\apps\core\forms.py:13
 msgid "Enter date"
 msgstr "Wprowadź datę"
 
@@ -246,25 +244,66 @@ msgstr "zmienione przez"
 msgid "Additional day off"
 msgstr "Dodatkowy dzień wolny"
 
-#: .\apps\core\models.py:31 .\apps\templates\core\settings.html:23
+#: .\apps\core\models.py:31 .\apps\templates\core\settings.html:30
 msgid "Additional days off"
 msgstr "Dodatkowe dni wolne"
 
-#: .\apps\core\models.py:36
+#: .\apps\core\models.py:36 .\apps\core\models.py:65 .\apps\core\models.py:78
 msgid "Name"
 msgstr "Nazwa"
 
-#: .\apps\core\models.py:37
+#: .\apps\core\models.py:37 .\apps\core\models.py:45
 msgid "Price"
 msgstr "Cena"
 
-#: .\apps\core\views.py:153
+#: .\apps\core\models.py:53 .\apps\core\models.py:66 .\apps\core\models.py:79
+msgid "Amount"
+msgstr "Kwota"
+
+#: .\apps\core\models.py:59 .\apps\kids\models.py:20 .\apps\kids\tables.py:16
+#: .\apps\templates\core\settings.html:144
+msgid "Local subsidy"
+msgstr "Dopłata dla mieszkańców gminy"
+
+#: .\apps\core\models.py:60
+msgid "Local subsidies"
+msgstr "Dopłaty"
+
+#: .\apps\core\models.py:72
+msgid "Government subsidy"
+msgstr "Dopłata państwowa"
+
+#: .\apps\core\models.py:73
+msgid "Government subsidies"
+msgstr "Dopłaty państwowe"
+
+#: .\apps\core\models.py:85
+msgid "Inna dopłata"
+msgstr "Dopłata"
+
+#: .\apps\core\models.py:86
+msgid "Other subsidies"
+msgstr "Inne dopłaty"
+
+#: .\apps\core\views.py:168
 msgid "Additional day off has been saved."
 msgstr "Dodatkowy dzień wolny został zapisany."
 
-#: .\apps\core\views.py:166
+#: .\apps\core\views.py:181
 msgid "Day off has been deleted."
 msgstr "Dodatkowy dzień wolny został usunięty."
+
+#: .\apps\core\views.py:192
+#, fuzzy
+#| msgid "Absence has been added."
+msgid "Food price has been added."
+msgstr "Nieobecność została dodana."
+
+#: .\apps\core\views.py:208
+#, fuzzy
+#| msgid "Child has been deleted."
+msgid "Food price has been deleted."
+msgstr "Dziecko zostało usunięte z bazy."
 
 #: .\apps\info\models.py:11
 msgid "Breakfast"
@@ -362,10 +401,6 @@ msgstr "Data przyjęcia"
 msgid "Leave date"
 msgstr "Data odejścia"
 
-#: .\apps\kids\models.py:20 .\apps\kids\tables.py:16
-msgid "Local subsidy"
-msgstr "Dopłata"
-
 #: .\apps\kids\models.py:31
 msgid "Children"
 msgstr "Dzieci"
@@ -389,7 +424,7 @@ msgstr "Edytuj nieobecność"
 #: .\apps\templates\absences\absence_update.html:41
 #: .\apps\templates\absences\includes\absence_form.html:7
 #: .\apps\templates\absences\includes\absence_form_nursery.html:94
-#: .\apps\templates\core\settings_form.html:19
+#: .\apps\templates\core\settings_form.html:45
 #: .\apps\templates\kids\child_form.html:106
 #: .\apps\templates\users\parent_form.html:49
 msgid "Back"
@@ -415,8 +450,9 @@ msgstr "Wpisz nazwisko imię"
 
 #: .\apps\templates\absences\absences_list.html:62
 #: .\apps\templates\absences\includes\absence_form_nursery.html:97
-#: .\apps\templates\core\settings.html:32
-#: .\apps\templates\core\settings_form.html:24
+#: .\apps\templates\core\settings.html:39
+#: .\apps\templates\core\settings.html:76
+#: .\apps\templates\core\settings_form.html:50
 #: .\apps\templates\kids\child_form.html:66
 #: .\apps\templates\kids\children_list.html:49
 #: .\apps\templates\users\parent_form.html:54
@@ -424,13 +460,21 @@ msgid "Add"
 msgstr "Dodaj"
 
 #: .\apps\templates\absences\includes\absence_accions_links.html:7
+#: .\apps\templates\core\settings.html:94
+#: .\apps\templates\core\settings.html:98
+#: .\apps\templates\core\settings.html:132
+#: .\apps\templates\core\settings.html:136
+#: .\apps\templates\core\settings.html:158
+#: .\apps\templates\core\settings.html:162
 #: .\apps\templates\kids\includes\child_accions_links.html:7
 msgid "Edit"
 msgstr "Edytuj"
 
 #: .\apps\templates\absences\includes\absence_accions_links.html:14
-#: .\apps\templates\core\settings.html:49
-#: .\apps\templates\core\settings.html:53
+#: .\apps\templates\core\settings.html:56
+#: .\apps\templates\core\settings.html:60
+#: .\apps\templates\core\settings.html:105
+#: .\apps\templates\core\settings.html:109
 #: .\apps\templates\kids\child_form.html:84
 #: .\apps\templates\kids\child_form.html:89
 #: .\apps\templates\kids\child_form.html:93
@@ -513,25 +557,53 @@ msgstr "Lista dzieci nieobecnych"
 msgid "No results found."
 msgstr "Brak wyników"
 
-#: .\apps\templates\core\settings.html:20
+#: .\apps\templates\core\settings.html:27
 msgid "Settings"
 msgstr "Ustawienia"
+
+#: .\apps\templates\core\settings.html:68
+#, fuzzy
+#| msgid "Food price"
+msgid "Food prices"
+msgstr "Stawka wyżywienia"
 
 #: .\apps\templates\core\settings_form.html:5
 msgid "Add additional day off"
 msgstr "Dodaj dodatkowy dzień wolny"
 
-#: .\apps\templates\core\settings_form.html:26
+#: .\apps\templates\core\settings_form.html:7
+#, fuzzy
+#| msgid "Food price"
+msgid "Add food price"
+msgstr "Stawka wyżywienia"
+
+#: .\apps\templates\core\settings_form.html:9
+#, fuzzy
+#| msgid "Food price"
+msgid "Change food price"
+msgstr "Stawka wyżywienia"
+
+#: .\apps\templates\core\settings_form.html:11
+#, fuzzy
+#| msgid "Monthly payment"
+msgid "Change monthly payment price"
+msgstr "Miesięczna opłata"
+
+#: .\apps\templates\core\settings_form.html:13
+#, fuzzy
+#| msgid "Local subsidy"
+msgid "Change local subsidy"
+msgstr "Dopłata"
+
+#: .\apps\templates\core\settings_form.html:52
 #: .\apps\templates\kids\child_form.html:116
 #: .\apps\templates\users\parent_form.html:58
 msgid "Ready"
 msgstr "Gotowe"
 
 #: .\apps\templates\kids\child_form.html:22
-#, fuzzy
-#| msgid "Enter child"
 msgid "Edit child"
-msgstr "Wpisz nazwisko imię"
+msgstr "Zmień dane dziecka"
 
 #: .\apps\templates\kids\child_form.html:24
 msgid "Add child"
@@ -634,6 +706,3 @@ msgstr "Konto rodziców zostało usunięte."
 
 #~ msgid "Absence's data has been successfully submitted."
 #~ msgstr "Informacja o nieobecności została zapisana."
-
-#~ msgid "Amount"
-#~ msgstr "Cena"

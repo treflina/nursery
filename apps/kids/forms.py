@@ -1,10 +1,11 @@
 from autocomplete import widgets
-
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.models import OtherSubsidy
 from apps.users.models import Parent
+
 from .models import Child
 
 
@@ -20,6 +21,8 @@ class ChildForm(forms.ModelForm):
             "leave_date",
             "food_price",
             "local_subsidy",
+            "gov_subsidy",
+            "other_subsidies",
         ]
 
         base_class = """border-2 border-blue-300 rounded-md
@@ -54,6 +57,21 @@ class ChildForm(forms.ModelForm):
                     "class": """w-5 h-5 text-blue-600 bg-white border-gray-300 rounded
                         focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2"""
                 }
+            ),
+            "gov_subsidy": forms.Select(
+                attrs={
+                    "class": """border-2 border-blue-300 rounded-md w-full
+                        focus:ring-[#92F398] focus:border-[#92F398]"""
+                }
+            ),
+            "other_subsidies": widgets.Autocomplete(
+                name="other_subsidies",
+                options=dict(
+                    multiselect=True,
+                    model=OtherSubsidy,
+                    minimum_search_length=0,
+                    no_result_text=_("No results found"),
+                ),
             ),
         }
 

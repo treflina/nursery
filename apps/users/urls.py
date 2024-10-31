@@ -1,11 +1,7 @@
 from django.urls import path
 
-from .views import (
-    create_parent,
-    delete_parent,
-    change_password_parent,
-    change_email_parent,
-)
+from .views import (change_email_parent, change_password_parent, create_parent,
+                    delete_parent)
 
 app_name = "users"
 

@@ -27,7 +27,7 @@ class="modal-wrapper flex flex-col justify-center items-center w-full {% if crea
     <div class="table-top-container">
       <div class="flex flex-wrap justify-center items-end gap-3 mt-2 p-2 border-2 rounded-sm bg-neutral-200 border-neutral-300">
         <div class="flex gap-2 items-end">
-          <div class="w-full max-w-[300px] sm:w-auto flex gap-2 flex-wrap items-center">
+          <div class="flex gap-2 flex-wrap items-center justify-center">
             <label for="id_query" class="font-semibold text-neutral-800">{% translate 'Find child' %}</label>
             <input type="search" name="query" placeholder="{% translate 'Enter child' %}" class="searchinput form-control" id="id_query"
               hx-trigger="keyup changed delay:500ms, search" hx-get="{% url 'kids:children' %}" hx-indicator=".progress"

@@ -1,13 +1,7 @@
 from django.urls import path
 
-from .views import (
-    ChildCreateView,
-    ChildrenList,
-    ChildUpdateView,
-    # create_child,
-    delete_child,
-    switch_child_profile,
-)
+from .views import (ChildCreateView, ChildrenList,  # create_child,
+                    ChildUpdateView, delete_child, switch_child_profile)
 
 app_name = "kids"
 

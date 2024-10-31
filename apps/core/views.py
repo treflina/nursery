@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
-from django_htmx.http import trigger_client_event, retarget, reswap
+from django_htmx.http import reswap, retarget, trigger_client_event
 
 from apps.absences.models import Absence
 from apps.billings.models import Billing
@@ -14,8 +14,10 @@ from apps.kids.models import Child
 from apps.users.decorators import get_parent_context
 from apps.users.models import Parent
 
-from .forms import AdditionalDayOffForm, FoodPriceForm
-from .models import FoodPrice, AdditionalDayOff
+from .forms import (AdditionalDayOffForm, FoodPriceForm, GovernmentSubsidyForm,
+                    LocalSubsidyForm, MonthlyPaymentForm, OtherSubsidyForm)
+from .models import (AdditionalDayOff, FoodPrice, GovernmentSubsidy,
+                     LocalSubsidy, MonthlyPayment, OtherSubsidy)
 from .utils.absent_days import get_holidays, get_not_enrolled_days
 from .utils.helpers import get_next_prev_month
 
@@ -138,10 +140,16 @@ def day_details(request, selected_child, children, chosendate=None):
 def main_settings(request):
     today = date.today()
     additional_days_off = AdditionalDayOff.objects.filter(day__year__gte=today.year)
-    food_prices = FoodPrice.objects.all()
+
     context = {}
+    context["monthly_payment"] = MonthlyPayment.objects.last()
+    context["monthly_payment_count"] = MonthlyPayment.objects.count()
+    context["local_subsidy"] = LocalSubsidy.objects.last()
+    context["local_count"] = LocalSubsidy.objects.count()
+    context["government_subsidies"] = GovernmentSubsidy.objects.all()
+    context["other_subsidies"] = OtherSubsidy.objects.all()
     context["additional_days_off"] = additional_days_off
-    context["food_prices"] = food_prices
+    context["food_prices"] = FoodPrice.objects.all()
 
     return render(request, "core/settings.html", context=context)
 
@@ -217,3 +225,157 @@ def update_food_price(request, pk):
     return render(
         request, "core/settings_form.html", {"form": form, "update_food_price": True}
     )
+
+
+def create_monthly_payment(request):
+    if request.method == "POST":
+        form = MonthlyPaymentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            resp = HttpResponse(status=204)
+            msg = _("Monthly payment has been added.")
+            trigger_client_event(resp, "paymentChanged")
+            return trigger_client_event(resp, "showToast", {"msg": msg})
+    else:
+        form = MonthlyPaymentForm()
+    return render(
+        request, "core/settings_form.html", {"form": form, "add_monthly": True}
+    )
+
+
+def update_monthly_payment(request, pk):
+    obj = MonthlyPayment.objects.get(id=pk)
+
+    form = MonthlyPaymentForm(instance=obj)
+    if request.method == "POST":
+        form = MonthlyPaymentForm(request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+            resp = HttpResponse(status=204)
+            return trigger_client_event(resp, "paymentChanged")
+    return render(
+        request,
+        "core/settings_form.html",
+        {"form": form, "update_monthly_payment": True},
+    )
+
+
+def create_local_subsidy(request):
+    if request.method == "POST":
+        form = LocalSubsidyForm(request.POST)
+        if form.is_valid():
+            form.save()
+            resp = HttpResponse(status=204)
+            msg = _("Subsidy has been added.")
+            trigger_client_event(resp, "localChanged")
+            return trigger_client_event(resp, "showToast", {"msg": msg})
+    else:
+        form = LocalSubsidyForm()
+    return render(request, "core/settings_form.html", {"form": form, "add_local": True})
+
+
+def update_local_subsidy(request, pk):
+    obj = LocalSubsidy.objects.get(id=pk)
+
+    form = LocalSubsidyForm(instance=obj)
+    if request.method == "POST":
+        form = LocalSubsidyForm(request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+            resp = HttpResponse(status=204)
+            return trigger_client_event(resp, "localChanged")
+    return render(
+        request, "core/settings_form.html", {"form": form, "update_local": True}
+    )
+
+
+def update_gov_subsidy(request, pk):
+    obj = GovernmentSubsidy.objects.get(id=pk)
+
+    form = GovernmentSubsidyForm(instance=obj)
+    if request.method == "POST":
+        form = GovernmentSubsidyForm(request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+            resp = HttpResponse(status=204)
+            return trigger_client_event(resp, "govChanged")
+    return render(request, "core/settings_form.html", {"form": form, "gov": True})
+
+
+def create_gov_subsidy(request):
+    if request.method == "POST":
+        form = GovernmentSubsidyForm(request.POST)
+        if form.is_valid():
+            form.save()
+            resp = HttpResponse(status=204)
+            msg = _("Subsidy has been added.")
+            trigger_client_event(resp, "govChanged")
+            return trigger_client_event(resp, "showToast", {"msg": msg})
+    else:
+        form = GovernmentSubsidyForm()
+    return render(request, "core/settings_form.html", {"form": form, "gov": True})
+
+
+@require_http_methods(["DELETE"])
+def delete_gov_subsidy(request, pk):
+    if request.htmx:
+        try:
+            GovernmentSubsidy.objects.filter(pk=pk).delete()
+            resp = HttpResponse("")
+            msg = _("Subsidy has been deleted.")
+            return trigger_client_event(resp, "showToast", {"msg": msg})
+        except ProtectedError:
+            resp = HttpResponse(
+                """<p id='msg'>You can't delete this subsidy because is still assigned
+                to a child. You can change the amount instead.</p>"""
+            )
+            resp["HX-Reselect"] = "#msg"
+            reswap(resp, "innerHTML")
+            return retarget(resp, "#messages-box2")
+
+
+def update_other_subsidy(request, pk):
+    obj = OtherSubsidy.objects.get(id=pk)
+
+    form = OtherSubsidyForm(instance=obj)
+    if request.method == "POST":
+        form = OtherSubsidyForm(request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+            resp = HttpResponse(status=204)
+            return trigger_client_event(resp, "otherChanged")
+    return render(
+        request, "core/settings_form.html", {"form": form, "update_other": True}
+    )
+
+
+@require_http_methods(["DELETE"])
+def delete_other_subsidy(request, pk):
+    if request.htmx:
+        try:
+            OtherSubsidy.objects.filter(pk=pk).delete()
+            resp = HttpResponse("")
+            msg = _("Subsidy has been deleted.")
+            return trigger_client_event(resp, "showToast", {"msg": msg})
+        except ProtectedError:
+            resp = HttpResponse(
+                """<p id='msg'>You can't delete this subsidy because is still assigned
+                to a child. You can change the amount instead.</p>"""
+            )
+            resp["HX-Reselect"] = "#msg"
+            reswap(resp, "innerHTML")
+            return retarget(resp, "#messages-box3")
+
+
+def create_other_subsidy(request):
+    if request.method == "POST":
+        form = OtherSubsidyForm(request.POST)
+        if form.is_valid():
+            form.save()
+            resp = HttpResponse(status=204)
+            msg = _("Subsidy has been added.")
+            trigger_client_event(resp, "otherChanged")
+            return trigger_client_event(resp, "showToast", {"msg": msg})
+    else:
+        form = OtherSubsidyForm()
+    return render(request, "core/settings_form.html", {"form": form, "gov": True})
