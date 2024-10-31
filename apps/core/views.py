@@ -1,12 +1,12 @@
 import calendar
 from datetime import date, datetime
 
+from django.db.models import ProtectedError
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
-from django.views.generic import CreateView
-from django_htmx.http import trigger_client_event
+from django_htmx.http import trigger_client_event, retarget, reswap
 
 from apps.absences.models import Absence
 from apps.billings.models import Billing
@@ -14,7 +14,7 @@ from apps.kids.models import Child
 from apps.users.decorators import get_parent_context
 from apps.users.models import Parent
 
-from .forms import AdditionalDayOffForm
+from .forms import AdditionalDayOffForm, FoodPriceForm
 from .models import FoodPrice, AdditionalDayOff
 from .utils.absent_days import get_holidays, get_not_enrolled_days
 from .utils.helpers import get_next_prev_month
@@ -137,9 +137,11 @@ def day_details(request, selected_child, children, chosendate=None):
 
 def main_settings(request):
     today = date.today()
-    additional_days_off = AdditionalDayOff.objects.filter(day__gte=today)
+    additional_days_off = AdditionalDayOff.objects.filter(day__year__gte=today.year)
+    food_prices = FoodPrice.objects.all()
     context = {}
     context["additional_days_off"] = additional_days_off
+    context["food_prices"] = food_prices
 
     return render(request, "core/settings.html", context=context)
 
@@ -167,11 +169,51 @@ def delete_additional_day_off(request, pk):
         return trigger_client_event(resp, "showToast", {"msg": msg})
 
 
-class FoodPrice(CreateView):
-    model = FoodPrice
-    template_name = "core/foodprice.html"
+def create_food_price(request):
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["objects"] = self.model.objects.all()
-        return context
+    if request.method == "POST":
+        form = FoodPriceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            resp = HttpResponse(status=204)
+            msg = _("Food price has been added.")
+            trigger_client_event(resp, "foodPriceAdded")
+            return trigger_client_event(resp, "showToast", {"msg": msg})
+    else:
+        form = FoodPriceForm()
+    return render(
+        request, "core/settings_form.html", {"form": form, "add_food_price": True}
+    )
+
+
+@require_http_methods(["DELETE"])
+def delete_food_price(request, pk):
+    if request.htmx:
+        try:
+            FoodPrice.objects.filter(pk=pk).delete()
+            resp = HttpResponse("")
+            msg = _("Food price has been deleted.")
+            return trigger_client_event(resp, "showToast", {"msg": msg})
+        except ProtectedError:
+            resp = HttpResponse(
+                """<p id='msg'>You can't delete the food price already assigned
+                to a child. You can change only the price instead.</p>"""
+            )
+            resp["HX-Reselect"] = "#msg"
+            reswap(resp, "innerHTML")
+            return retarget(resp, "#messages-box")
+
+
+def update_food_price(request, pk):
+    obj = FoodPrice.objects.get(id=pk)
+
+    form = FoodPriceForm(instance=obj)
+    if request.method == "POST":
+        form = FoodPriceForm(request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+            resp = HttpResponse(status=204)
+            return trigger_client_event(resp, "foodPriceChanged")
+    return render(
+        request, "core/settings_form.html", {"form": form, "update_food_price": True}
+    )

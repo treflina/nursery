@@ -17,7 +17,6 @@ import Swal from 'sweetalert2';
         })
 
     const closeModal = () => {
-        console.log("closing");
         modal.classList.add("hidden");
         modal.innerHTML = "";
         modalBackground.classList.add("hidden");
@@ -35,7 +34,6 @@ import Swal from 'sweetalert2';
 
     document.addEventListener("htmx:beforeSwap", (e) => {
         if (e.detail.target.id == "modal" && !e.detail.xhr.response) {
-            console.log("beforeSwap closing")
             closeModal()
             e.detail.shouldSwap = false
         }
