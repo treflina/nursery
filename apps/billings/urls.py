@@ -2,8 +2,10 @@ from django.urls import path, register_converter
 
 from apps.core.converters import DateConverter
 
-from .views import (BillingListView, BillingsReportsView, billing,
-                    billing_response_updateview, generate_report)
+from .views import (BillingListView, BillingsReportsView, BillingUpdateView,
+                    billing, billing_paid_update, billing_response_updateview,
+                    billing_update_notes, delete_billing, delete_billings,
+                    generate_report)
 
 register_converter(DateConverter, "date")
 
@@ -14,14 +16,27 @@ urlpatterns = [
     path("report/", BillingListView.as_view(), name="report"),
     path("generate-report/", generate_report, name="generate_report"),
     path("billing/<date:chosendate>/", billing, name="billing"),
+    path("billings/update/paid/<int:pk>/", billing_paid_update, name="paid_update"),
     path(
-        "billings/",
-        BillingsReportsView.as_view(),
-        name="billings",
+        "billing/update/<int:pk>/",
+        BillingUpdateView.as_view(),
+        name="billing_update",
     ),
     path(
         "billings/update/",
         billing_response_updateview,
         name="billings_update",
+    ),
+    path(
+        "billings/update_notes/<int:pk>/",
+        billing_update_notes,
+        name="update_notes",
+    ),
+    path("billing/delete/<int:pk>/", delete_billing, name="delete"),
+    path("billings/delete/", delete_billings, name="delete_selection"),
+    path(
+        "billings/",
+        BillingsReportsView.as_view(),
+        name="billings",
     ),
 ]

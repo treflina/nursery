@@ -1,0 +1,130 @@
+{% extends "django_tables2/table.html" %}
+
+{% load django_tables2 %}
+{% load i18n %}
+
+{% block table %}
+    <div class="skipnav"><a href="#pagination">Przejdź do paginacji</a></div>
+    <table {% render_attrs table.attrs %} class="table table-header checkcolumn-table header bg-white">
+        {% block table.thead %}
+        <thead {{ table.attrs.thead.as_html }}>
+        <tr>
+          {% for column in table.columns %}
+            {% if column.name == 'selection' %}
+            <th {{ column.attrs.th.as_html }}
+                x-data="{ toggleSelection(event) {
+                  select_all = !select_all;
+                  let checkboxes = document.getElementsByName('selection');
+                  [...checkboxes].map((el) => {
+                    el.checked = select_all;
+                  })
+                }
+              }"
+              @click="toggleSelection()"
+              style="cursor: pointer;">
+              <input type="checkbox" x-model="select_all">
+            </th>
+            {% else %}
+              {% if column.orderable %}
+                <th {{ column.attrs.th.as_html }}
+                    x-data="{ col_name: '{{ column.order_by_alias }}',
+                    toggleSort(event) {
+                      this.col_name = this.col_name.startsWith('-') ? this.col_name.substring(1) : ('-' + this.col_name);
+                      sort_by = this.col_name;
+                    }
+                  }"
+                  @click="toggleSort()"
+                  :class="sort_by !== '' ? (sort_by === col_name ? (sort_by.startsWith('-') ? 'desc' : 'asc') : '') : ''"
+                  style="cursor: pointer;">
+                  {{ column.header }}
+                </th>
+              {% else %}
+                <th {{ column.attrs.th.as_html }}>{{ column.header }}</th>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </tr>
+      </thead>
+        {% endblock table.thead %}
+        {% block table.tbody %}
+            <tbody {{ table.attrs.tbody.as_html }}>
+            {% for row in table.paginated_rows %}
+                {% block table.tbody.row %}
+                <tr {{ row.attrs.as_html }}>
+                    {% for column, cell in row.items %}
+                        <td {{ column.attrs.td.as_html }}>{% if column.localize == None %}{{ cell }}{% else %}{% if column.localize %}{{ cell|localize }}{% else %}{{ cell|unlocalize }}{% endif %}{% endif %}</td>
+                    {% endfor %}
+                </tr>
+                {% endblock table.tbody.row %}
+            {% empty %}
+                {% if table.empty_text %}
+                {% block table.tbody.empty_text %}
+                <tr><td colspan="{{ table.columns|length }}">{{ table.empty_text }}</td></tr>
+                {% endblock table.tbody.empty_text %}
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        {% endblock table.tbody %}
+        {% block table.tfoot %}
+        {% if table.has_footer %}
+        <tfoot {{ table.attrs.tfoot.as_html }}>
+            <tr>
+            {% for column in table.columns %}
+                <td {{ column.attrs.tf.as_html }}>{{ column.footer }}</td>
+            {% endfor %}
+            </tr>
+        </tfoot>
+        {% endif %}
+        {% endblock table.tfoot %}
+    </table>
+{% endblock table %}
+
+{% block pagination %}
+    {% if table.page and table.paginator.num_pages > 1 %}
+    <ul id="pagination" class="pagination" @click="paginationClicked = true"
+        @click.outside="paginationClicked = false">
+        {% if table.page.has_previous %}
+        {% block pagination.previous %}
+            <li class="previous page-item">
+            <button role="button" @click.prevent="page_by = {{table.page.previous_page_number}}"
+                    class="page-link">
+                <span aria-hidden="true">&laquo;</span>
+                {% trans 'previous' %}
+            </button>
+            </li>
+        {% endblock pagination.previous %}
+        {% endif %}
+        {% if table.page.has_previous or table.page.has_next %}
+            {% block pagination.range %}
+                {% for p in table.page|table_page_range:table.paginator %}
+                <li class="page-item flex justify-center items-center rounded-md {% if table.page.number == p %} active bg-neutral-200{% endif %}">
+                <button x-ref="page{{p}}" class="page-link px-2 py-1 rounded-md
+                border-2 border-transparent focus:border-[#77ef7f] active:border-[#77ef7f]"
+                {% if p != '...' %}
+                @click.prevent="page_by={{p}};"
+                {% endif %}
+                {% if table.page.number == p %}
+                aria-current="true" :autofocus="paginationClicked ? 'true' : 'false'"
+                {% endif %}
+                >
+                    {{ p }}
+                </button>
+                </li>
+                {% endfor %}
+            {% endblock pagination.range %}
+        {% endif %}
+        {% if table.page.has_next %}
+        {% block pagination.next %}
+            <li class="next page-item user-select">
+            <button @click.prevent="page_by = {{table.page.next_page_number}}; await $nextTick(); $refs.page{{table.page.next_page_number}}.focus();"
+                class="page-link">
+                {% trans 'next' %}
+                <span aria-hidden="true">&raquo;</span>
+            </button>
+            </li>
+        {% endblock pagination.next %}
+    {% endif %}
+    </ul>
+    {% endif %}
+{% endblock pagination %}
+

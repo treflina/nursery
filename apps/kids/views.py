@@ -108,7 +108,6 @@ class ChildUpdateView(UpdateView):
     success_url = reverse_lazy("kids:children")
 
     def get_success_url(self):
-        self.request.session["updated_obj"] = self.kwargs.get("pk")
         url = reverse("absences:absences_list")
         if "next" in self.request.GET:
             url = self.request.GET["next"]
@@ -116,7 +115,10 @@ class ChildUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        redirect_to = self.request.GET.get("next", '')
+        self.request.session["updated_obj"] = self.kwargs.get("pk")
         context["updating"] = True
+        context["redirect_to"] = redirect_to
         return context
 
 

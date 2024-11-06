@@ -11,7 +11,16 @@ def rows_higlighter(**kwargs):
 
     selected_rows = kwargs["table"].selected_rows
     if selected_rows and kwargs["record"].pk in selected_rows:
+        if kwargs["record"].tag == "yellow":
+            return "yellow highlight-me "
+        elif kwargs["record"].tag == "green":
+            return "highlight-me green"
         return "highlight-me"
+    if kwargs["record"].tag == "yellow":
+        return "yellow"
+    elif kwargs["record"].tag == "green":
+        return "green"
+
     return ""
 
 

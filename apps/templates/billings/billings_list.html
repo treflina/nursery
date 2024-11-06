@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+
+{% load render_table export_url from django_tables2 %}
+
+{% load django_tables2 i18n static %}
+
+ {% block extra_styles %}
+<style>
+.wrapper {
+	overflow: scroll;
+  padding-bottom: .5rem;
+}
+
+table {
+	border-collapse: collapse;
+	width: max(65rem, 100%);
+	table-layout: fixed;
+}
+
+th,
+caption {
+	text-align: start;
+}
+
+caption {
+	margin-block: 0.75rem;
+}
+
+thead th:not(:first-child),
+td {
+	text-align: start;
+}
+
+thead {
+	background: whitesmoke;
+}
+
+
+th,
+td {
+	border: 1px solid lightgrey;
+	padding: 0.25rem 0.75rem;
+	vertical-align: baseline;
+}
+
+
+tbody th {
+	background: white;
+}
+
+thead th,
+tfoot th {
+	background: whitesmoke;
+}
+
+thead th {
+	vertical-align: bottom;
+}
+
+/* For the shadow: https://adrianroselli.com/2020/01/fixed-table-headers.html */
+div[tabindex="0"][aria-labelledby][role="region"] {
+  background:
+    linear-gradient(to right, transparent 30%, rgba(255,255,255,0)),
+    linear-gradient(to right, rgba(255,255,255,0), white 70%) 0 100%,
+    radial-gradient(farthest-side at 0% 50%, rgba(0,0,0,0.2), rgba(0,0,0,0)),
+    radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,0.2), rgba(0,0,0,0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: #fff;
+  background-size: 4em 100%, 4em 100%, 1.4em 100%, 1.4em 100%;
+  background-position: 0 0, 100%, 0 0, 100%;
+  background-attachment: local, local, scroll, scroll;
+}</style>
+{% endblock extra_styles %}
+{% block content %}
+
+<main class="modal-wrapper">
+<div class="fixed top-0 flex flex-wrap justify-center items-center gap-4 py-1 bg-sky-700 w-full z-20">
+    <div class="flex flex-row gap-2 items-center h-12 mx-2">
+      <p class="text-neutral-50">Oznacz jako: </p>
+      <button id="activate" type="submit" name="activate"
+          class="bg-neutral-50 border border-neutral-300 rounded-md px-2 py-1
+          hover:bg-neutral-200 transition-colors duration-300"
+          hx-post="{% url 'billings:billings_update' %}"
+          hx-target=".table-container"
+          hx-indicator=".progress"
+          hx-include="#bulk-actions, #id_query, #id_month, #id_year">
+          Zapłacone
+        </button>
+        <button id="deactivate" type="submit" name="deactivate"
+          class="bg-neutral-50 border border-neutral-300 rounded-md px-2 py-1
+          hover:bg-neutral-200 transition-colors duration-300"
+          hx-post="{% url 'billings:billings_update' %}"
+          hx-target=".table-container"
+          hx-indicator=".progress"
+          hx-include="#bulk-actions, #id_query, #id_month, #id_year">
+          Niezapłacone
+        </button>
+        <button id="deactivate" type="submit" name="yellow_tag"
+          title="Żółty"
+          class="bg-yellow-100 border border-neutral-300 rounded-md px-2 py-1 w-8 h-8
+          hover:bg-yellow-200 transition-colors duration-300"
+          hx-post="{% url 'billings:billings_update' %}"
+          hx-target=".table-container"
+          hx-indicator=".progress"
+          hx-include="#bulk-actions, #id_query, #id_month, #id_year">
+          <span class="sr-only">Żółty</span>
+        </button>
+        <button id="deactivate" type="submit" name="green_tag"
+          class="bg-green-100 border border-neutral-300 rounded-md px-2 py-1 w-8 h-8
+          hover:bg-green-200 transition-colors duration-300"
+          title="Zielony"
+          hx-post="{% url 'billings:billings_update' %}"
+          hx-target=".table-container"
+          hx-indicator=".progress"
+          hx-include="#bulk-actions, #id_query, #id_month, #id_year">
+          <span class="sr-only">Zielony</span>
+        </button>
+        <button id="deactivate" type="submit" name="clear_tag"
+          class="bg-neutral-50 border border-neutral-300 rounded-md px-2 py-1 w-8 h-8
+          hover:white transition-colors duration-300"
+          title="Wyczyść kolory"
+          hx-post="{% url 'billings:billings_update' %}"
+          hx-target=".table-container"
+          hx-indicator=".progress"
+          hx-include="#bulk-actions, #id_query, #id_month, #id_year">
+          <span class="sr-only">Wyczyść kolory</span>
+        </button>
+        <button type="button" class="openModal flex items-center gap-1 px-2 py-0.5 pb-0.8 border-2 border-red-300 rounded-md
+         bg-red-200 hover:bg-red-300 focus:bg-red-300 duration-300 transition-colors"
+          hx-delete="{% url 'billings:delete_selection' %}"
+          hx-target=".table-container"
+          hx-indicator=".progress"
+          hx-include="#bulk-actions, #id_query, #id_month, #id_year"
+          confirm-swal="zaznaczone rachunki">
+          <svg class="w-4 h-4 fill-red-600" alt="" aria-hidden="true">
+            <use href="{% static 'img/sprite.svg' %}#trash" />
+          </svg>
+          {% translate 'Delete' %}
+      </button>
+        <a href='{% url "billings:billings" %}{% export_url "xlsx" %}'
+          class="flex items-center gap-1 bg-neutral-200 border border-neutral-300 rounded-md px-2 py-1
+          hover:bg-neutral-300 transition-colors duration-300">
+          <svg class="w-4 h-4 fill-neutral-600" alt="" aria-hidden="true">
+            <use href="{% static 'img/sprite.svg' %}#download" />
+          </svg>
+          Pobierz .xlms</a>
+    </div>
+</div>
+<div id="billings" class="flex flex-col justify-center items-center mt-12">
+  <section class="billings my-8 px-1 relative">
+  <h1 class="text-2xl font-semibold mb-8 text-center">Zestawienie rachunków</h1>
+  <div class="table-top-container">
+    {# Bulk actions and search bar #}
+      <div class="flex flex-wrap justify-center items-end gap-3 mt-2 p-2 border-2 rounded-sm bg-neutral-200 border-neutral-300">
+        <div class="flex gap-1 flex-col items-start">
+          <label for="id_month" class="font-semibold text-sm text-neutral-800">{% translate 'Month' %}</label>
+          <select name="month" class="form-control" id="id_month"
+                hx-trigger="change"
+                hx-get="{% url 'billings:billings' %}"
+                hx-indicator=".progress"
+                hx-target=".table-container"
+                hx-include="[name='year'], [name='query']"
+                x-data
+                x-on:htmx:before-request="$dispatch('clear-pagination-and-sort')">
+            <option value="" selected="">---------</option>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+        </div>
+        <div class="flex gap-1 flex-col items-start">
+          <label for="id_year" class="font-semibold text-neutral-800 text-sm">{% translate 'Year' %}</label>
+          {{filter.form.year}}
+        </div>
+        <div class="flex gap-1 flex-col items-start">
+          <label for="id_query" class="font-semibold text-neutral-800 text-sm">{% translate 'Find child' %}</label>
+          <input id="id_query" type="search" name="query" placeholder="{% translate 'Enter child' %}"
+            class="searchinput form-control" id="id_query"
+            hx-trigger="keyup changed delay:500ms, search"
+            hx-get="{% url 'billings:billings' %}"
+            hx-indicator=".progress"
+            hx-target=".table-container"
+            hx-include="[name='month'], [name='year']"
+            x-data
+            x-on:htmx:before-request="$dispatch('clear-pagination-and-sort')">
+      </div>
+    </div>
+
+  </div>
+  <div x-data="{paginationClicked: false}" class="scroll-wrapper max-w-[1200px]" tabindex="0">
+    {# Table header #}
+    <form id="bulk-actions"
+          hx-get="{% url 'billings:billings' %}"
+          hx-target=".table-container"
+          hx-trigger="sort-initiated, pagination-initiated, billingsDeleted from:body, noteUpdateCalled from:body"
+          hx-swap="outerHTML"
+          hx-include="#id_query, #id_month, #id_year"
+          hx-indicator=".progress"
+          x-data="{ sort_by: '',
+                    page_by: 1,
+                    select_all: false,
+                    last_checked: false }"
+          @clear-pagination-and-sort.window="page_by = 1; sort_by = ''"
+          x-on:htmx:after-swap="select_all = false">
+
+      {# Hidden input to store pagination page and column to sort by #}
+      <input type="hidden" name="sort" x-ref="sort_input" x-model="sort_by"
+            x-init="$watch('sort_by',
+                            () => $refs.sort_input.dispatchEvent(
+                                      new Event('sort-initiated',
+                                                { bubbles: true })))">
+
+      <input type="hidden" name="page" x-ref="paginate_input" x-model="page_by"
+            x-init="$watch('page_by',
+                            () => $refs.paginate_input.dispatchEvent(
+                                      new Event('pagination-initiated',
+                                                { bubbles: true })))">
+
+      {# Progress indicator #}
+      <div class="progress">
+        <div class="indeterminate"></div>
+      </div>
+
+      {# Content table #}
+      {% render_table table %}
+    </form>
+  </div>
+  </div>
+  </section>
+  <div class="modalBackground hidden z-30"></div>
+  <div id="billing-form-wrapper">
+      <div role="dialog" id="modal" aria-labelledby="modal-title"
+          hx-target="this"
+          class="no-inert modalbox hidden bg-neutral-50 rounded-md lg:w-96
+          px-2 py-3 md::p-6 z-40"
+          tabindex="-1">
+      </div>
+  </div>
+</div>
+</main>
+{% endblock %}
+{% block footer %}
+<script>
+    // Set the checkbox to be checked from the start
+    // to end when the user presses the shift key.
+  function checkRange(event) {
+    let checkboxes = document.getElementsByName('selection');
+    let inBetween =  false;
+    if( event.shiftKey && event.target.checked ) {
+      checkboxes.forEach( checkbox => {
+        if( checkbox === event.target || checkbox === last_checked ) {
+          inBetween = !inBetween;
+        }
+        if( inBetween ) {
+          checkbox.checked = true;
+        }
+      });
+    }
+    last_checked = event.target;
+  }
+
+</script>
+{% endblock %}

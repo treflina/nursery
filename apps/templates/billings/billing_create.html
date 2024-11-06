@@ -8,7 +8,7 @@
 {{month}}
 </div>
 
-<form hx-post="{% url 'core:generate_report' %}"" hx-swap="delete">
+<form hx-post="{% url 'billings:generate_report' %}"" hx-swap="delete">
     <input hidden name="year" value="{{year}}" />
     <input hidden name="month" value="{{month}}" />
     <button>Wylicz</button>

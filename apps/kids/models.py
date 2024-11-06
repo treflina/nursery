@@ -39,6 +39,10 @@ class Child(models.Model):
         return sum([x.amount for x in self.other_subsidies.all()])
 
     @property
+    def other_subsidies_list(self):
+        return ", ".join([x.name for x in self.other_subsidies.all()])
+
+    @property
     def all_subsidies_sum(self):
 
         local_subsidy = LocalSubsidy.objects.last()
