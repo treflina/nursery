@@ -115,7 +115,7 @@ class ChildUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        redirect_to = self.request.GET.get("next", '')
+        redirect_to = self.request.GET.get("next", "")
         self.request.session["updated_obj"] = self.kwargs.get("pk")
         context["updating"] = True
         context["redirect_to"] = redirect_to

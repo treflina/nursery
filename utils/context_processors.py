@@ -75,5 +75,5 @@ def nav_info(request):
     info_context["perc_present_today"] = perc_present_today
     info_context["perc_present_tomorrow"] = perc_present_tomorrow
     info_context["num_children_today"] = num_children_today
-    # print(request.path, info_context)
+
     return info_context

@@ -21,7 +21,19 @@ class BillingsFilter(BaseFilter):
         method="month_filter",
         choices=MONTH_CHOICES,
         label=_("Month"),
-        widget=Select(attrs={"class": "form-control"}),
+        widget=Select(
+            attrs={
+                "class": "form-control",
+                "hx-trigger": "change",
+                # "hx-headers": "filterChange",
+                "hx-get": "/billings",
+                "hx-indicator": ".progress",
+                "hx-target": ".table-container",
+                "hx-include": "[name='year'], [name='query']",
+                "x-data": "",
+                "x-on:htmx:before-request": "$dispatch('clear-pagination-and-sort')",
+            }
+        ),  # noqa: E501
     )
     year = django_filters.ChoiceFilter(
         field_name="date_month",
@@ -32,6 +44,7 @@ class BillingsFilter(BaseFilter):
             attrs={
                 "class": "form-control",
                 "hx-trigger": "change",
+                # "hx-headers": "filterChange",
                 "hx-target": ".table-container",
                 "hx-get": "/billings",
                 "hx-indicator": ".progress",

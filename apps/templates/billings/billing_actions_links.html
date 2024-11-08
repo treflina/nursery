@@ -1,26 +1,61 @@
 {% load static i18n %}
-<div class="flex gap-2" hx-push-url="false">
+<div class="flex gap-1 justify-between" hx-push-url="false">
+  <div class="flex gap-1 justify-start">
     <a href="{% url 'billings:billing_update' record.id %}?next={{ request.get_full_path|urlencode}}"
-    class="px-2 pt-0.7 py-0.5 border-2 border-neutral-300 rounded-md bg-neutral-100 hover:bg-neutral-200
-    focus:bg-neutral-200 duration-300 transition-colors"
-    {% if updated_obj == record.id %} autofocus {% endif %}
-    >{% translate 'Edit' %}</a>
-    <button type="button" class="openModal px-2 py-0.5 pb-0.8 border-2 border-red-300 rounded-md
-      bg-neutral-100 hover:bg-red-200 focus:bg-red-200 duration-300 transition-colors"
+      class="flex justify-center items-center px-1 border-neutral-300 rounded-md bg-inherit hover:bg-neutral-200
+      focus:bg-neutral-200 duration-300 transition-colors" title="{% translate 'Edit' %}"
+      {% if updated_obj == record.id %} autofocus {% endif %}
+      >
+      <svg class="w-5 h-5 fill-green-800" alt="" aria-hidden="true">
+        <use href="{% static 'img/sprite.svg' %}#pen" />
+      </svg>
+    </a>
+    <button type="button" class="openModal px-1 py-0.5 border-red-300 rounded-md
+      bg-inherit hover:bg-red-100 focus:bg-red-100 duration-300 transition-colors"
+        title="{% translate 'Delete' %}"
         hx-delete="{% url 'billings:delete' record.id %}"
         hx-target="closest tr"
         hx-swap="outerHTML"
         confirm-swal="pozycję raportu: {{ record.child }} - {{ record.date_month|date:'F Y' }}">
-        {% translate 'Delete' %}
+        <svg class="w-5 h-5 fill-red-400" alt="" aria-hidden="true">
+          <use href="{% static 'img/sprite.svg' %}#trash" />
+        </svg>
     </button>
     <button
-      class="flex items-center px-1 border-2 border-neutral-300 rounded-md bg-neutral-100 hover:bg-neutral-200
+      class="flex items-center px-1 border-neutral-300 rounded-md bg-inherit hover:bg-neutral-200
       focus:bg-neutral-200 duration-300 transition-colors cursor-pointer"
+      title="{% translate 'Notes' %}"
       hx-get="{% url 'billings:update_notes' record.id %}"
       hx-target="#modal"
       hx-swap="innerHTML"
       {% if updated_note == record.id %} autofocus {% endif %}
-    >  <svg class="w-5 h-5 fill-neutral-600" alt="" aria-hidden="true">
-            <use href="{% static 'img/sprite.svg' %}#memo-info" />
-          </svg></button>
+    >
+     {% if record.note or record.info %}
+      <svg class="w-5 h-5 fill-sky-700" aria-hidden="true">
+        <use href="{% static 'img/sprite.svg' %}#memo-info" />
+      </svg>
+      {% else %}
+      <svg class="w-4 h-5 fill-neutral-800" aria-hidden="true">
+        <use href="{% static 'img/sprite.svg' %}#memo" />
+      </svg>
+      {% endif %}
+    </button>
+  </div>
+    {% if not record.confirmed %}
+    <button name="confirm"
+      class="text-sm border-2 border-neutral-300 rounded-md px-1.5 py-1 w-[4.7rem]"
+      hx-post="{% url 'billings:confirm' record.id %}"
+      hx-swap="outerHTML"
+      hx-target="this"
+      confirm-swal2="zatwierdzić rachunek: {{ record.child }} - {{ record.date_month|date:'F Y' }}"
+      title-swal="Potwierdzenie"
+      expl-swal = "Po zatwierdzeniu rachunek będzie widoczny na koncie rodzica."
+      >
+      Zatwierdź
+    </button>
+    {% elif record.sent %}
+    <p class="text-sm inline-block px-1.5 py-1 w-[4.7rem]">Wysłano</p>
+    {% else %}
+      {% include "billings/includes/send_button.html" %}
+    {% endif %}
 </div>

@@ -24,7 +24,7 @@ class BillingsHTMxBulkActionTable(tables.Table):
     selection = tables.CheckBoxColumn(
         accessor="pk", orderable=False, attrs={"td__input": {"@click": "checkRange"}}
     )
-    sub_received = tables.Column(_("Subsidy"), accessor="sub_received", orderable=False)
+    date_month = tables.Column(_("Month"), accessor="date_month", orderable=False)
     paid = CheckBoxColumnWithName(
         verbose_name="Zapł.", accessor="paid", checked=check_check
     )
@@ -78,6 +78,8 @@ class BillingsHTMxBulkActionTable(tables.Table):
             "note",
             "sub_received",
             "tag",
+            "confirmed",
+            "sent",
         )
 
         sequence = (

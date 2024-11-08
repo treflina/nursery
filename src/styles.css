@@ -174,7 +174,11 @@ text-align: left;
 
 .billings td:nth-child(2),
 .billings th:nth-child(2) {
-    width: 5.5rem;
+    width: 4.5rem;
+}
+
+.billings td:nth-child(2) {
+    padding: 0 .25rem;
 }
 
 .billings td:nth-child(3),
@@ -190,7 +194,7 @@ text-align: left;
 
 .billings td:nth-child(8),
 .billings th:nth-child(8) {
-    width: 4.5rem;
+    width: 4rem;
 }
 
 .billings td:nth-child(6),
@@ -205,17 +209,17 @@ text-align: left;
 
 .billings td:nth-child(4),
 .billings th:nth-child(4) {
-    width: 5.5rem;
+    width: 4.5rem;
 }
 
 .billings td:nth-child(5),
 .billings th:nth-child(5) {
-    width: 5.5rem;
+    width: 4.5rem;
 }
 
 .billings td:nth-child(6),
 .billings th:nth-child(6) {
-    width: 5.5rem;
+    width: 4.5rem;
 }
 
 .billings td:nth-child(9),
@@ -225,12 +229,12 @@ text-align: left;
 
 .billings td:nth-child(10),
 .billings th:nth-child(10) {
-    width: 5.5rem;
+    width: 4.6rem;
 }
 
 .billings td:nth-child(11),
 .billings th:nth-child(11) {
-    width: 5.5rem;
+    width: 4.6rem;
 }
 
 .billings td:nth-child(12),
@@ -255,6 +259,9 @@ text-align: left;
     text-align: right;
 }
 
+.billings td:nth-child(1),
+.billings th:nth-child(1),
+.billings td:nth-child(2),
 .billings th:nth-child(12),
 .billings td:nth-child(12),
 .billings td:nth-child(13),

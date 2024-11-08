@@ -3,9 +3,10 @@ from django.urls import path, register_converter
 from apps.core.converters import DateConverter
 
 from .views import (BillingListView, BillingsReportsView, BillingUpdateView,
-                    billing, billing_paid_update, billing_response_updateview,
-                    billing_update_notes, delete_billing, delete_billings,
-                    generate_report)
+                    billing, billing_confirm, billing_paid_update,
+                    billing_response_updateview, billing_update_notes,
+                    delete_billing, delete_billings, export_xlsx_file,
+                    generate_report, send_billing)
 
 register_converter(DateConverter, "date")
 
@@ -23,9 +24,21 @@ urlpatterns = [
         name="billing_update",
     ),
     path(
+        "billing/confirm/<int:pk>/",
+        billing_confirm,
+        name="confirm",
+    ),
+    path("export_xlsx/<int:year>/<int:month>/", export_xlsx_file, name="export_file"),
+    path("export_xlsx/", export_xlsx_file, name="export_file"),
+    path(
         "billings/update/",
         billing_response_updateview,
         name="billings_update",
+    ),
+    path(
+        "billing/send_email/<int:pk>/",
+        send_billing,
+        name="email",
     ),
     path(
         "billings/update_notes/<int:pk>/",

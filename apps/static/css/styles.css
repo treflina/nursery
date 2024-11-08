@@ -1432,6 +1432,10 @@ input:checked + .toggle-bg {
   width: 2rem;
 }
 
+.w-\[4\.7rem\] {
+  width: 4.7rem;
+}
+
 .w-full {
   width: 100%;
 }
@@ -1876,6 +1880,10 @@ input:checked + .toggle-bg {
   background-color: rgb(222 247 236 / var(--tw-bg-opacity));
 }
 
+.bg-inherit {
+  background-color: inherit;
+}
+
 .bg-neutral-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(245 245 245 / var(--tw-bg-opacity));
@@ -1942,12 +1950,24 @@ input:checked + .toggle-bg {
   fill: #046C4E;
 }
 
+.fill-green-800 {
+  fill: #03543F;
+}
+
 .fill-neutral-600 {
   fill: #525252;
 }
 
 .fill-neutral-700 {
   fill: #404040;
+}
+
+.fill-neutral-800 {
+  fill: #262626;
+}
+
+.fill-red-400 {
+  fill: #F98080;
 }
 
 .fill-red-600 {
@@ -1999,6 +2019,11 @@ input:checked + .toggle-bg {
 .px-1 {
   padding-left: 0.25rem;
   padding-right: 0.25rem;
+}
+
+.px-1\.5 {
+  padding-left: 0.375rem;
+  padding-right: 0.375rem;
 }
 
 .px-2 {
@@ -2259,6 +2284,11 @@ input:checked + .toggle-bg {
 .text-gray-900 {
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+
+.text-green-800 {
+  --tw-text-opacity: 1;
+  color: rgb(3 84 63 / var(--tw-text-opacity));
 }
 
 .text-neutral-50 {
@@ -2591,7 +2621,11 @@ thead th {
 
 .billings td:nth-child(2),
 .billings th:nth-child(2) {
-  width: 5.5rem;
+  width: 4.5rem;
+}
+
+.billings td:nth-child(2) {
+  padding: 0 .25rem;
 }
 
 .billings td:nth-child(3),
@@ -2607,7 +2641,7 @@ thead th {
 
 .billings td:nth-child(8),
 .billings th:nth-child(8) {
-  width: 4.5rem;
+  width: 4rem;
 }
 
 .billings td:nth-child(6),
@@ -2622,17 +2656,17 @@ thead th {
 
 .billings td:nth-child(4),
 .billings th:nth-child(4) {
-  width: 5.5rem;
+  width: 4.5rem;
 }
 
 .billings td:nth-child(5),
 .billings th:nth-child(5) {
-  width: 5.5rem;
+  width: 4.5rem;
 }
 
 .billings td:nth-child(6),
 .billings th:nth-child(6) {
-  width: 5.5rem;
+  width: 4.5rem;
 }
 
 .billings td:nth-child(9),
@@ -2642,12 +2676,12 @@ thead th {
 
 .billings td:nth-child(10),
 .billings th:nth-child(10) {
-  width: 5.5rem;
+  width: 4.6rem;
 }
 
 .billings td:nth-child(11),
 .billings th:nth-child(11) {
-  width: 5.5rem;
+  width: 4.6rem;
 }
 
 .billings td:nth-child(12),
@@ -2672,6 +2706,9 @@ thead th {
   text-align: right;
 }
 
+.billings td:nth-child(1),
+.billings th:nth-child(1),
+.billings td:nth-child(2),
 .billings th:nth-child(12),
 .billings td:nth-child(12),
 .billings td:nth-child(13),
@@ -2900,6 +2937,11 @@ ul.pagination {
   background-color: rgb(212 212 212 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-red-100:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 232 232 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-red-200:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(251 213 213 / var(--tw-bg-opacity));
@@ -2974,6 +3016,11 @@ ul.pagination {
 .focus\:bg-neutral-200:focus {
   --tw-bg-opacity: 1;
   background-color: rgb(229 229 229 / var(--tw-bg-opacity));
+}
+
+.focus\:bg-red-100:focus {
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 232 232 / var(--tw-bg-opacity));
 }
 
 .focus\:bg-red-200:focus {

@@ -43,6 +43,8 @@ class Billing(TimeUserStampedModel):
     tag = models.CharField(
         _("tag"), null=True, blank=True, choices=TAG_CHOICES, max_length=255
     )
+    confirmed = models.BooleanField(_("Confirmed"), default=False)
+    sent = models.BooleanField(_("Sent"), default=False)
 
     @property
     def payments_sum(self):

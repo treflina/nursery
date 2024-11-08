@@ -1,0 +1,24 @@
+
+{% load i18n static %}
+{% if record.child.parent.email %}
+<button name="confirm"
+    class="flex justify-between text-sm border-2 border-neutral-300 rounded-md px-1.5 py-1 w-[4.7rem]"
+    hx-post="{% url 'billings:email' record.id %}"
+    hx-swap="outerHTML"
+    hx-target="this"
+    confirm-swal2="wysłać email z rachunkiem: {{ record.child }} - {{ record.date_month|date:'F Y' }}"
+    title-swal="Potwierdzenie"
+    >
+    <svg class="w-4 h-5 fill-neutral-800" aria-hidden="true">
+    <use href="{% static 'img/sprite.svg' %}#check" />
+    </svg>
+    Wyślij
+</button>
+{% else %}
+<div class="flex justify-between text-sm  px-1.5 py-1 w-[4.7rem]">
+    <svg class="w-4 h-5 fill-neutral-800" aria-hidden="true">
+        <use href="{% static 'img/sprite.svg' %}#check" />
+    </svg>
+    <p>Brak@</p>
+</div>
+{% endif %}

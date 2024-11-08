@@ -13,6 +13,5 @@ def url_date_format(year, month, num):
 
 @register.simple_tag
 def first_day_month(year, month):
-    print(year, month)
     string_date = f"{str(year)}-{str(month)}-01"
     return datetime.strptime(string_date, "%Y-%m-%d")

@@ -1,6 +1,7 @@
 import calendar
 from datetime import date
 
+from django.core.mail import send_mail
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -12,6 +13,7 @@ from django_filters.views import FilterView
 from django_htmx.http import trigger_client_event
 from django_tables2 import SingleTableMixin
 from django_tables2.export.views import ExportMixin
+from xlsxwriter.workbook import Workbook
 
 from apps.core.models import LocalSubsidy
 from apps.core.utils.absent_days import get_all_absent_days
@@ -143,15 +145,20 @@ def billing(request, selected_child, children, chosendate=None):
 class BillingsReportsView(ExportMixin, SingleTableMixin, FilterView):
 
     table_class = BillingsHTMxBulkActionTable
-    queryset = Billing.objects.all()
+    queryset = (
+        Billing.objects.all()
+        .order_by("date_month", "child")
+        .select_related("child__parent")
+        .only("child__parent__email")
+    )
     filterset_class = BillingsFilter
-    paginate_by = 10
+    paginate_by = 100
     export_name = "zestawienie_oplat"
-    exclude_columns = ("selection", "paid", "sub_received")
+    exclude_columns = ("selection", "paid", "sub_received", "accions")
 
     def get_template_names(self):
         if self.request.htmx and self.request.htmx.target != "billings":
-            template_name = "tables/base_table_partial.html"
+            template_name = "tables/billings_table_partial.html"
         else:
             template_name = "billings/billings_list.html"
         return template_name
@@ -172,8 +179,106 @@ class BillingsReportsView(ExportMixin, SingleTableMixin, FilterView):
         if selected_rows:
             selected_rows = [int(_) for _ in selected_rows.split(",")]
             kwargs["selected_rows"] = selected_rows
-
         return kwargs
+
+    def get_filterset_kwargs(self, filterset_class):
+        kwargs = super().get_filterset_kwargs(filterset_class)
+
+        if kwargs["data"] is None:
+            request_dict = {}
+        else:
+            request_dict = kwargs["data"].dict()
+
+        if not request_dict:
+            last_billing = Billing.objects.all().order_by("date_month").last()
+            request_dict.update(
+                {
+                    "year": last_billing.date_month.year,
+                    "month": last_billing.date_month.month,
+                }
+            )
+        kwargs["data"] = request_dict
+        return kwargs
+
+
+def export_xlsx_file(request, year=None, month=None):
+
+    if year is None or month is None:
+        last_billing = Billing.objects.all().order_by("date_month").last()
+        year = last_billing.date_month.year
+        month = last_billing.date_month.month
+    qs = Billing.objects.filter(
+        Q(date_month__month=month) & Q(date_month__year=year)
+    ).order_by("child")
+    if qs.count() > 100:
+        qs = Billing.objects.filter(
+            Q(date_month__month=month) & Q(date_month__year=year)
+        ).order_by("child")[:100]
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    response["Content-Disposition"] = f"attachment; filename=zlobek_{month}_{year}"
+
+    workbook = Workbook(response, {"in_memory": True})
+    worksheet = workbook.add_worksheet("zestawienie")
+
+    yellow = workbook.add_format({"bg_color": "#FEF9C3"})
+    green = workbook.add_format({"bg_color": "#BBF7D0"})
+    white = workbook.add_format({"bg_color": "white"})
+    bold = workbook.add_format({"bold": True})
+
+    row = 1
+    col = 0
+
+    for line in qs:
+        if line.tag == "yellow":
+            c_format = yellow
+        elif line.tag == "green":
+            c_format = green
+        else:
+            c_format = white
+
+        worksheet.write(row, col, row, c_format)
+        worksheet.write(row, col + 1, line.child.full_name, c_format)
+        worksheet.write(row, col + 2, line.local_subsidy, c_format)
+        worksheet.write(row, col + 3, line.gov_subsidy, c_format)
+        worksheet.write(row, col + 4, line.other_subsidies, c_format)
+
+        worksheet.write(row, col + 5, line.days_count, c_format)
+        worksheet.write(row, col + 6, line.food_price, c_format)
+        worksheet.write(row, col + 7, line.food_total, c_format)
+        worksheet.write(row, col + 8, line.monthly_payment, c_format)
+        worksheet.write(row, col + 9, line.payments_sum, c_format)
+        if line.paid is True:
+            worksheet.write(row, col + 10, "Tak", c_format)
+        else:
+            worksheet.write(row, col + 10, "Nie", c_format)
+        if line.confirmed is True:
+            worksheet.write(row, col + 11, "Tak", c_format)
+        else:
+            worksheet.write(row, col + 11, "Nie", c_format)
+        worksheet.write(row, col + 12, line.info_subsidies)
+        worksheet.write(row, col + 13, line.note)
+        row += 1
+
+    worksheet.write("A1", "Lp.", bold)
+    worksheet.write("B1", "Dziecko", bold)
+    worksheet.write("C1", "Dopł. gmina", bold)
+    worksheet.write("D1", "Dopł. państwo", bold)
+    worksheet.write("E1", "Dopł. inne", bold)
+    worksheet.write("F1", "L.dni", bold)
+    worksheet.write("G1", "Wyż.dz.", bold)
+    worksheet.write("H1", "Wyż. suma", bold)
+    worksheet.write("I1", "Mies.opłata", bold)
+    worksheet.write("J1", "Razem", bold)
+    worksheet.write("K1", "Zapłacone", bold)
+    worksheet.write("L1", "Zatwierdzone", bold)
+    worksheet.write("M1", "Inne dopłaty", bold)
+    worksheet.write("N1", "Notatka", bold)
+    worksheet.autofit()
+    workbook.close()
+    return response
 
 
 def billing_paid_update(request, pk):
@@ -188,11 +293,10 @@ def billing_paid_update(request, pk):
         page = request.POST.get("page", 1)
         page = int(page)
 
-        # Get the sort by column
         sort_by = request.POST.get("sort", None)
-
-        # Get the query
         query = request.POST.get("query", "")
+        month = request.POST.get("month", None)
+        year = request.POST.get("year", None)
 
     return HttpResponseRedirect(
         reverse_querystring(
@@ -200,35 +304,49 @@ def billing_paid_update(request, pk):
             query_kwargs={
                 "page": page,
                 "sort": sort_by,
-                "query": query
+                "query": query,
+                "month": month,
+                "year": year,
             },
         )
     )
 
 
-def billing_response_updateview(request):
+def billing_confirm(request, pk):
+    if request.method == "POST" and request.htmx:
+        if request.htmx.trigger_name == "confirm":
+            billing = Billing.objects.filter(id=pk).last()
+            billing.confirmed = True
+            billing.save()
+            context = {"record": billing}
+            return render(
+                request, "billings/includes/send_button.html", context=context
+            )
+    return trigger_client_event(HttpResponse(""), "htmx:abort")
 
+
+def billing_response_updateview(request):
     if request.method == "POST" and request.htmx:
         selected_billings = request.POST.getlist("selection")
 
         if request.htmx.trigger_name == "activate":
             Billing.objects.filter(pk__in=selected_billings).update(paid=True)
-
         elif request.htmx.trigger_name == "deactivate":
             Billing.objects.filter(pk__in=selected_billings).update(paid=False)
-
         elif request.htmx.trigger_name == "yellow_tag":
             Billing.objects.filter(pk__in=selected_billings).update(tag="yellow")
-
         elif request.htmx.trigger_name == "green_tag":
             Billing.objects.filter(pk__in=selected_billings).update(tag="green")
-
         elif request.htmx.trigger_name == "clear_tag":
             Billing.objects.filter(pk__in=selected_billings).update(tag="")
+        elif request.htmx.trigger_name == "confirm_many":
+            Billing.objects.filter(pk__in=selected_billings).update(confirmed=True)
 
         page = request.POST.get("page", 1)
         page = int(page)
         sort_by = request.POST.get("sort", None)
+        month = request.POST.get("month", None)
+        year = request.POST.get("year", None)
         query = request.POST.get("query", "")
         selection = ",".join(selected_billings)
 
@@ -239,6 +357,8 @@ def billing_response_updateview(request):
                 "page": page,
                 "sort": sort_by,
                 "query": query,
+                "month": month,
+                "year": year,
                 "selection": selection,
             },
         )
@@ -260,7 +380,7 @@ class BillingUpdateView(UpdateView):
         context = super().get_context_data(**kwargs)
         self.request.session["updated_obj"] = self.kwargs.get("pk")
         context["updating"] = True
-        redirect_to = self.request.GET.get("next", '')
+        redirect_to = self.request.GET.get("next", "")
         context["redirect_to"] = redirect_to
         return context
 
@@ -288,6 +408,46 @@ def billing_update_notes(request, pk):
     return render(
         request, "billings/billing_note_form.html", {"form2": form, "update": True}
     )
+
+
+def send_billing(request, pk):
+    if request.method == "POST" and request.htmx:
+        billing = Billing.objects.filter(id=pk).last()
+        if billing.confirmed is False:
+            msg = _("Before sending, confirm the billing.")
+            resp = HttpResponse(status=204)
+            return trigger_client_event(resp, "showToast", {"msg": msg, "err": "true"})
+        if billing.child.parent is not None:
+            email = billing.child.parent.email
+            if email is None:
+                msg = _(
+                    "Email was not sent because there is no parent account assigned."
+                )
+            else:
+                try:
+                    send_mail(
+                        subject=f"""Rachunek {billing.date_month.month}-
+                        {billing.date_month.year}""",
+                        message=f"Wyżywienie: {billing.food_total}",
+                        from_email="test@example.com",
+                        recipient_list=[email],
+                    )
+                    billing.sent = True
+                    billing.save()
+                    msg = _("Email has been sent.")
+                    resp = HttpResponse(
+                        """<p class="text-sm inline-block px-1.5
+                        py-1 w-[4.7rem]">Wysłano</p>"""
+                    )
+                    return trigger_client_event(resp, "showToast", {"msg": msg})
+                except Exception as e:
+                    # TODO  handle failure
+                    msg = _("Email was not sent")
+                    pass
+        else:
+            msg = _("Email was not sent because there is no parent account assigned.")
+    resp = HttpResponse(status=204)
+    return trigger_client_event(resp, "showToast", {"msg": msg, "err": "true"})
 
 
 @require_http_methods(["DELETE"])

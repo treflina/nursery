@@ -1,0 +1,14 @@
+{% load static %}
+{% load render_table from django_tables2 %}
+
+{% render_table table %}
+
+<a href='{% url "billings:export_file" request.GET.year request.GET.month %}'
+    id="export" hx-swap-oob="true"
+    class="flex items-center gap-1 bg-neutral-200 border border-neutral-300 rounded-md px-2 py-1
+    hover:bg-neutral-300 transition-colors duration-300">
+    <svg class="w-4 h-4 fill-neutral-600" alt="" aria-hidden="true">
+    <use href="{% static 'img/sprite.svg' %}#download" />
+    </svg>
+    Pobierz .xlsx
+</a>
