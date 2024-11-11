@@ -1,11 +1,11 @@
 from datetime import date, timedelta
 
-from autocomplete import HTMXAutoComplete, widgets
+from autocomplete import widgets
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from apps.kids.models import Child
+from apps.core.utils.htmx_autocomplete import ChildHTMXAutocomplete
 
 from .models import Absence
 
@@ -38,33 +38,6 @@ class BaseAbsenceForm(forms.ModelForm):
                 raise ValidationError(_("End date cannot be earlier than start date."))
 
         return cleaned_data
-
-
-class ChildHTMXAutocomplete(HTMXAutoComplete):
-    """Autocomplete component to select Data Sources from a library"""
-
-    name = "child"
-    model = Child
-
-    def get_items(self, search=None, values=None):
-        data = Child.objects.all()
-        if search is not None:
-            items = [
-                {"label": str(x), "value": str(x.id)}
-                for x in data
-                # Refactor so equality comparison is a function passed in?
-                if search == "" or str(search).upper() in f"{x}".upper()
-            ]
-            return items
-        if values is not None:
-            items = [
-                {"label": str(x), "value": str(x.id)}
-                for x in data
-                if str(x.id) in values
-            ]
-            return items
-
-        return []
 
 
 class NurseryAbsenceForm(BaseAbsenceForm):

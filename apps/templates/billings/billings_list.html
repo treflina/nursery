@@ -73,174 +73,188 @@ div[tabindex="0"][aria-labelledby][role="region"] {
 {% endblock extra_styles %}
 {% block content %}
 
-<main class="modal-wrapper">
-<div class="fixed top-0 flex flex-wrap justify-center items-center gap-4 py-1 bg-sky-700 w-full z-20">
-    <div class="flex flex-row gap-2 items-center h-12 mx-2">
-      <p class="text-neutral-50">Oznacz jako: </p>
-      <button id="activate" type="submit" name="activate"
-          class="bg-neutral-50 border border-neutral-300 rounded-md px-2 py-1
-          hover:bg-neutral-200 transition-colors duration-300"
-          hx-post="{% url 'billings:billings_update' %}"
-          hx-target=".table-container"
-          hx-indicator=".progress"
-          hx-include="#bulk-actions, #id_query, #id_month, #id_year">
-          Zapłacone
-        </button>
-        <button type="submit" name="deactivate"
-          class="bg-neutral-50 border border-neutral-300 rounded-md px-2 py-1
-          hover:bg-neutral-200 transition-colors duration-300"
-          hx-post="{% url 'billings:billings_update' %}"
-          hx-target=".table-container"
-          hx-indicator=".progress"
-          hx-include="#bulk-actions, #id_query, #id_month, #id_year">
-          Niezapłacone
-        </button>
-        <button type="submit" name="yellow_tag"
-          title="Żółty"
-          class="bg-yellow-100 border border-neutral-300 rounded-md px-2 py-1 w-8 h-8
-          hover:bg-yellow-200 transition-colors duration-300"
-          hx-post="{% url 'billings:billings_update' %}"
-          hx-target=".table-container"
-          hx-indicator=".progress"
-          hx-include="#bulk-actions, #id_query, #id_month, #id_year">
-          <span class="sr-only">Żółty</span>
-        </button>
-        <button type="submit" name="green_tag"
-          class="bg-green-100 border border-neutral-300 rounded-md px-2 py-1 w-8 h-8
-          hover:bg-green-200 transition-colors duration-300"
-          title="Zielony"
-          hx-post="{% url 'billings:billings_update' %}"
-          hx-target=".table-container"
-          hx-indicator=".progress"
-          hx-include="#bulk-actions, #id_query, #id_month, #id_year">
-          <span class="sr-only">Zielony</span>
-        </button>
-        <button type="submit" name="clear_tag"
-          class="bg-neutral-50 border border-neutral-300 rounded-md px-2 py-1 w-8 h-8
-          hover:white transition-colors duration-300"
-          title="Wyczyść kolory"
-          hx-post="{% url 'billings:billings_update' %}"
-          hx-target=".table-container"
-          hx-indicator=".progress"
-          hx-include="#bulk-actions, #id_query, #id_month, #id_year">
-          <span class="sr-only">Wyczyść kolory</span>
-        </button>
-         <button type="submit"
-            name="confirm_many"
-            class="openModal flex items-center gap-1 px-2 py-0.5 pb-0.8 border-2 border-neutral-300 rounded-md
-            bg-neutral-50 hover:bg-neutral-200 focus:bg-neutral-200 duration-300 transition-colors"
+<main id="billings-main"
+  class="modal-wrapper"
+  >
+  <div class="fixed top-0 flex flex-wrap justify-center items-center gap-4 py-1 bg-sky-700 w-full z-20">
+      <div class="flex flex-row gap-2 items-center h-12 mx-2">
+        <p class="text-neutral-50">Oznacz jako: </p>
+        <button id="activate" type="submit" name="activate"
+            class="bg-neutral-50 border border-neutral-300 rounded-md px-2 py-1
+            hover:bg-neutral-200 transition-colors duration-300"
             hx-post="{% url 'billings:billings_update' %}"
             hx-target=".table-container"
             hx-indicator=".progress"
-            hx-include="#bulk-actions, #id_query, #id_month, #id_year"
-            confirm-swal="zatwierdzić zaznaczone rachunki">
-            <svg class="w-4 h-4 fill-neutral-800" alt="" aria-hidden="true">
-              <use href="{% static 'img/sprite.svg' %}#check" />
-            </svg>
-            {% translate 'Confirm' %}
-        </button>
-        <button type="button" class="openModal flex items-center gap-1 px-2 py-0.5 pb-0.8 border-2 border-red-300 rounded-md
-         bg-red-200 hover:bg-red-300 focus:bg-red-300 duration-300 transition-colors"
-          hx-delete="{% url 'billings:delete_selection' %}"
-          hx-target=".table-container"
-          hx-indicator=".progress"
-          hx-include="#bulk-actions, #id_query, #id_month, #id_year"
-          confirm-swal="zaznaczone rachunki">
-          <svg class="w-4 h-4 fill-red-600" alt="" aria-hidden="true">
-            <use href="{% static 'img/sprite.svg' %}#trash" />
-          </svg>
-          {% translate 'Delete' %}
-        </button>
-        <a href='{% url "billings:export_file" %}'
-          id="export" hx-swap-oob="true"
-          class="flex items-center gap-1 bg-neutral-200 border border-neutral-300 rounded-md px-2 py-1
-          hover:bg-neutral-300 transition-colors duration-300">
-          <svg class="w-4 h-4 fill-neutral-600" alt="" aria-hidden="true">
-            <use href="{% static 'img/sprite.svg' %}#download" />
-          </svg>
-          Pobierz .xlsx</a>
-    </div>
-</div>
-<div id="billings" class="flex flex-col justify-center items-center mt-12" hx-push-url="true">
-  <section class="billings my-8 px-1 relative">
-  <h1 class="text-2xl font-semibold mb-8 text-center">Zestawienie rachunków</h1>
-  <div class="table-top-container">
-    {# Bulk actions and search bar #}
-      <div class="flex flex-wrap justify-center items-end gap-3 mt-2 p-2 border-2 rounded-sm bg-neutral-200 border-neutral-300">
-        <div class="flex gap-1 flex-col items-start">
-          <label for="id_month" class="font-semibold text-sm text-neutral-800">{% translate 'Month' %}</label>
-          {{filter.form.month}}
-        </div>
-        <div class="flex gap-1 flex-col items-start">
-          <label for="id_year" class="font-semibold text-neutral-800 text-sm">{% translate 'Year' %}</label>
-          {{filter.form.year}}
-        </div>
-        <div class="flex gap-1 flex-col items-start">
-          <label for="id_query" class="font-semibold text-neutral-800 text-sm">{% translate 'Find child' %}</label>
-          <input id="id_query" type="search" name="query" placeholder="{% translate 'Enter child' %}"
-            class="searchinput form-control" id="id_query"
-            hx-trigger="keyup changed delay:500ms, search"
-            hx-get="{% url 'billings:billings' %}"
-            hx-indicator=".progress"
+            hx-include="#bulk-actions, #id_query, #id_month, #id_year">
+            Zapłacone
+          </button>
+          <button type="submit" name="deactivate"
+            class="bg-neutral-50 border border-neutral-300 rounded-md px-2 py-1
+            hover:bg-neutral-200 transition-colors duration-300"
+            hx-post="{% url 'billings:billings_update' %}"
             hx-target=".table-container"
-            hx-include="[name='month'], [name='year']"
-            x-data
-            x-on:htmx:before-request="$dispatch('clear-pagination-and-sort')">
+            hx-indicator=".progress"
+            hx-include="#bulk-actions, #id_query, #id_month, #id_year">
+            Niezapłacone
+          </button>
+          <button type="submit" name="yellow_tag"
+            title="Żółty"
+            class="bg-yellow-100 border border-neutral-300 rounded-md px-2 py-1 w-8 h-8
+            hover:bg-yellow-200 transition-colors duration-300"
+            hx-post="{% url 'billings:billings_update' %}"
+            hx-target=".table-container"
+            hx-indicator=".progress"
+            hx-include="#bulk-actions, #id_query, #id_month, #id_year">
+            <span class="sr-only">Żółty</span>
+          </button>
+          <button type="submit" name="green_tag"
+            class="bg-green-100 border border-neutral-300 rounded-md px-2 py-1 w-8 h-8
+            hover:bg-green-200 transition-colors duration-300"
+            title="Zielony"
+            hx-post="{% url 'billings:billings_update' %}"
+            hx-target=".table-container"
+            hx-indicator=".progress"
+            hx-include="#bulk-actions, #id_query, #id_month, #id_year">
+            <span class="sr-only">Zielony</span>
+          </button>
+          <button type="submit" name="clear_tag"
+            class="bg-neutral-50 border border-neutral-300 rounded-md px-2 py-1 w-8 h-8
+            hover:white transition-colors duration-300"
+            title="Wyczyść kolory"
+            hx-post="{% url 'billings:billings_update' %}"
+            hx-target=".table-container"
+            hx-indicator=".progress"
+            hx-include="#bulk-actions, #id_query, #id_month, #id_year">
+            <span class="sr-only">Wyczyść kolory</span>
+          </button>
+          <button type="submit"
+              name="confirm_many"
+              class="openModal flex items-center gap-1 px-2 py-0.5 pb-0.8 border-2 border-neutral-300 rounded-md
+              bg-neutral-50 hover:bg-neutral-200 focus:bg-neutral-200 duration-300 transition-colors"
+              hx-post="{% url 'billings:billings_update' %}"
+              hx-target=".table-container"
+              hx-indicator=".progress"
+              hx-include="#bulk-actions, #id_query, #id_month, #id_year"
+              confirm-swal="zatwierdzić zaznaczone rachunki">
+              <svg class="w-4 h-4 fill-neutral-800" alt="" aria-hidden="true">
+                <use href="{% static 'img/sprite.svg' %}#check" />
+              </svg>
+              {% translate 'Confirm' %}
+          </button>
+          <button type="button" name="delete" class="openModal flex items-center gap-1 px-2 py-0.5 pb-0.8 border-2 border-red-300 rounded-md
+          bg-red-200 hover:bg-red-300 focus:bg-red-300 duration-300 transition-colors"
+            hx-delete="{% url 'billings:delete_selection' %}"
+            hx-target=".table-container"
+            hx-indicator=".progress"
+            hx-include="#bulk-actions, #id_query, #id_month, #id_year"
+            confirm-swal="zaznaczone rachunki">
+            <svg class="w-4 h-4 fill-red-600" alt="" aria-hidden="true">
+              <use href="{% static 'img/sprite.svg' %}#trash" />
+            </svg>
+            {% translate 'Delete' %}
+          </button>
+          <div id="export" hx-swap-oob="true" class="w-[7.7rem]">
+            <a href='{% url "billings:export_file" year month %}'
+              class="flex items-center gap-1 bg-neutral-200 border border-neutral-300 rounded-md px-2 py-1
+              hover:bg-neutral-300 transition-colors duration-300">
+              <svg class="w-4 h-4 fill-neutral-600" alt="" aria-hidden="true">
+                <use href="{% static 'img/sprite.svg' %}#download" />
+              </svg>
+              Pobierz .xlsx</a>
+          </div>
       </div>
+  </div>
+  <div id="billings" class="flex flex-col justify-center items-center mt-12" hx-push-url="true">
+    <section class="billings my-8 px-1 relative">
+    <h1 class="text-2xl font-semibold mb-8 text-center">Zestawienie rachunków</h1>
+    <div class="table-top-container">
+      {# Bulk actions and search bar #}
+        <div class="flex flex-wrap justify-center items-end gap-3 mt-2 p-2 border-2 rounded-sm bg-neutral-200 border-neutral-300">
+          <div class="flex gap-1 flex-col items-start">
+            <label for="id_month" class="font-semibold text-sm text-neutral-800">{% translate 'Month' %}</label>
+            {{filter.form.month}}
+          </div>
+          <div class="flex gap-1 flex-col items-start">
+            <label for="id_year" class="font-semibold text-neutral-800 text-sm">{% translate 'Year' %}</label>
+            {{filter.form.year}}
+          </div>
+          <div class="flex gap-1 flex-col items-start">
+            <label for="id_query" class="font-semibold text-neutral-800 text-sm">{% translate 'Find child' %}</label>
+            <input id="id_query" type="search" name="query" placeholder="{% translate 'Enter child' %}"
+              class="searchinput form-control" id="id_query"
+              hx-trigger="keyup changed delay:500ms, search"
+              hx-get="{% url 'billings:billings' %}"
+              hx-indicator=".progress"
+              hx-target=".table-container"
+              hx-include="[name='month'], [name='year']"
+              x-data
+              x-on:htmx:before-request="$dispatch('clear-pagination-and-sort')">
+        </div>
+        <button id="btn-abs-nursery" class="flex items-center h-11 px-2 gap-1 border-2 border-neutral-300
+              rounded-md bg-amber-100 hover:bg-amber-200 focus:bg-amber-200
+              duration-300 transition-colors"
+              hx-target="#modal"
+              hx-get="{% url 'billings:create' %}"
+              hx-push-url="false">
+            <svg class="w-5 h-5" aria-hidden="true">
+              <use href="{% static 'img/sprite.svg' %}#plus" />
+            </svg>
+            {% translate 'Add' %}
+        </button>
+      </div>
+
     </div>
+    <div x-data="{paginationClicked: false}" class="scroll-wrapper max-w-[1200px]" tabindex="0">
+      {# Table header #}
+      <form id="bulk-actions"
+            hx-get="{% url 'billings:billings' %}"
+            hx-target=".table-container"
+            hx-trigger="sort-initiated, pagination-initiated, billingsDeleted from:body, noteUpdateCalled from:body, newReport from:body"
+            hx-swap="outerHTML"
+            hx-include="#id_query, #id_month, #id_year"
+            hx-indicator=".progress"
+            hx-push-url="true"
+            x-data="{ sort_by: '',
+                      page_by: 1,
+                      select_all: false,
+                      last_checked: false }"
+            @clear-pagination-and-sort.window="page_by = 1; sort_by = ''"
+            x-on:htmx:after-swap="select_all = false">
 
+        {# Hidden input to store pagination page and column to sort by #}
+        <input type="hidden" name="sort" x-ref="sort_input" x-model="sort_by"
+              x-init="$watch('sort_by',
+                              () => $refs.sort_input.dispatchEvent(
+                                        new Event('sort-initiated',
+                                                  { bubbles: true })))">
+
+        <input type="hidden" name="page" x-ref="paginate_input" x-model="page_by"
+              x-init="$watch('page_by',
+                              () => $refs.paginate_input.dispatchEvent(
+                                        new Event('pagination-initiated',
+                                                  { bubbles: true })))">
+
+        {# Progress indicator #}
+        <div class="progress">
+          <div class="indeterminate"></div>
+        </div>
+
+        {# Content table #}
+        {% render_table table %}
+      </form>
+    </div>
+    </div>
+    </section>
+    <div class="modalBackground hidden z-30"></div>
+    <div id="billing-form-wrapper">
+        <div role="dialog" id="modal" aria-labelledby="modal-title"
+            hx-target="this"
+            class="no-inert modalbox hidden bg-neutral-50 rounded-md lg:w-96
+            px-2 py-3 md::p-6 z-40"
+            tabindex="-1">
+        </div>
+    </div>
   </div>
-  <div x-data="{paginationClicked: false}" class="scroll-wrapper max-w-[1200px]" tabindex="0">
-    {# Table header #}
-    <form id="bulk-actions"
-          hx-get="{% url 'billings:billings' %}"
-          hx-target=".table-container"
-          hx-trigger="sort-initiated, pagination-initiated, billingsDeleted from:body, noteUpdateCalled from:body"
-          hx-swap="outerHTML"
-          hx-include="#id_query, #id_month, #id_year"
-          hx-indicator=".progress"
-          hx-push-url="true"
-          x-data="{ sort_by: '',
-                    page_by: 1,
-                    select_all: false,
-                    last_checked: false }"
-          @clear-pagination-and-sort.window="page_by = 1; sort_by = ''"
-          x-on:htmx:after-swap="select_all = false">
-
-      {# Hidden input to store pagination page and column to sort by #}
-      <input type="hidden" name="sort" x-ref="sort_input" x-model="sort_by"
-            x-init="$watch('sort_by',
-                            () => $refs.sort_input.dispatchEvent(
-                                      new Event('sort-initiated',
-                                                { bubbles: true })))">
-
-      <input type="hidden" name="page" x-ref="paginate_input" x-model="page_by"
-            x-init="$watch('page_by',
-                            () => $refs.paginate_input.dispatchEvent(
-                                      new Event('pagination-initiated',
-                                                { bubbles: true })))">
-
-      {# Progress indicator #}
-      <div class="progress">
-        <div class="indeterminate"></div>
-      </div>
-
-      {# Content table #}
-      {% render_table table %}
-    </form>
-  </div>
-  </div>
-  </section>
-  <div class="modalBackground hidden z-30"></div>
-  <div id="billing-form-wrapper">
-      <div role="dialog" id="modal" aria-labelledby="modal-title"
-          hx-target="this"
-          class="no-inert modalbox hidden bg-neutral-50 rounded-md lg:w-96
-          px-2 py-3 md::p-6 z-40"
-          tabindex="-1">
-      </div>
-  </div>
-</div>
 </main>
 {% endblock %}
 {% block footer %}

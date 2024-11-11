@@ -14,10 +14,22 @@ from apps.kids.models import Child
 from apps.users.decorators import get_parent_context
 from apps.users.models import Parent
 
-from .forms import (AdditionalDayOffForm, FoodPriceForm, GovernmentSubsidyForm,
-                    LocalSubsidyForm, MonthlyPaymentForm, OtherSubsidyForm)
-from .models import (AdditionalDayOff, FoodPrice, GovernmentSubsidy,
-                     LocalSubsidy, MonthlyPayment, OtherSubsidy)
+from .forms import (
+    AdditionalDayOffForm,
+    FoodPriceForm,
+    GovernmentSubsidyForm,
+    LocalSubsidyForm,
+    MonthlyPaymentForm,
+    OtherSubsidyForm,
+)
+from .models import (
+    AdditionalDayOff,
+    FoodPrice,
+    GovernmentSubsidy,
+    LocalSubsidy,
+    MonthlyPayment,
+    OtherSubsidy,
+)
 from .utils.absent_days import get_holidays, get_not_enrolled_days
 from .utils.helpers import get_next_prev_month
 

@@ -1436,6 +1436,10 @@ input:checked + .toggle-bg {
   width: 4.7rem;
 }
 
+.w-\[7\.7rem\] {
+  width: 7.7rem;
+}
+
 .w-full {
   width: 100%;
 }
@@ -2301,6 +2305,16 @@ input:checked + .toggle-bg {
   color: rgb(115 115 115 / var(--tw-text-opacity));
 }
 
+.text-neutral-600 {
+  --tw-text-opacity: 1;
+  color: rgb(82 82 82 / var(--tw-text-opacity));
+}
+
+.text-neutral-700 {
+  --tw-text-opacity: 1;
+  color: rgb(64 64 64 / var(--tw-text-opacity));
+}
+
 .text-neutral-800 {
   --tw-text-opacity: 1;
   color: rgb(38 38 38 / var(--tw-text-opacity));
@@ -2714,6 +2728,10 @@ thead th {
 .billings td:nth-child(13),
 .billings th:nth-child(13) {
   text-align: center;
+}
+
+#id_date_month_month {
+  flex-basis: 100%;
 }
 
 /*

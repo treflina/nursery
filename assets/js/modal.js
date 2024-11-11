@@ -32,7 +32,7 @@ import Swal from 'sweetalert2';
     // htmx.logAll();
 
     document.addEventListener("htmx:beforeSwap", (e) => {
-        if (e.detail.target.id == "modal" && !e.detail.xhr.response) {
+        if (e.detail.target.id == "modal" && (!e.detail.xhr.response || e.detail.xhr.response == "")) {
             closeModal()
             e.detail.shouldSwap = false
         }
@@ -163,5 +163,10 @@ import Swal from 'sweetalert2';
             background: bcg || "#e0f6e2",
             text: message || "Data has been successfully changed.",
         })
+    })
+
+    document.addEventListener("billingsDeleted", function (e) {
+        console.log("deleted")
+        // window.replaceState({}, "", "/billings/")
     })
 })();

@@ -10,7 +10,10 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView, UpdateView
 from django_filters.views import FilterView
-from django_htmx.http import trigger_client_event
+from django_htmx.http import (
+    trigger_client_event,
+    HttpResponseClientRedirect,
+)
 from django_tables2 import SingleTableMixin
 from django_tables2.export.views import ExportMixin
 from xlsxwriter.workbook import Workbook
@@ -22,7 +25,7 @@ from apps.kids.models import Child
 from apps.users.decorators import get_parent_context
 
 from .filters import BillingsFilter
-from .forms import BillingForm, BillingNoteForm
+from .forms import BillingForm, BillingNoteForm, BillingCreateForm
 from .models import Billing
 from .tables import BillingsHTMxBulkActionTable
 
@@ -55,64 +58,118 @@ class BillingListView(ListView):
         return context
 
 
-@require_http_methods(["POST"])
 def generate_report(request):
+    if request.method == "POST":
+        form = BillingCreateForm(request.POST)
 
-    year = int(request.POST.get("year"))
-    month = int(request.POST.get("month"))
+        if form.is_valid():
+            date_month = form.cleaned_data["date_month"]
+            child = form.cleaned_data["child"]
 
-    report_date = date(year, month, 1)
+            year = date_month.year
+            month = date_month.month
+            report_date = date(year, month, 1)
+            num_days_in_month = calendar.monthrange(year, month)[1]
 
-    num_days_in_month = calendar.monthrange(year, month)[1]
+            if child is not None:
+                if (child.admission_date > date(year, month, num_days_in_month)) or (
+                    child.leave_date is not None and child.leave_date < report_date
+                ):
+                    form.add_error(
+                        "child", "Dziecko nie uczęszczało do żłobka w wybranym okresie"
+                    )
+                    return render(
+                        request, "billings/billing_create.html", {"form2": form}
+                    )
+                else:
+                    children = [child]
+                    children_count = 1
+            else:
+                children = Child.objects.filter(
+                    Q(admission_date__lte=date(year, month, num_days_in_month))
+                    & (Q(leave_date__gte=date(year, month, 1)) | Q(leave_date=None))
+                )
+                children_count = children.count()
+                if children_count == 0:
+                    form.add_error(
+                        "date_month",
+                        "Brak dzieci, dla których można wygenerować \
+                        rachunek w wybranym okresie.",
+                    )
+                    return render(
+                        request, "billings/billing_create.html", {"form2": form}
+                    )
 
-    children = Child.objects.filter(
-        Q(admission_date__lte=date(year, month, num_days_in_month))
-        & (Q(leave_date__gte=date(year, month, 1)) | Q(leave_date=None))
-    )
-    # TODO select_related
+            # TODO select_related
+            local_subs = LocalSubsidy.objects.last()
 
-    local_subs = LocalSubsidy.objects.last()
+            confirmed_count = 0
 
-    for child in children:
-        absent_days = get_all_absent_days(child, year, month)
-        days_to_pay_count = num_days_in_month - len(absent_days)
+            for child in children:
+                absent_days = get_all_absent_days(child, year, month)
+                days_to_pay_count = num_days_in_month - len(absent_days)
 
-        food_price_day = child.food_price.price if child.food_price else 0
+                food_price_day = child.food_price.price if child.food_price else 0
 
-        food_to_pay = days_to_pay_count * food_price_day
-        loc_subsidy = local_subs.amount if (local_subs and child.local_subsidy) else 0
+                food_to_pay = days_to_pay_count * food_price_day
+                loc_subsidy = (
+                    local_subs.amount if (local_subs and child.local_subsidy) else 0
+                )
 
-        gov_subsidy = child.gov_subsidy.amount if child.gov_subsidy else 0
-        other_sub = child.other_subsidies_sum
-        other_sub_list = child.other_subsidies_list
+                gov_subsidy = child.gov_subsidy.amount if child.gov_subsidy else 0
+                other_sub = child.other_subsidies_sum
+                other_sub_list = child.other_subsidies_list
 
-        obj = Billing.objects.filter(date_month=report_date, child=child).last()
+                obj = Billing.objects.filter(date_month=report_date, child=child).last()
 
-        if obj:
-            obj.food_price = food_price_day
-            obj.food_total = food_to_pay
-            obj.days_count = days_to_pay_count
-            obj.local_subsidy = loc_subsidy
-            obj.gov_subsidy = gov_subsidy
-            obj.other_subsidies = other_sub
-            obj.info_subsidies = other_sub_list
-            obj.changed_by = request.user
-        else:
-            obj = Billing(
-                date_month=report_date,
-                child=child,
-                food_price=food_price_day,
-                food_total=food_to_pay,
-                days_count=days_to_pay_count,
-                local_subsidy=loc_subsidy,
-                gov_subsidy=gov_subsidy,
-                other_subsidies=other_sub,
-                info_subsidies=other_sub_list,
-                note=other_sub_list,
-                changed_by=request.user,
-            )
-        obj.save()
-    return HttpResponse("", headers={"HX-Trigger": "newReport"})
+                if obj and obj.confirmed is True:
+                    confirmed_count += 1
+                elif obj and obj.confirmed is False:
+                    obj.food_price = food_price_day
+                    obj.food_total = food_to_pay
+                    obj.days_count = days_to_pay_count
+                    obj.local_subsidy = loc_subsidy
+                    obj.gov_subsidy = gov_subsidy
+                    obj.other_subsidies = other_sub
+                    obj.info_subsidies = other_sub_list
+                    obj.changed_by = request.user
+                else:
+                    obj = Billing(
+                        date_month=report_date,
+                        child=child,
+                        food_price=food_price_day,
+                        food_total=food_to_pay,
+                        days_count=days_to_pay_count,
+                        local_subsidy=loc_subsidy,
+                        gov_subsidy=gov_subsidy,
+                        other_subsidies=other_sub,
+                        info_subsidies=other_sub_list,
+                        note=other_sub_list,
+                        changed_by=request.user,
+                    )
+                obj.save()
+
+            count = children_count - confirmed_count
+
+            resp = HttpResponse(status=204)
+            if children_count == confirmed_count and confirmed_count > 0:
+                msg = _(
+                    "No billings were created, because in the \
+given period all are already confirmed."
+                )
+                trigger_client_event(resp, "showToast", {"msg": msg, "err": "true"})
+            else:
+                msg = _(
+                    f"Billings have been successfully created. \
+                    Created: {count} \nSkipped: {confirmed_count}"
+                )
+                trigger_client_event(resp, "showToast", {"msg": msg})
+
+            return trigger_client_event(resp, "newReport")
+
+    else:
+        form = BillingCreateForm()
+        return render(request, "billings/billing_create.html", {"form2": form})
 
 
 @get_parent_context
@@ -147,7 +204,7 @@ class BillingsReportsView(ExportMixin, SingleTableMixin, FilterView):
     table_class = BillingsHTMxBulkActionTable
     queryset = (
         Billing.objects.all()
-        .order_by("date_month", "child")
+        .order_by("-date_month", "child")
         .select_related("child__parent")
         .only("child__parent__email")
     )
@@ -157,7 +214,10 @@ class BillingsReportsView(ExportMixin, SingleTableMixin, FilterView):
     exclude_columns = ("selection", "paid", "sub_received", "accions")
 
     def get_template_names(self):
-        if self.request.htmx and self.request.htmx.target != "billings":
+        if self.request.htmx and self.request.htmx.target not in [
+            "billings",
+            "billings-main",
+        ]:
             template_name = "tables/billings_table_partial.html"
         else:
             template_name = "billings/billings_list.html"
@@ -165,6 +225,15 @@ class BillingsReportsView(ExportMixin, SingleTableMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        year_params = self.request.GET.get("year")
+        month_params = self.request.GET.get("month")
+
+        if year_params and month_params:
+            context["export_data"] = True
+
+        last_billing = Billing.objects.all().order_by("date_month").last()
+        context["year"] = last_billing.date_month.year
+        context["month"] = last_billing.date_month.month
 
         # get recently updated absence id to set focus
         updated_note = self.request.session.pop("updated_note", None)
@@ -203,7 +272,7 @@ class BillingsReportsView(ExportMixin, SingleTableMixin, FilterView):
 
 def export_xlsx_file(request, year=None, month=None):
 
-    if year is None or month is None:
+    if not year or not month:
         last_billing = Billing.objects.all().order_by("date_month").last()
         year = last_billing.date_month.year
         month = last_billing.date_month.month
@@ -316,12 +385,13 @@ def billing_confirm(request, pk):
     if request.method == "POST" and request.htmx:
         if request.htmx.trigger_name == "confirm":
             billing = Billing.objects.filter(id=pk).last()
-            billing.confirmed = True
-            billing.save()
-            context = {"record": billing}
-            return render(
-                request, "billings/includes/send_button.html", context=context
-            )
+            if billing:
+                billing.confirmed = True
+                billing.save()
+                context = {"record": billing}
+                return render(
+                    request, "billings/includes/send_button.html", context=context
+                )
     return trigger_client_event(HttpResponse(""), "htmx:abort")
 
 
@@ -342,13 +412,18 @@ def billing_response_updateview(request):
         elif request.htmx.trigger_name == "confirm_many":
             Billing.objects.filter(pk__in=selected_billings).update(confirmed=True)
 
+        selection = ",".join(selected_billings)
+
+        if request.htmx.trigger_name == "delete":
+            Billing.objects.filter(pk__in=selected_billings).delete()
+            selection = ""
+
         page = request.POST.get("page", 1)
         page = int(page)
         sort_by = request.POST.get("sort", None)
         month = request.POST.get("month", None)
         year = request.POST.get("year", None)
         query = request.POST.get("query", "")
-        selection = ",".join(selected_billings)
 
     return HttpResponseRedirect(
         reverse_querystring(
@@ -403,10 +478,18 @@ def billing_update_notes(request, pk):
             trigger_client_event(resp, "noteUpdateCalled")
             return trigger_client_event(resp, "showToast", {"msg": msg})
     else:
-        form = BillingNoteForm(instance=obj)
+        if obj:
+            form = BillingNoteForm(instance=obj)
+        else:
+            resp = HttpResponse(status=204)
+            msg = _("Nie znaleziono w bazie wybranego rachunku.")
+            trigger_client_event(resp, "noteUpdateCalled")
+            return trigger_client_event(resp, "showToast", {"msg": msg})
 
     return render(
-        request, "billings/billing_note_form.html", {"form2": form, "update": True}
+        request,
+        "billings/billing_note_form.html",
+        {"form2": form, "update": True, "obj": obj},
     )
 
 
@@ -456,6 +539,7 @@ def delete_billing(request, pk):
         billing_to_delete = Billing.objects.filter(pk=pk).last()
         if billing_to_delete:
             billing_to_delete.delete()
+
             resp = HttpResponse("")
             msg = _("Billing has been deleted.")
             trigger_client_event(resp, "billingDeleted")
@@ -471,9 +555,23 @@ def delete_billings(request):
         billings_to_delete = Billing.objects.filter(pk__in=selected_billings)
         if billings_to_delete:
             billings_to_delete.delete()
-            resp = HttpResponse(status=204)
+
+            query = request.GET.get("query", "")
+            sort = request.GET.get("sort", "")
+            page = request.GET.get("page", 1)
+            month = request.GET.get("month", "")
+            year = request.GET.get("year", "")
+
+            # resp = HttpResponse(status=204)
+            url = reverse("billings:billings")
+            resp = HttpResponseClientRedirect(
+                f"{url}?month={month}&year={year}&page={page}&sort={sort}&query={query}"
+            )
             msg = _("Selected billings have been deleted.")
             trigger_client_event(resp, "billingsDeleted")
             return trigger_client_event(resp, "showToast", {"msg": msg})
         resp = HttpResponse(status=200)
         return trigger_client_event(resp, "htmx:abort")
+
+
+#
