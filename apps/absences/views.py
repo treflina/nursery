@@ -10,6 +10,7 @@ from django_filters.views import FilterView
 from django_htmx.http import trigger_client_event
 from django_tables2 import SingleTableMixin
 
+from apps.billings.models import Billing
 from apps.core.utils.absent_days import get_holidays
 from apps.core.utils.helpers import daterange
 from apps.kids.models import Child
@@ -145,6 +146,9 @@ for the submitted date."
 
             if absences_list:
                 Absence.objects.bulk_create(absences_list)
+                billing = Billing.objects.filter(
+                    date_month=date(date_from.year, date_from.month, 1), child=child
+                )
                 return render(
                     request,
                     "core/base-day.html",
@@ -152,6 +156,7 @@ for the submitted date."
                         "chosendate": date_from,
                         "children": children,
                         "form": AbsenceForm(),
+                        "billing": billing,
                     },
                 )
             else:

@@ -3,7 +3,7 @@
   <h2 id="modal-title" class="font-semibold mb-2 text-lg">
     {% translate 'Edit notes' %}
   </h2>
-  <h3 class="mb-4 font-semibold text-neutral-700">Do rachunku: {{obj.child}} {{obj.date_month|date:"m-Y"}}</h3>
+  <h3 class="mb-4 font-semibold text-neutral-700">Do rachunku: {{obj.child_name}} {{obj.date_month|date:"m-Y"}}</h3>
   <form method="post" hx-post="{{ request.path }}" id="note-form"
       class="flex flex-col gap-3"> {% csrf_token %}
       {{ form2.non_field_errors }}

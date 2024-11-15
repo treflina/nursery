@@ -14,22 +14,10 @@ from apps.kids.models import Child
 from apps.users.decorators import get_parent_context
 from apps.users.models import Parent
 
-from .forms import (
-    AdditionalDayOffForm,
-    FoodPriceForm,
-    GovernmentSubsidyForm,
-    LocalSubsidyForm,
-    MonthlyPaymentForm,
-    OtherSubsidyForm,
-)
-from .models import (
-    AdditionalDayOff,
-    FoodPrice,
-    GovernmentSubsidy,
-    LocalSubsidy,
-    MonthlyPayment,
-    OtherSubsidy,
-)
+from .forms import (AdditionalDayOffForm, FoodPriceForm, GovernmentSubsidyForm,
+                    LocalSubsidyForm, MonthlyPaymentForm, OtherSubsidyForm)
+from .models import (AdditionalDayOff, FoodPrice, GovernmentSubsidy,
+                     LocalSubsidy, MonthlyPayment, OtherSubsidy)
 from .utils.absent_days import get_holidays, get_not_enrolled_days
 from .utils.helpers import get_next_prev_month
 
@@ -134,9 +122,11 @@ def day_details(request, selected_child, children, chosendate=None):
         else:
             chosendate = datetime.strptime(session_chosendate, "%Y-%m-%d").date()
 
-    billing = Billing.objects.filter(
-        date_month=date(chosendate.year, chosendate.month, 1)
-    ).exists()
+    billing = (
+        Billing.objects.filter(date_month=date(chosendate.year, chosendate.month, 1))
+        .filter(child=selected_child)
+        .exists()
+    )
 
     return render(
         request,
@@ -154,8 +144,7 @@ def main_settings(request):
     additional_days_off = AdditionalDayOff.objects.filter(day__year__gte=today.year)
 
     context = {}
-    context["monthly_payment"] = MonthlyPayment.objects.last()
-    context["monthly_payment_count"] = MonthlyPayment.objects.count()
+    context["monthly_payments"] = MonthlyPayment.objects.all()
     context["local_subsidy"] = LocalSubsidy.objects.last()
     context["local_count"] = LocalSubsidy.objects.count()
     context["government_subsidies"] = GovernmentSubsidy.objects.all()
@@ -272,6 +261,24 @@ def update_monthly_payment(request, pk):
     )
 
 
+@require_http_methods(["DELETE"])
+def delete_monthly_payment(request, pk):
+    if request.htmx:
+        try:
+            MonthlyPayment.objects.filter(pk=pk).delete()
+            resp = HttpResponse("")
+            msg = _("Monthly payment has been deleted.")
+            return trigger_client_event(resp, "showToast", {"msg": msg})
+        except ProtectedError:
+            resp = HttpResponse(
+                """<p id='msg'>You can't delete the monthly payment already assigned
+                to a child. You can change only the price instead.</p>"""
+            )
+            resp["HX-Reselect"] = "#msg"
+            reswap(resp, "innerHTML")
+            return retarget(resp, "#messages-box5")
+
+
 def create_local_subsidy(request):
     if request.method == "POST":
         form = LocalSubsidyForm(request.POST)
@@ -371,7 +378,7 @@ def delete_other_subsidy(request, pk):
             return trigger_client_event(resp, "showToast", {"msg": msg})
         except ProtectedError:
             resp = HttpResponse(
-                """<p id='msg'>You can't delete this subsidy because is still assigned
+                """<p id='msg'>You can't delete this subsidy because it's still assigned
                 to a child. You can change the amount instead.</p>"""
             )
             resp["HX-Reselect"] = "#msg"

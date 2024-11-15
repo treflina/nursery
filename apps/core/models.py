@@ -29,6 +29,7 @@ class AdditionalDayOff(models.Model):
     class Meta:
         verbose_name = _("Additional day off")
         verbose_name_plural = _("Additional days off")
+        ordering = ("day",)
 
 
 class FoodPrice(models.Model):
@@ -45,7 +46,7 @@ class MonthlyPayment(models.Model):
     price = models.DecimalField(_("Amount"), max_digits=6, decimal_places=2, default=0)
 
     def __str__(self):
-        return f"Monthly payment {self.price} zł"
+        return f"{self.price} zł"
 
 
 class LocalSubsidy(models.Model):

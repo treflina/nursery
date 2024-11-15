@@ -22,8 +22,15 @@ def check_check(value, record):
 class BillingsHTMxBulkActionTable(tables.Table):
 
     selection = tables.CheckBoxColumn(
-        accessor="pk", orderable=False, attrs={"td__input": {"@click": "checkRange"}}
+        accessor="pk",
+        orderable=False,
+        attrs={
+            "td__input": {"@click": "checkRange"},
+            "td": {"class": "hidden lg:table-cell"},
+            "th": {"class": "hidden lg:table-cell"},
+        },
     )
+    child_name = tables.Column("Dziecko", accessor="child_name")
     date_month = tables.Column(_("Month"), accessor="date_month", orderable=False)
     paid = CheckBoxColumnWithName(
         verbose_name="Zapł.", accessor="paid", checked=check_check
@@ -33,13 +40,15 @@ class BillingsHTMxBulkActionTable(tables.Table):
         _("Wyż. (dzień)"), accessor="food_price", orderable=False
     )
     food_total = tables.Column(_("Wyż. (suma)"), accessor="food_total", orderable=False)
-    monthly_payment = tables.Column(
-        "Opłata mies.", accessor="monthly_payment", orderable=False
+    payment_to_charge = tables.Column(
+        "Opłata mies.", accessor="payment_to_charge", orderable=False
     )
     local_subsidy = tables.Column(
         "Dopł. gminna", accessor="local_subsidy", orderable=False
     )
-    gov_subsidy = tables.Column("Dopł. pańtwa", accessor="gov_subsidy", orderable=False)
+    gov_subsidy = tables.Column(
+        "Dopł. państwa", accessor="gov_subsidy", orderable=False
+    )
     other_subsidies = tables.Column(
         "Dopł. inne", accessor="other_subsidies", orderable=False
     )
@@ -80,19 +89,21 @@ class BillingsHTMxBulkActionTable(tables.Table):
             "tag",
             "confirmed",
             "sent",
+            "child",
+            "monthly_payment",
         )
 
         sequence = (
             "selection",
             "date_month",
-            "child",
+            "child_name",
             "local_subsidy",
             "gov_subsidy",
             "other_subsidies",
             "days_count",
             "food_price",
             "food_total",
-            "monthly_payment",
+            "payment_to_charge",
             "sum",
             "...",
         )

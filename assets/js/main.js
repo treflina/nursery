@@ -1,7 +1,11 @@
 import Datepicker from "flowbite-datepicker/Datepicker";
 import DateRangePicker from "flowbite-datepicker/DateRangePicker";
 import pl from "../../node_modules/flowbite-datepicker/js/i18n/locales/pl"
+import Alpine from 'alpinejs'
+
 (() => {
+    window.Alpine = Alpine
+    Alpine.start()
 
     document.addEventListener("createAbsenceForm", function (e) {
         Datepicker.locales.pl = pl.pl;

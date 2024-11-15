@@ -7,6 +7,7 @@
 {% block content %}
 <div id="children-wrapper">
 {% include 'absences/includes/absences_top_info.html' %}
+{% include 'includes/logout_form.html' %}
 <main id="children-main"
 class="modal-wrapper flex flex-col justify-center items-center w-full {% if creating or updating %}bg-cyan-50 {% endif %}">
   {% comment %} <div class="modalBackground hidden"></div> {% endcomment %}
@@ -34,13 +35,14 @@ class="modal-wrapper flex flex-col justify-center items-center w-full {% if crea
               hx-target=".table-container" x-data
               x-on:htmx:before-request="$dispatch('clear-pagination-and-sort')">
           </div>
-          <button id="btn-abs-nursery" class="flex items-center h-11 px-2 gap-1 border-2 border-neutral-300
+          <button class="flex items-center h-11 px-2 gap-1 border-2 border-neutral-300
               rounded-md bg-amber-100 hover:bg-amber-200 focus:bg-amber-200
               duration-300 transition-colors"
               hx-target="#children"
               hx-select="#children"
               hx-get="{% url 'kids:create' %}?next={{ request.get_full_path|urlencode}}"
-              hx-swap="outerHTML">
+              hx-swap="outerHTML"
+              hx-push-url="true">
             <svg class="w-5 h-5" aria-hidden="true">
               <use href="{% static 'img/sprite.svg' %}#plus" />
             </svg>

@@ -1,14 +1,18 @@
-{% load static %}
+{% load static i18n %}
 <div id="absence-form-wrapper" class="lg:mr-8 px-2 mx-auto w-full max-w-[700px]">
-    <button class="rounded-full border-2 mb-8
-    px-6 pt-2 pb-3 bg-blue-300 hover:bg-blue-400 hover:shadow-md transition-all duration-300
+    <button class="flex gap-2 justify-start items-center rounded-full border-2 mb-8
+    px-4 pt-2 pb-3 bg-blue-300 hover:bg-blue-400 hover:shadow-md transition-all duration-300
     uppercase font-semibold"
     hx-get="{% url 'info:day' %}{{chosendate.year}}-{{chosendate.month}}-{{chosendate.day}}"
-    hx-target="#info">< {% translate 'Back' %}</button>
+    hx-target="#info">
+        <svg class="w-4 h-4 fill-sky-700" aria-hidden="true">
+            <use href="{% static 'img/sprite.svg' %}#left" />
+        </svg> {% translate 'Back' %}
+    </button>
     <form id="form-abs" hx-target="#main" hx-swap="outerHTML" hx-post="{% url 'absences:absence_create' %}"
         class="flex flex-col items-start justify-start border-2 border-neutral-200 rounded-md p-2 md:p-6 lg:p-8">
         {% csrf_token %}
-        <h2 class="font-semibold text-lg text-left">{{child.first_name}} {{child.last_name}} będzie nieobecny w dniach</h2>
+        <h2 class="font-semibold text-lg text-left">Dziecko {{child.first_name}} {{child.last_name}} będzie nieobecne w dniach</h2>
         <div class="daterangepicker flex flex-wrap items-center gap-2 my-3 ">
             <div class="flex flex-wrap justify-center items-center my-2">
                 <label for="id_a_date" class="mr-2">{% translate 'from' %}:</label>

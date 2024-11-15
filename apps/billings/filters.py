@@ -1,4 +1,3 @@
-import calendar
 from datetime import date
 
 import django_filters
@@ -13,8 +12,23 @@ from .models import Billing
 class BillingsFilter(BaseFilter):
 
     year_end_range = date.today().year + 2
-    MONTH_CHOICES = [(i, calendar.month_name[i]) for i in range(1, 13)]
     YEAR_CHOICES = [(i, i) for i in range(2024, year_end_range)]
+    MONTH_NAMES = [
+        _("January"),
+        _("February"),
+        _("March"),
+        _("April"),
+        _("May"),
+        _("June"),
+        _("July"),
+        _("October"),
+        _("September"),
+        _("October"),
+        _("November"),
+        _("December"),
+    ]
+    # MONTH_CHOICES = [(i, calendar.month_name[i]) for i in range(1, 13)]
+    MONTH_CHOICES = [(month[0], month[1]) for month in enumerate(MONTH_NAMES, start=1)]
 
     month = django_filters.ChoiceFilter(
         field_name="date_month",
@@ -33,7 +47,7 @@ class BillingsFilter(BaseFilter):
                 "x-data": "",
                 "x-on:htmx:before-request": "$dispatch('clear-pagination-and-sort')",
             }
-        ),  # noqa: E501
+        ),
     )
     year = django_filters.ChoiceFilter(
         field_name="date_month",

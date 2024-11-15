@@ -21,6 +21,7 @@ class ChildForm(forms.ModelForm):
             "leave_date",
             "food_price",
             "local_subsidy",
+            "payment_month",
             "gov_subsidy",
             "other_subsidies",
         ]
@@ -44,6 +45,7 @@ class ChildForm(forms.ModelForm):
                     item_label="username",
                     minimum_search_length=0,
                     no_result_text=_("No results found"),
+                    placeholder="Zacznij pisać aby wyszukać",
                 ),
             ),
             "food_price": forms.Select(
@@ -56,6 +58,12 @@ class ChildForm(forms.ModelForm):
                 attrs={
                     "class": """w-5 h-5 text-blue-600 bg-white border-gray-300 rounded
                         focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2"""
+                }
+            ),
+            "payment_month": forms.Select(
+                attrs={
+                    "class": """border-2 border-blue-300 rounded-md w-full
+                        focus:ring-[#92F398] focus:border-[#92F398]"""
                 }
             ),
             "gov_subsidy": forms.Select(
@@ -94,3 +102,4 @@ class ChildForm(forms.ModelForm):
         self.fields["leave_date"].label = _("Leave")
         self.fields["parent"].label = _("Access account")
         self.fields["food_price"].label = _("Food price")
+        self.fields["local_subsidy"].label = "Gm.Turawa"

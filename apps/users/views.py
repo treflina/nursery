@@ -5,12 +5,8 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import UpdateView
 from django_htmx.http import trigger_client_event
 
-from .forms import (
-    GetParentForm,
-    ParentChangeEmailForm,
-    ParentChangePasswordForm,
-    ParentForm,
-)
+from .forms import (GetParentForm, ParentChangeEmailForm,
+                    ParentChangePasswordForm, ParentForm)
 from .models import Parent
 
 
@@ -23,6 +19,7 @@ class ParentUpdate(UpdateView):
 
 
 def create_parent(request):
+
     if request.method == "POST":
         form = ParentForm(request.POST)
         if form.is_valid():
@@ -32,7 +29,6 @@ def create_parent(request):
             return trigger_client_event(resp, "showToast", {"msg": msg})
     else:
         form = ParentForm()
-
     return render(request, "users/parent_form.html", {"form2": form, "add": True})
 
 

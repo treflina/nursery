@@ -18,6 +18,13 @@ class Child(models.Model):
     food_price = models.ForeignKey(
         "core.FoodPrice", on_delete=models.PROTECT, blank=True, null=True
     )
+    payment_month = models.ForeignKey(
+        "core.MonthlyPayment",
+        verbose_name=_("Monthly payment"),
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+    )
     local_subsidy = models.BooleanField(_("Subsidy"), default=True)
     other_subsidies = models.ManyToManyField(
         OtherSubsidy, verbose_name=_("Other subsidies"), blank=True, null=True
@@ -58,6 +65,10 @@ class Child(models.Model):
             gov = gov_subsidy.amount
 
         return sum([x.amount for x in self.other_subsidies.all()]) + local + gov
+
+    @property
+    def monthly_payment(self):
+        return self.payment_month - self.all_subsidies_sum
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}"

@@ -1,14 +1,8 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from .models import (
-    AdditionalDayOff,
-    FoodPrice,
-    GovernmentSubsidy,
-    LocalSubsidy,
-    MonthlyPayment,
-    OtherSubsidy,
-)
+from .models import (AdditionalDayOff, FoodPrice, GovernmentSubsidy,
+                     LocalSubsidy, MonthlyPayment, OtherSubsidy)
 
 base_class = """border-2 border-blue-300 rounded-md
                 focus:ring-[#92F398] focus:border-[#92F398]"""

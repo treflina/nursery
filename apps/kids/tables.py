@@ -12,6 +12,9 @@ class ChildrenTable(tables.Table):
     food_price = tables.Column(
         verbose_name=_("Food"), accessor="food_price", orderable=False
     )
+    payment_month = tables.Column(
+        verbose_name=_("Monthly payment"), accessor="payment_month", orderable=False
+    )
     local_subsidy = TemplateColumn(
         verbose_name=_("Gm.Turawa"),
         accessor="local_subsidy",

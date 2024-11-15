@@ -1,13 +1,18 @@
-{% load static %}
+{% load static i18n %}
 <div
-    class="flex justify-end relative lg:absolute bg-neutral-200 lg:bg-transparent lg:top-6 lg:right-2 py-1 pr-6 w-100 lg:w-min">
+    class="flex justify-end gap-2 relative lg:absolute bg-neutral-200 lg:bg-transparent lg:top-6 lg:right-2 py-1 pr-6
+    lg:w-min">
     {% load static %}
     {% if session_child %}
-    <div class="flex gap-2 p-2 bg-neutral-50 rounded-lg shadow-sm lg:shadow-md"
+    <div class="flex gap-2 p-2 bg-neutral-50 rounded-lg shadow-sm lg:shadow-md
+        hover:bg-neutral-200 transition-colors duration-300 cursor-pointer"
         {% if children_count > 1 %}
+        role="button"
+        tabindex="0"
         hx-trigger="click"
         hx-get="{% url 'kids:switch' %}"
-        hx-select="#main" hx-target="#main"
+        hx-select="#main"
+        hx-target="#main"
         hx-swap="outerHTML"
         {% endif %}>
         <svg class="w-8 h-8">
@@ -16,4 +21,15 @@
         <p class="font-semibold text-xl">{{session_child.first_name}}</p>
     </div>
     {% endif %}
+    <form class="flex gap-2 bg-neutral-50 rounded-lg shadow-sm lg:shadow-md" method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+        <button type="submit" class="flex gap-2 justify-center items-center p-2 hover:bg-neutral-200
+            transition-colors duration-300 rounded-lg">
+            <svg class="w-6 h-6 fill-black" aria-hidden="true">
+                <use href="{% static 'img/sprite.svg' %}#logout" />
+            </svg>
+            <span class="font-semibold hidden sm:inline-block text-xl">Wyloguj</span>
+            <span class="sr-only"> {% translate 'Logout' %} </span>
+        </button>
+    </form>
 </div>

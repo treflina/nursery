@@ -1,4 +1,5 @@
 from datetime import date
+
 from autocomplete import widgets
 from django import forms
 from django.utils.translation import gettext_lazy as _
@@ -6,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.core.utils.htmx_autocomplete import ChildHTMXAutocomplete
 from apps.core.widgets import MonthYearWidget
 from apps.kids.models import Child
+
 from .models import Billing
 
 
@@ -18,6 +20,7 @@ class BillingForm(forms.ModelForm):
             "food_price",
             "food_total",
             "monthly_payment",
+            "payment_to_charge",
             "local_subsidy",
             "gov_subsidy",
             "other_subsidies",
@@ -31,7 +34,8 @@ class BillingForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": base_class})
         self.fields["local_subsidy"].label = "Dopłata gm. Turawa"
-        self.fields["monthly_payment"].label = "Miesięczna opłata rodzica"
+        self.fields["monthly_payment"].label = "Miesięczna opłata"
+        self.fields["payment_to_charge"].label = "Po odliczeniach"
         self.fields["info_subsidies"].widget.attrs.update({"rows": "2"})
 
 
@@ -53,8 +57,6 @@ class BillingNoteForm(forms.ModelForm):
 
 
 class BillingCreateForm(forms.ModelForm):
-
-    last_billing = Billing.objects.all().order_by("date_month").last()
 
     date_month = forms.DateField(
         widget=MonthYearWidget(
@@ -85,10 +87,15 @@ class BillingCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.last_billing.date_month.month == 12:
-            m = 1
-            y = self.last_billing.date_month.year + 1
+        last_billing = Billing.objects.all().order_by("date_month").last()
+        if last_billing:
+            if last_billing.date_month.month == 12:
+                m = 1
+                y = last_billing.date_month.year + 1
+            else:
+                m = last_billing.date_month.month + 1
+                y = last_billing.date_month.year
         else:
-            m = self.last_billing.date_month.month + 1
-            y = self.last_billing.date_month.year
+            m = date.today().month
+            y = date.today().year
         self.fields["date_month"].initial = date(y, m, 1)

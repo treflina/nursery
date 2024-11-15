@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load static i18n %}
 {% block content %}
-{% if children %}
+{% comment %} {% if children %}
 <form method="post" class="flex gap-2 max-w-sm ml-auto">{% csrf_token %}
   <label for="children" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Wybierz dziecko:</label>
   <select id="children" name="child" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500
@@ -11,5 +12,70 @@
   </select>
   <button type="submit">Zmień</button>
 </form>
-{% endif %}
+{% endif %} {% endcomment %}
+<div class="min-h-dvh flex flex-col">
+  {% include 'absences/includes/absences_top_info.html' %}
+  {% include 'includes/logout_form.html' %}
+  <section class="relative mx-auto max-w-[1000px] flex flex-col gap-4 justify-center items-center mt-8 mb-4 pt-8 py-6">
+    <div class="flex flex-wrap gap-4 justify-center">
+      <div class="relative rounded-md border-4 bg-neutral-100 border-sky-700 w-72">
+        <a class="cursor-pointer inline-block w-full h-full p-8 text-lg font-semibold after:absolute after:inset-0 after:z-10
+          hover:bg-neutral-200 transition-colors duration-300"
+        href="{% url 'kids:children' %}">Dzieci</a>
+        <svg class=" absolute right-1 bottom-1 w-24 h-16 fill-blue-400" aria-hidden="true">
+            <use href="{% static 'img/sprite.svg' %}#children" />
+        </svg>
+      </div>
+      <div class="relative rounded-md border-4 border-sky-700 bg-neutral-100 w-72">
+        <a class="cursor-pointer block text-lg font-semibold after:absolute after:inset-0 after:z-10
+        hover:bg-neutral-200 transition-colors duration-300 p-8"
+        href="{% url 'billings:billings' %}">Rachunki</a>
+        <svg class=" absolute right-1 bottom-1 w-16 h-16 fill-zinc-500" aria-hidden="true">
+          <use href="{% static 'img/sprite.svg' %}#bill" />
+        </svg>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-4 justify-center">
+      <div class="relative rounded-md border-4 border-sky-700 bg-neutral-100 w-72">
+        <a class="cursor-pointer block text-lg font-semibold after:absolute after:inset-0 after:z-10
+        hover:bg-neutral-200 transition-colors duration-300 p-8"
+        href="{% url 'absences:absences_list' %}">Nieobecności</a>
+        <svg class=" absolute right-1 bottom-1 w-16 h-16 fill-rose-400" aria-hidden="true">
+            <use href="{% static 'img/sprite.svg' %}#calendar" />
+        </svg>
+      </div>
+      <div class="relative rounded-md border-4 border-sky-700 bg-neutral-100 w-72">
+        <a class="cursor-pointer block text-lg font-semibold after:absolute after:inset-0 after:z-10
+        hover:bg-neutral-200 transition-colors duration-300 p-8"
+        href="{% url 'core:settings' %}">Ustawienia</a>
+        <svg class=" absolute right-1 bottom-1 w-16 h-16 fill-green-700" aria-hidden="true">
+            <use href="{% static 'img/sprite.svg' %}#gear" />
+        </svg>
+      </div>
+    </div>
+      <div class="flex flex-wrap gap-4 justify-center">
+      <div class="relative rounded-md border-4 border-sky-700 bg-neutral-100 w-72">
+        <a class="cursor-pointer block text-lg font-semibold after:absolute after:inset-0 after:z-10
+        hover:bg-neutral-200 transition-colors duration-300 p-8"
+        href="#">Jadłospis</a>
+        <svg class=" absolute right-1 bottom-1 w-16 h-16 fill-lime-400" aria-hidden="true">
+            <use href="{% static 'img/sprite.svg' %}#plate" />
+        </svg>
+      </div>
+      <div class="relative rounded-md border-4 border-sky-700 bg-neutral-100 w-72">
+        <a class="cursor-pointer block text-lg font-semibold after:absolute after:inset-0 after:z-10
+        hover:bg-neutral-200 transition-colors duration-300 p-8"
+        href="#">Zajęcia</a>
+        <svg class=" absolute right-1 bottom-1 w-16 h-16 fill-yellow-400" aria-hidden="true">
+            <use href="{% static 'img/sprite.svg' %}#teddy" />
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <footer class="mt-auto text-center py-2 text-white text-lg bg-sky-700">
+    <p>Żłobek Gminny "Promyczki" w Kotorzu Małym</p>
+  </footer>
+</div>
+{% include 'absences/includes/absences_modals.html' %}
 {% endblock %}

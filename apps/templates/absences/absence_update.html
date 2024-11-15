@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% load static i18n %}
 {% block content %}
+
 <main id="absences-update"
     class="modal-wrapper flex flex-col justify-center items-center w-full">
     {% include 'absences/includes/absences_top_info.html' %}
+     {% include 'includes/logout_form.html' %}
     {% if messages %}
     <div x-data="{showMsg : true}" @click.outside="showMsg = false" class="fixed top-3 right-3 z-10">
         <div x-show="showMsg" class="relative pr-5 pl-3 pb-4 bg-[#e0f6e2] rounded-md border-2 border-[#77ef7f] shadow-sm">
@@ -17,7 +19,6 @@
     {% endif %}
     <section id="absences" class="my-8 px-1 relative">
         <h1 class="text-2xl font-semibold mb-8 text-center">{% translate 'Edit absence' %}</h1>
-
         <div class="p-4 sm:p-6 lg:px-12 lg:py-6 bg-neutral-100 border-2 border-neutral-300 rounded-md shadow-md">
             <p class="mt-4 mb-5">{% translate 'Child' %}:
                 <span class="font-semibold px-4 py-2 ml-2 border border-neutral-200 rounded-md bg-neutral-50">{{ object.child.first_name }} {{ object.child.last_name }}</span></p>

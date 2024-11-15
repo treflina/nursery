@@ -6,6 +6,8 @@ from dateutil.relativedelta import TH, relativedelta
 
 from apps.absences.models import Absence
 
+from ..models import AdditionalDayOff
+
 
 def get_holidays_in_a_year(year):
     """Returns Polish holidays dates (legally considered non-working days)"""
@@ -25,6 +27,9 @@ def get_holidays_in_a_year(year):
         "Christmas  Day": date(year, 12, 25),
         "Boxing Day": date(year, 12, 26),
     }
+    additional_days_off = AdditionalDayOff.objects.filter(day__year=year)
+    additional_days_off_dict = {k: v.day for (k, v) in enumerate(additional_days_off)}
+    holidays.update(additional_days_off_dict)
     return holidays
 
 

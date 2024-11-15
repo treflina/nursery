@@ -1,6 +1,24 @@
 {% extends "base.html" %}
-
+{% load static i18n %}
 {% block content %}
-  <p>Logged out!</p>
-  <a href="{% url 'login'%}">Click here to login again.</a>
+<div class="min-h-dvh flex flex-col">
+  <div class="sky-gradient footer-calc relative flex flex-wrap justify-center items-center">
+    <div class="flex flex-wrap gap-6 lg:gap-12 items-center justify-center px-6 py-4 lg:px-10 lg:py-8 mx-4 bg-neutral-50
+      rounded-md border-2 border-neutral-300">
+      <img src="{% static 'img/logozlobeknobg.png' %}" class="w-40"/>
+      <div class="max-w-[600px] "  method="post" action="{% url 'login' %}">
+        <h1 class="font-semibold text-xl text-center sm:text-left mb-2">Wylogowano</h1>
+        <div>
+            {% comment %} <a class="font-semibold text-sky-700 underline" href="{% url 'login'%}">{% translate 'Click here to login again.' %}</a> {% endcomment %}
+            <a class="font-semibold text-sky-700 underline hover:no-underline
+              duration-300 transition-all" href="{% url 'login'%}">
+              Zaloguj się ponownie</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="mt-auto p-1 flex justify-center items-center text-center w-full h-12 text-white text-lg bg-sky-700">
+    <p >Żłobek Gminny "Promyczki" w&nbsp;Kotorzu&nbsp;Małym</p>
+  </footer>
+</div>
 {% endblock %}

@@ -54,3 +54,33 @@ class Activities(models.Model):
 
     def __str__(self):
         return f"Activities {self.day}"
+
+
+# class ActivityType(models.Model):
+
+#     name = models.CharField(_("Activity Type"), max_length=50)
+#     order = models.SmallIntegerField(_("Order"), default=0)
+
+#     def __str__(self):
+#         return self.name
+
+
+# class Activity(models.Model):
+
+#     activity_date = models.DateField(_("Activity date"))
+#     activity_type = models.ForeignKey(
+#         ActivityType,
+#         verbose_name=_("Activity Type"),
+#         on_delete=models.CASCADE
+#         )
+#     description = models.TextField(_("Description"))
+
+
+# class MainTopic(models.Model):
+#     date_from = models.DateField(_("Date from"))
+#     date_to = models.DateField(_("Date to"))
+#     name = models.CharField(_("Main Topic"))
+
+
+# class DailyTopic(models.Model):
+#     date = models.DateField()

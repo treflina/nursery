@@ -1,0 +1,14 @@
+{% load static i18n %}
+<div class="relative w-full">
+    <form class="absolute top-1 right-1 md:right-2 lg:right-12" method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button type="submit" class="ml-auto mt-2 flex gap-2 justify-center items-center bg-amber-100
+      rounded-md px-2 py-1 border-2 border-neutral-300 hover:bg-amber-200 transition-colors duration-300">
+          <span class="font-semibold hidden sm:inline-block">Wyloguj się</span>
+          <svg class="w-6 h-6 fill-sky-700" aria-hidden="true">
+              <use href="{% static 'img/sprite.svg' %}#logout" />
+          </svg>
+          <span class="sr-only"> {% translate 'Logout' %} </span>
+      </button>
+  </form>
+</div>

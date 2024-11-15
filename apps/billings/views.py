@@ -10,12 +10,8 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView, UpdateView
 from django_filters.views import FilterView
-from django_htmx.http import (
-    trigger_client_event,
-    HttpResponseClientRedirect,
-)
+from django_htmx.http import HttpResponseClientRedirect, trigger_client_event
 from django_tables2 import SingleTableMixin
-from django_tables2.export.views import ExportMixin
 from xlsxwriter.workbook import Workbook
 
 from apps.core.models import LocalSubsidy
@@ -25,7 +21,7 @@ from apps.kids.models import Child
 from apps.users.decorators import get_parent_context
 
 from .filters import BillingsFilter
-from .forms import BillingForm, BillingNoteForm, BillingCreateForm
+from .forms import BillingCreateForm, BillingForm, BillingNoteForm
 from .models import Billing
 from .tables import BillingsHTMxBulkActionTable
 
@@ -117,14 +113,30 @@ def generate_report(request):
                 )
 
                 gov_subsidy = child.gov_subsidy.amount if child.gov_subsidy else 0
+
                 other_sub = child.other_subsidies_sum
                 other_sub_list = child.other_subsidies_list
+
+                if child.payment_month:
+                    monthly_payment = child.payment_month.price
+                    payment_total = (
+                        child.payment_month.price
+                        - loc_subsidy
+                        - gov_subsidy
+                        - other_sub
+                    )
+                    if payment_total < 0:
+                        payment_total = 0
+                else:
+                    monthly_payment = 0
+                    payment_total = 0
 
                 obj = Billing.objects.filter(date_month=report_date, child=child).last()
 
                 if obj and obj.confirmed is True:
                     confirmed_count += 1
                 elif obj and obj.confirmed is False:
+                    obj.child_name = child.full_name
                     obj.food_price = food_price_day
                     obj.food_total = food_to_pay
                     obj.days_count = days_to_pay_count
@@ -132,11 +144,18 @@ def generate_report(request):
                     obj.gov_subsidy = gov_subsidy
                     obj.other_subsidies = other_sub
                     obj.info_subsidies = other_sub_list
+                    obj.monthly_payment = monthly_payment
+                    obj.payment_to_charge = payment_total
+                    obj.paid = False
+                    obj.note = None
+                    obj.info = None
+                    obj.tag = None
                     obj.changed_by = request.user
                 else:
                     obj = Billing(
                         date_month=report_date,
                         child=child,
+                        child_name=child.full_name,
                         food_price=food_price_day,
                         food_total=food_to_pay,
                         days_count=days_to_pay_count,
@@ -144,7 +163,8 @@ def generate_report(request):
                         gov_subsidy=gov_subsidy,
                         other_subsidies=other_sub,
                         info_subsidies=other_sub_list,
-                        note=other_sub_list,
+                        monthly_payment=monthly_payment,
+                        payment_to_charge=payment_total,
                         changed_by=request.user,
                     )
                 obj.save()
@@ -199,19 +219,17 @@ def billing(request, selected_child, children, chosendate=None):
     )
 
 
-class BillingsReportsView(ExportMixin, SingleTableMixin, FilterView):
+class BillingsReportsView(SingleTableMixin, FilterView):
 
     table_class = BillingsHTMxBulkActionTable
     queryset = (
         Billing.objects.all()
-        .order_by("-date_month", "child")
+        .order_by("-date_month", "child_name")
         .select_related("child__parent")
         .only("child__parent__email")
     )
     filterset_class = BillingsFilter
     paginate_by = 100
-    export_name = "zestawienie_oplat"
-    exclude_columns = ("selection", "paid", "sub_received", "accions")
 
     def get_template_names(self):
         if self.request.htmx and self.request.htmx.target not in [
@@ -232,8 +250,12 @@ class BillingsReportsView(ExportMixin, SingleTableMixin, FilterView):
             context["export_data"] = True
 
         last_billing = Billing.objects.all().order_by("date_month").last()
-        context["year"] = last_billing.date_month.year
-        context["month"] = last_billing.date_month.month
+        if last_billing:
+            context["year"] = last_billing.date_month.year
+            context["month"] = last_billing.date_month.month
+        else:
+            context["year"] = date.today().year
+            context["month"] = date.today().month
 
         # get recently updated absence id to set focus
         updated_note = self.request.session.pop("updated_note", None)
@@ -260,12 +282,21 @@ class BillingsReportsView(ExportMixin, SingleTableMixin, FilterView):
 
         if not request_dict:
             last_billing = Billing.objects.all().order_by("date_month").last()
-            request_dict.update(
-                {
-                    "year": last_billing.date_month.year,
-                    "month": last_billing.date_month.month,
-                }
-            )
+            if last_billing:
+                request_dict.update(
+                    {
+                        "year": last_billing.date_month.year,
+                        "month": last_billing.date_month.month,
+                    }
+                )
+            else:
+                request_dict.update(
+                    {
+                        "year": date.today().year,
+                        "month": date.today().month,
+                    }
+                )
+
         kwargs["data"] = request_dict
         return kwargs
 
@@ -274,8 +305,13 @@ def export_xlsx_file(request, year=None, month=None):
 
     if not year or not month:
         last_billing = Billing.objects.all().order_by("date_month").last()
-        year = last_billing.date_month.year
-        month = last_billing.date_month.month
+        if last_billing:
+            year = last_billing.date_month.year
+            month = last_billing.date_month.month
+        else:
+            year = date.today().year
+            month = date.today().month
+
     qs = Billing.objects.filter(
         Q(date_month__month=month) & Q(date_month__year=year)
     ).order_by("child")
@@ -309,7 +345,7 @@ def export_xlsx_file(request, year=None, month=None):
             c_format = white
 
         worksheet.write(row, col, row, c_format)
-        worksheet.write(row, col + 1, line.child.full_name, c_format)
+        worksheet.write(row, col + 1, line.child_name, c_format)
         worksheet.write(row, col + 2, line.local_subsidy, c_format)
         worksheet.write(row, col + 3, line.gov_subsidy, c_format)
         worksheet.write(row, col + 4, line.other_subsidies, c_format)
@@ -509,8 +545,10 @@ def send_billing(request, pk):
             else:
                 try:
                     send_mail(
-                        subject=f"""Rachunek {billing.date_month.month}-
-                        {billing.date_month.year}""",
+                        subject=(
+                            f"Rachunek {billing.date_month.month}-"
+                            f"{billing.date_month.year}"
+                        ),
                         message=f"Wyżywienie: {billing.food_total}",
                         from_email="test@example.com",
                         recipient_list=[email],
@@ -526,6 +564,7 @@ def send_billing(request, pk):
                 except Exception as e:
                     # TODO  handle failure
                     msg = _("Email was not sent")
+                    print(e)
                     pass
         else:
             msg = _("Email was not sent because there is no parent account assigned.")

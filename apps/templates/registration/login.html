@@ -1,37 +1,59 @@
 {% extends 'base.html' %}
-
+{% load static i18n %}
 {% block content %}
 
-  {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
+{% if next %}
+<div class="bg-amber-100">
+  {% if user.is_authenticated %}
+    <p class="p-2 text-center">Twoje konto nie ma dostępu do żądanej strony.</p>
+  {% else %}
+    <p class="p-2 text-center">Prosimy zalogować się aby móc wyświetlić żądaną stronę.</p>
   {% endif %}
+</div>
+{% endif %}
+<div class="min-h-dvh flex flex-col">
+<div class="sky-gradient footer-calc relative flex flex-wrap justify-center items-center">
+  <div class="flex flex-wrap gap-6 lg:gap-12 items-center justify-center px-6 py-4 lg:px-10 lg:py-8 mx-4 bg-neutral-50
+    rounded-md border-2 border-neutral-300">
+    <img src="{% static 'img/logozlobeknobg.png' %}" class="w-40 sm:w-64"/>
+    <form class="max-w-[600px] "  method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+      <h1 class="font-semibold text-xl text-center sm:text-left mb-2">Strona logowania</h1>
+      <div  class="text-red-700 h-4 mb-2">
+        {% if form.errors %}
+          <p class="text-center">Niepoprawne dane logowania.</p>
+        {% endif %}
+      </div>
+      <div class="flex flex-col gap-3">
+        <div class="flex flex-col gap-1">
+          <div class="text-sm font-semibold text-neutral-600">{{ form.username.label_tag }}</div>
+          <input type="text" name="username" class=" border-2 border-[#06c3dd] rounded-md
+            focus:ring-[#27d495] focus:border-[#27d495] bg-white" autofocus="" autocapitalize="none"
+            autocomplete="username" maxlength="150" required="" id="id_username">
+        </div>
+        <div class="flex flex-col gap-1">
+          <div class="text-sm font-semibold text-neutral-600">{{ form.password.label_tag }}</div>
+          <input type="password" name="password" class=" border-2 border-[#06c3dd] rounded-md
+            focus:ring-[#27d495] focus:border-[#27d495] bg-white"
+          autocomplete="current-password" required="" id="id_password">
+        </div>
+        <button type="submit"
+          class="w-full rounded-md border-2 border-neutral-300 px-4 py-2 hover:bg-[#f8db0b] focus:bg-[#f8db0b]
+          focus:ring-[#27d495] focus:border-[#27d495] bg-amber-100 transition-colors duration-300
+          uppercase font-semibold">
+          Zaloguj</button>
+      </div>
 
-  {% if next %}
-    {% if user.is_authenticated %}
-      <p>Your account doesn't have access to this page. To proceed,
-      please login with an account that has access.</p>
-    {% else %}
-      <p>Please login to see this page.</p>
-    {% endif %}
-  {% endif %}
-
-  <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    <table>
-      <tr>
-        <td>{{ form.username.label_tag }}</td>
-        <td>{{ form.username }}</td>
-      </tr>
-      <tr>
-        <td>{{ form.password.label_tag }}</td>
-        <td>{{ form.password }}</td>
-      </tr>
-    </table>
-    <input type="submit" value="login">
-    <input type="hidden" name="next" value="{{ next }}">
-  </form>
+      <input type="hidden" name="next" value="{{ next }}">
+    </form>
+  </div>
+</div>
+  <footer class="mt-auto px-1 flex justify-center items-center text-center w-full h-12 text-white text-lg bg-sky-700">
+  <p >Żłobek Gminny "Promyczki" w&nbsp;Kotorzu&nbsp;Małym</p>
+</footer>
+</div>
 
   {# Assumes you set up the password_reset view in your URLconf #}
-  <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+  {% comment %} <p><a href="{% url 'password_reset' %}">Lost password?</a></p> {% endcomment %}
 
 {% endblock %}

@@ -1,13 +1,7 @@
 from django.contrib import admin
 
-from .models import (
-    AdditionalDayOff,
-    FoodPrice,
-    GovernmentSubsidy,
-    LocalSubsidy,
-    MonthlyPayment,
-    OtherSubsidy,
-)
+from .models import (AdditionalDayOff, FoodPrice, GovernmentSubsidy,
+                     LocalSubsidy, MonthlyPayment, OtherSubsidy)
 
 admin.site.register(FoodPrice)
 admin.site.register(AdditionalDayOff)

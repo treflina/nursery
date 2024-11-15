@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% block content %}
+<div id="activities-wrapper">
+{% include 'absences/includes/absences_top_info.html' %}
+    <main id="activities-main">
+        <section id="activities" class="flex flex-col items-center justify-center my-8 px-1 relative">
+            <h1 class="text-2xl font-semibold mb-8 text-center">
+                {% if updating %}
+                {% translate 'Edit info about activities' %}
+                {% else %}
+                {% translate 'Add info about activities' %}
+                {% endif %}
+            </h1>
+            <form method="post"
+                class="flex flex-wrap gap-6 items-start justify-center bg-neutral-100 border-2 border-neutral-300 rounded-md
+                p-4 sm:p-6 md:p-10 lg:px-12 lg:py-8 my-1 mx-2 w-full max-w-[1000px] shadow-md"> {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="flex flex-col gap-2">
+                    <div class="flex flex-col gap-1">
+                        {{ form.day.as_field_group }}
+                    </div>
+                    <div class="flex flex-col gap-1 w-full">
+                        {{ form.main_topic.as_field_group }}
+                    </div>
+                    <div class="flex flex-col gap-1 w-full">
+                        {{ form.topic.as_field_group }}
+                    </div>
+                    <div class="flex flex-col gap-1 w-full">
+                        {{ form.activity.as_field_group }}
+                    </div>
+                    <div class="flex flex-col gap-1 w-full">
+                        {{ form.movement.as_field_group }}
+                    </div>
+                </div>
+                <div class="flex flex-col gap-2 ">
+                    <div class="flex flex-col gap-1 w-full">
+                        {{ form.music.as_field_group }}
+                    </div>
+                    <div class="flex flex-col gap-1 w-full">
+                        {{ form.art.as_field_group }}
+                    </div>
+                    <div class="flex flex-col gap-1 w-full">
+                        {{ form.other.as_field_group }}
+                    </div>
+                    <div class="flex gap-2 justify-end items-center w-full mt-4 lg:mt-8">
+                        <button type="button" class="rounded-md border-2
+                            px-4 pt-2 pb-2 bg-amber-100 hover:bg-amber-200 hover:shadow-md transition-all duration-300
+                            uppercase font-semibold"
+                            {% if redirect_to != '' %}
+                            hx-get="{{redirect_to}}"
+                            {% else %}
+                            {% comment %} hx-get="{% url 'info:activities' %}" {% endcomment %}
+                            {% endif %}
+                            hx-target="#activities-wrapper"
+                            hx-swap="outerHTML">
+                            {% translate 'Back' %}
+                        </button>
+                        <button type="submit"
+                            {% if creating %}
+                            hx-post="{{ request.path }}"
+                            hx-target="#activities-wrapper"
+                            hx-swap="outerHTML"
+                            {% endif %}
+                            class="self-end rounded-md border-2
+                            px-4 pt-2 pb-2 bg-sky-700 text-white hover:bg-sky-600 hover:shadow-md
+                            transition-all duration-300
+                            uppercase font-semibold">
+                            {% translate 'Ready' %}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
+{% endblock content %}

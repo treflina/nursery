@@ -78,6 +78,18 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
     color: #525252;
 }
 
+.sky-gradient {
+    background: hsla(22, 22%, 90%, 1);
+    background: radial-gradient(circle, hsla(22, 22%, 90%, 1) 0%, hsla(201, 96%, 32%, 1) 100%);
+    background: -moz-radial-gradient(circle, hsla(22, 22%, 90%, 1) 0%, hsla(201, 96%, 32%, 1) 100%);
+    background: -webkit-radial-gradient(circle, hsla(22, 22%, 90%, 1) 0%, hsla(201, 96%, 32%, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#ECE5E1", endColorstr="#0369A1", GradientType=1 );
+}
+
+.footer-calc {
+    height: calc(100dvh - 3rem);
+}
+
 /* modal */
 .modalbox {
   position: fixed;
@@ -163,9 +175,35 @@ text-align: left;
 
 .children .table-container td:nth-child(1),
 .children .table-header th:nth-child(1)  {
-    width: 30%;
+    width: 16rem;
+}
+.children .table-container td:nth-child(2),
+.children .table-header th:nth-child(2)  {
+    width: 7rem;
+    text-align: center;
+}
+.children .table-container td:nth-child(3),
+.children .table-header th:nth-child(3)  {
+    width: 7rem;
+    text-align: center;
 }
 
+.children .table-container td:nth-child(6),
+.children .table-header th:nth-child(6)  {
+    width: 6.5rem;
+    text-align: center;
+}
+
+.children .table-container td:nth-child(5),
+.children .table-header th:nth-child(5)  {
+    text-align: center;
+}
+
+.children .table-container td:nth-child(4),
+.children .table-header th:nth-child(4)  {
+    width: 7rem;
+    text-align: center;
+}
 
 .checkcolumn-table td:nth-child(1),
 .checkcolumn-table th:nth-child(1) {

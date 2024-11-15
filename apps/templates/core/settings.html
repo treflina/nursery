@@ -116,7 +116,7 @@
             <div id="monthly-payment" class="mt-8">
                 <div class="flex flex-wrap gap-3 items-center mb-4">
                     <h2 class="text-xl font-semibold">{% translate 'Monthly payment' %}</h2>
-                    {% if monthly_payment_count == 0 %}
+
                     <a class="openModal cursor-pointer flex items-center text-sm gap-1 text-sky-700 font-semibold"
                         hx-target="#modal"
                         hx-get="{% url 'core:monthly_payment_create' %}"
@@ -126,7 +126,7 @@
                         </svg>
                         {% translate 'Add' %}
                     </a>
-                    {% endif %}
+
                 </div>
                 <div id="monthly-payment-content" class="flex flex-wrap gap-3"
                     hx-get="{% url 'core:settings' %}"
@@ -134,23 +134,35 @@
                     hx-target="#monthly-payment-content"
                     hx-swap="outerHTML"
                     hx-trigger="paymentChanged from:body">
-                     {% if monthly_payment %}
+                     {% for item in monthly_payments %}
                     <div class="flex gap-2 items-center px-4 py-2 bg-neutral-100 border-2 border-neutral-200 rounded-md">
-                        <p>{{ monthly_payment.price }} zł</p>
-                              <a class="openModal cursor-pointer flex items-center text-sm gap-1"
-                                hx-get="{% url 'core:monthly_payment_update' monthly_payment.id %}"
-                                hx-target="#modal"
-                                hx-select="#settings-form"
-                                hx-swap="innerHTML"
-                                title="{% translate 'Edit' %}">
-                                <svg class="w-4 h-4 fill-sky-700" alt="" aria-hidden="true">
-                                    <use href="{% static 'img/sprite.svg' %}#pen" />
+                        <p>{{ item.price }} zł</p>
+                            <a class="openModal cursor-pointer flex items-center text-sm gap-1"
+                            hx-get="{% url 'core:monthly_payment_update' item.id %}"
+                            hx-target="#modal"
+                            hx-select="#settings-form"
+                            hx-swap="innerHTML"
+                            title="{% translate 'Edit' %}">
+                            <svg class="w-4 h-4 fill-sky-700" alt="" aria-hidden="true">
+                                <use href="{% static 'img/sprite.svg' %}#pen" />
+                            </svg>
+                            <span class="sr-only">{% translate 'Edit' %}</span>
+                        </a>
+                        <a class="openModal cursor-pointer flex items-center text-sm gap-1"
+                                hx-delete="{% url 'core:monthly_payment_delete' item.id %}"
+                                hx-target="closest div"
+                                hx-swap="outerHTML"
+                                confirm-swal="dopłatę: {{ item.price }} zł"
+                                title="{% translate 'Delete' %}">
+                                <svg class="w-4 h-4 fill-stone-600" alt="" aria-hidden="true">
+                                    <use href="{% static 'img/sprite.svg' %}#trash" />
                                 </svg>
-                                <span class="sr-only">{% translate 'Edit' %}</span>
+                                <span class="sr-only">{% translate 'Delete' %}</span>
                             </a>
                     </div>
-                     {% endif %}
+                     {% endfor %}
                 </div>
+                 <div id="messages-box5" class="text-red-700 font-semibold mt-4"></div>
             </div>
             <div id="local_subsidy" class="mt-8">
                 <div class="flex flex-wrap gap-3 items-center mb-4">
@@ -214,7 +226,7 @@
                 >
                     {% for item in government_subsidies %}
                         <div class="flex gap-2 items-center px-4 py-2 bg-neutral-100 border-2 border-neutral-200 rounded-md">
-                            {{ item.name }}: {{ item.amount }} zł
+                            <p>{{ item.name }}: {{ item.amount }} zł</p>
                             <a class="openModal cursor-pointer flex items-center text-sm gap-1"
                                 hx-get="{% url 'core:gov_subsidy_update' item.id %}"
                                 hx-target="#modal"

@@ -113,6 +113,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+LOGOUT_REDIRECT_URL = "users:do-logout"
+
 LOCALE_PATHS = [str(BASE_DIR / "locale")]
 
 STATIC_URL = "/static/"

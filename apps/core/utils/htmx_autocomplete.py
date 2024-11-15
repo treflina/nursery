@@ -1,5 +1,4 @@
 from autocomplete import HTMXAutoComplete
-
 from django.utils.translation import gettext_lazy as _
 
 from apps.kids.models import Child

@@ -32,7 +32,6 @@ class ParentHTMXAutocomplete(HTMXAutoComplete):
                 if x.username in values
             ]
             return items
-
         return []
 
 

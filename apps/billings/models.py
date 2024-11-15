@@ -13,7 +13,9 @@ class Billing(TimeUserStampedModel):
     ]
 
     date_month = models.DateField(_("Month"))
-    child = models.ForeignKey(Child, on_delete=models.CASCADE)
+    child = models.ForeignKey(Child, on_delete=models.SET_NULL, null=True)
+    # TODO remove default
+    child_name = models.CharField(_("Child's name"), max_length=255, default="")
     food_price = models.DecimalField(
         _("Food price"), max_digits=4, decimal_places=2, default=0
     )
@@ -22,6 +24,9 @@ class Billing(TimeUserStampedModel):
     )
     monthly_payment = models.DecimalField(
         _("Monthly payment"), max_digits=6, decimal_places=2, default=0
+    )
+    payment_to_charge = models.DecimalField(
+        _("Payment to charge"), max_digits=6, decimal_places=2, default=0
     )
     days_count = models.PositiveIntegerField(_("Payable days count"), default=0)
     local_subsidy = models.DecimalField(
@@ -48,7 +53,11 @@ class Billing(TimeUserStampedModel):
 
     @property
     def payments_sum(self):
-        return self.food_total + self.monthly_payment
+        return self.food_total + self.payment_to_charge
+
+    @property
+    def subsidies_sum(self):
+        return self.local_subsidy + self.gov_subsidy + self.other_subsidies
 
     def __str__(self):
         return f"{self.date_month.strftime("%m-%Y")}: {self.child}"
