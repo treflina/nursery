@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django import forms
 
-from .models import Activities
+from .models import Activities, MainTopic
 
 
 class ActivitiesInfoForm(forms.ModelForm):
@@ -11,13 +11,13 @@ class ActivitiesInfoForm(forms.ModelForm):
         model = Activities
         fields = (
             "day",
-            "main_topic",
             "topic",
             "activity",
             "movement",
             "music",
             "art",
             "other",
+            "special_event",
         )
 
         widgets = {"day": forms.DateInput(format="%Y-%m-%d", attrs={"type": "date"})}
@@ -32,5 +32,12 @@ class ActivitiesInfoForm(forms.ModelForm):
             focus:ring-[#92F398] focus:border-[#92F398]"""
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": base_class})
-        for field in ["activity", "movement", "music", "art", "other"]:
-            self.fields[field].widget.attrs.update({"rows": "2"})
+        for field in ["activity", "movement", "music", "art", "other", "special_event"]:
+            self.fields[field].widget.attrs.update({"rows": "3"})
+
+
+class MainTopicForm(forms.ModelForm):
+
+    class Meta:
+        model = MainTopic
+        fields = ("description",)

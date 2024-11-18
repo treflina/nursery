@@ -86,6 +86,31 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
     filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#ECE5E1", endColorstr="#0369A1", GradientType=1 );
 }
 
+.sky-linear2 {
+    background: rgb(245,244,249);
+    background: linear-gradient(90deg, rgba(245,244,249,1) 0%, rgba(61,138,180,1) 47%, rgba(3,105,161,1) 100%);
+}
+
+.sky-linear {
+    background: rgb(245,244,249);
+    background: linear-gradient(90deg, rgba(245,244,249,1) 0%, rgba(152,187,205,1) 47%, rgba(3,105,161,1) 100%);
+}
+
+.neutral-linear2 {
+    background: rgb(229,229,229);
+    background: linear-gradient(90deg, rgba(229,229,229,1) 0%, rgba(212,212,212,1) 100%);
+}
+
+.neutral-linear {
+    background: rgb(229,229,229);
+    background: linear-gradient(90deg, rgba(229,229,229,1) 0%, rgba(3,105,161,1) 100%);
+}
+
+.neutral-linear3 {
+    background: rgb(229,229,229);
+    background: linear-gradient(90deg, rgba(229,229,229,1) 30%, rgba(196,211,219,1) 58%, rgba(3,105,161,1) 100%);
+}
+
 .footer-calc {
     height: calc(100dvh - 3rem);
 }

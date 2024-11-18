@@ -2,37 +2,33 @@
 {% block content %}
 {% load static i18n %}
 <div class="lg:mr-8 px-2">
-    <button class="flex gap-2 justify-start items-center rounded-full border-2 mb-8
-    px-6 pt-2 pb-3 bg-blue-300 hover:bg-blue-400 hover:shadow-md transition-all duration-300
-    uppercase font-semibold"
-    hx-get="{% url 'info:day' %}{{chosendate.year}}-{{chosendate.month}}-{{chosendate.day}}"
-    hx-target="#info">
-        <svg class="w-4 h-4 fill-sky-700" aria-hidden="true">
-            <use href="{% static 'img/sprite.svg' %}#left" />
-        </svg> {% translate 'Back' %}
-    </button>
-    <h2 class="font-bold text-3xl mb-4 lg:mt-2">Rozliczenie miesiąca</h2>
-    <p class="font-semibold text-2xl uppercase">{{billing.date_month|date:"F Y"}}</p>
+    {% include 'billings/includes/back_button.html' %}
     {% if not nochild %}
-    <hr class="my-4"/>
-<div>
-<p class="text-lg"><span class="mr-2 py-1 inline-block">Liczba dni do rozliczenia:</span>{{billing.days_count}}</p>
-<p class="text-lg"><span class="mr-2 py-1 inline-block">Stawka dzienna za wyżywienie:</span>{{billing.food_price}} zł</p>
-<p class="text-lg"><span class="mr-2 py-1 inline-block">Opłata za posiłki:</span><span class="font-semibold">{{billing.food_total}} zł</span></p>
-<p class="text-lg"><span class="mr-2 py-1 inline-block">Opłata miesięczna:</span>{{billing.monthly_payment}} zł</p>
-<p class="text-lg"><span class="mr-2 py-1 inline-block">Obniżono o dopłaty:</span>- {{billing.subsidies_sum}} zł</p>
-<p class="text-lg"><span class="mr-2 py-1 inline-block">Opłata za czesne:</span><span class="font-semibold">{{billing.payment_to_charge}} zł</span></p>
-{% if billing.info %}
-<p class="text-lg py-1 mt-2 font-semibold">{{billing.info}}</p>
-{% endif %}
-<hr class="mt-4"/>
-<div class="relative">
-    <div class="pr-4 bg-neutral-300 mt-4 py-4 text-right w-screen absolute top-0 right-0 z-10">
-        <p class="font-semibold text-2xl ">Do zapłaty: {{billing.payments_sum}} zł</p>
-    </div>
-</div>
-{% else %}
-<p>Przykro nam, ale nie znaleźliśmy dziecka przypisanego do Twojego konta.</p>
-{% endif %}
+    <div class="w-max mx-auto">
+        <h2 class="font-bold text-3xl mb-4 lg:mt-12">Rozliczenie miesiąca</h2>
+        <p class="font-semibold text-2xl uppercase">{{billing.date_month|date:"F Y"}}</p>
+        <hr class="my-4"/>
+        <div>
+            <p class="text-lg"><span class="mr-2 py-1 inline-block">Liczba dni do rozliczenia:</span>{{billing.days_count}}</p>
+            <p class="text-lg"><span class="mr-2 py-1 inline-block">Stawka dzienna za wyżywienie:</span>{{billing.food_price}} zł</p>
+            <p class="text-lg"><span class="mr-2 py-1 inline-block">Opłata za posiłki:</span><span class="font-semibold">{{billing.food_total}} zł</span></p>
+            <p class="text-lg"><span class="mr-2 py-1 inline-block">Opłata miesięczna:</span>{{billing.monthly_payment}} zł</p>
+            <p class="text-lg"><span class="mr-2 py-1 inline-block">Obniżono o dopłaty:</span>- {{billing.subsidies_sum}} zł</p>
+            <p class="text-lg"><span class="mr-2 py-1 inline-block">Opłata za czesne:</span><span class="font-semibold">{{billing.payment_to_charge}} zł</span></p>
+            {% if billing.info %}
+            <p class="text-lg py-1 mt-2 font-semibold">{{billing.info}}</p>
+            {% endif %}
+        </div>
+        </div>
+        <hr class="mt-4"/>
+        <div class="relative">
+            <div class="pr-4 neutral-linear3 mt-4 py-4 text-center w-screen absolute top-0 right-0 z-10">
+                <p class="inline-block font-semibold text-2xl lg:ml-[45%] pl-2">Do zapłaty: {{billing.payments_sum}} zł</p>
+            </div>
+        </div>
+    {% else %}
+        <p>Przykro nam, ale nie znaleźliśmy dziecka przypisanego do Twojego konta.</p>
+    {% endif %}
+
 </div>
 {% endblock content %}

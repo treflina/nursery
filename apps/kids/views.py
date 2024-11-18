@@ -41,7 +41,7 @@ def switch_child_profile(request, selected_child, children):
         chosendate = datetime.strptime(session_chosendate, "%Y-%m-%d").date()
 
     billing = Billing.objects.filter(
-        date_month=date(chosendate.year, chosendate.month, 1)
+        date_month=date(chosendate.year, chosendate.month, 1), child_id=new_selected_id
     ).exists()
 
     return render(

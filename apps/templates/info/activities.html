@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% block content %}
+<div id="activities-wrapper">
+{% include 'absences/includes/absences_top_info.html' %}
+{% include 'includes/logout_form.html' %}
+    <main id="activities-main">
+        <section id="activities" class="flex flex-col items-center w-[1000px] max-w-full mx-auto px-2">
+            <h1 class="my-8 text-2xl font-semibold text-center">
+                {% translate 'Activities topics' %}
+            </h1>
+            {% include 'info/main_topic_form.html' %}
+            {% include 'info/includes/activities_list.html' %}
+        </section>
+    </main>
+</div>
+{% include 'absences/includes/absences_modals.html' %}
+{% endblock content %}

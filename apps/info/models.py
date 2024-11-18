@@ -43,7 +43,11 @@ class Activities(models.Model):
 
     day = models.DateField(_("Date"))
     main_topic = models.ForeignKey(
-        "info.MainTopic", on_delete=models.PROTECT, blank=True, null=True
+        "info.MainTopic",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name="activities",
     )
     topic = models.CharField(_("Topic"), max_length=255, blank=True, null=True)
     activity = models.TextField(_("Kids activity"), blank=True, null=True)
@@ -51,6 +55,7 @@ class Activities(models.Model):
     music = models.TextField(_("Musical activity"), blank=True, null=True)
     art = models.TextField(_("Art activity"), blank=True, null=True)
     other = models.TextField(_("Inne"), blank=True, null=True)
+    special_event = models.TextField(_("Dodakowe wydarzenia"), blank=True, null=True)
 
     def __str__(self):
         return f"Activities {self.day}"

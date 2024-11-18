@@ -1,0 +1,31 @@
+{% load static i18n %}
+<form id="week-heading-{{object.id}}"
+    hx-post="{% url 'info:main_topic_update' object.id %}"
+    hx-target="#week-heading-{{object.id}}"
+    hx-select="#week-heading-{{object.id}}"
+    hx-swap="outerHTML"
+    @click.outside="htmx.trigger('body', 'closeForm');"
+    class="form-topic-update flex flex-col gap-2 w-full">
+    <div class="flex flex-wrap w-full justify-between">
+        <label class="sr-only" for="id_description{{object.id}}">Zmień temat tygodnia</label>
+        <input type="text" name="description" maxlength="255" class="font-semibold text-lg max-w-max
+            border-b-2 border-l-0 border-r-0 border-t-0 border-sky-700  py-1 px-1 outline-sky-700
+            {% comment %} focus:ring-[#92F398]{% endcomment %} focus:border-sky-700
+            bg-white"
+            required="" id="id_description{{object.id}}" value="{{object.description}}"
+            autofocus="autofocus">
+        {% comment %} <input type="text" name="description" maxlength="255" class="flex-grow border-2 border-blue-300 rounded-md
+            focus:ring-[#92F398] focus:border-[#92F398] " required="" id="id_description"> {% endcomment %}
+        <div class="flex gap-1 items-center justify-center">
+            <button type="submit"
+             class="flex gap-1 justify-center items-center p-1 border border-neutral-300 rounded-md bg-inherit
+                    hover:bg-neutral-200 focus:bg-neutral-200 duration-300 transition-colors text-sm"
+            ><svg class="w-4 h-4 fill-neutral-700" aria-hidden="true" focusable="false">
+                <use href="{% static 'img/sprite.svg' %}#check" />
+            </svg>
+                OK
+            </button>
+        </div>
+    </div>
+    {{ form2.description.errors }}
+</form>

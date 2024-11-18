@@ -1,20 +1,26 @@
 {% load static %}
-
 {% block content %}
 <div class="flex flex-col">
-    <div class="flex justify-between items-center">
-        <h2 class="font-bold text-3xl lg:mb-4 lg:mt-2 px-6 lg:px-0">{{chosen_date}}</h2>
-
+    <div class="flex gap-2 justify-start items-center lg:mb-4">
+        <div class="ml-2 w-14 h-14 ">
+            <img src="{% static 'img/logozlobeknobg.png' %}" class="w-full h-full inline-block" alt="Logo"/>
+        </div>
+        <h2 class="font-bold text-3xl px-2 lg:px-0">{{chosen_date|date:"d.m.Y"}}</h2>
     </div>
     {% if activities.main_topic or activities.topic %}
     <div class="relative lg:h-28 mt-4">
-        <div class="px-4 lg:pr-4 bg-neutral-300 py-4 text-right lg:w-screen lg:absolute lg:top-0 lg:right-0 z-10">
+        <div class="px-4 lg:pr-4 sky-linear py-4 text-right text-white lg:w-screen lg:absolute lg:top-0 lg:right-0 z-10">
             <p class="uppercase text-xl">{{activities.main_topic}}</p>
             <p class="font-semibold text-2xl ">{{activities.topic}}</p>
         </div>
     </div>
     {% endif %}
     <div class="mt-6 px-6 lg:px-0">
+        {% if activities.special_event %}
+        <p class="font-semibold text-[#d70263]  mb-3">{{activities.special_event}}</p>
+        <hr class="h-1 my-2 w-full">
+        {% comment %} <p class="inline-block mb-2">{{activities.activity}}</p> {% endcomment %}
+        {% endif %}
         {% if activities.activity %}
         <p class="font-semibold">Aktywność i działalność dziecka</p>
         <p class="inline-block mb-2">{{activities.activity}}</p>

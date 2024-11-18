@@ -1,0 +1,79 @@
+{% load static i18n %}
+<div id="activities_list" class="w-full flex flex-col items-start px-2"
+    hx-get="{% url 'info:activities_list' %}"
+    hx-target="this"
+    hx-trigger="closeForm from:body"
+    hx-swap="outerHTML"
+    >
+    {% for topic in main_topics %}
+    <div id="topic{{topic.id}}" class="w-full flex flex-col gap-2">
+        <div id="week-heading-{{topic.id}}"  class="flex flex-wrap gap-2 w-full justify-between">
+            <h2 class="inline-block font-semibold text-lg border-b-2 border-transparent py-1 px-1">{{topic}}</h2>
+            <div class="flex gap-1 items-center justify-center">
+                <button type="button" hx-get="{% url 'info:main_topic_update' topic.id %}"
+                    hx-target="#week-heading-{{topic.id}}"
+                    hx-swap="outerHTML"
+                    class="flex gap-1 justify-center items-center p-1 border border-neutral-300 rounded-md bg-inherit
+                    hover:bg-neutral-200 focus:bg-neutral-200 duration-300 transition-colors text-sm">
+                     {% translate 'Edit' %}
+                    <svg class="w-4 h-4 fill-neutral-700" aria-hidden="true" focusable="false">
+                        <use href="{% static 'img/sprite.svg' %}#pen" />
+                    </svg>
+                </button>
+                <button type="button" class="flex gap-1 items-center p-1 border border-red-300 rounded-md
+                    bg-inherit hover:bg-red-100 focus:bg-red-100 duration-300 transition-colors text-sm"
+                    hx-delete="{% url 'info:main_topic_delete' topic.id %}"
+                    hx-target="#topic{{topic.id}}"
+                    hx-swap="outerHTML"
+                    confirm-swal="opis zajęć CAŁEGO tygodnia z tematem {{topic.description}}">
+                    {% translate 'Delete' %}
+                    <svg class="w-4 h-4 fill-neutral-500" alt="" aria-hidden="true" focusable="false">
+                        <use href="{% static 'img/sprite.svg' %}#trash" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <a href="#" class="w-max cursor-pointer flex items-center text-sm gap-1 text-blue-700 px-1
+            font-semibold  hover:underline duration-300 transition-all"
+            hx-get="{% url 'info:activity_create' topic.id %}"
+            hx-target="#activities-main"
+            hx-select="#activities-main"
+            hx-swap="outerHTML"
+            hx-push-url="true"
+            >
+            <svg class="w-4 h-4 fill-blue-700" alt="" aria-hidden="true">
+                <use href="{% static 'img/sprite.svg' %}#plus2" />
+            </svg>
+            {% translate 'Add new day' %}
+        </a>
+        <div class="flex flex-col gap-2 w-full px-1">
+        {% for activity in topic.activities.all %}
+            <div class="flex gap-1 items-center">
+                <p>{{activity.day|date:"d.m.y (D)"}}: {{activity.topic}}</p>
+                <a href="{% url 'info:activity_update' activity.id %}?next={{request.path}}"
+                    class="flex justify-center items-center p-1 border border-neutral-300 rounded-md bg-inherit
+                    hover:bg-neutral-200 focus:bg-neutral-200 duration-300 transition-colors">
+                    <svg class="w-4 h-4 fill-neutral-700" aria-hidden="true" focusable="false">
+                        <use href="{% static 'img/sprite.svg' %}#pen" />
+                    </svg>
+                    <span class="sr-only">{% translate 'Edit' %}</span>
+                </a>
+                <button type="button" class="openModal px-1 py-0.5 border border-red-300 rounded-md
+                    bg-inherit hover:bg-red-100 focus:bg-red-100 duration-300 transition-colors"
+                    title="{% translate 'Delete' %}"
+                    hx-delete="{% url 'info:activity_delete' activity.id %}"
+                    hx-target="closest div"
+                    hx-swap="outerHTML"
+                    confirm-swal="opis zajęć z dnia {{ activity.day|date:'d.m.Y' }}">
+                    <svg class="w-4 h-4 fill-neutral-500" alt="" aria-hidden="true" focusable="false">
+                        <use href="{% static 'img/sprite.svg' %}#trash" />
+                    </svg>
+                    <span class="sr-only">{% translate 'Delete' %}</span>
+                </button>
+            </div>
+        {% endfor %}
+        </div>
+        <hr class="w-full h-[0.1rem] mx-auto my-4 bg-gray-200 border-0 rounded md:my-10 dark:bg-gray-700">
+    </div>
+    {% endfor %}
+</div>

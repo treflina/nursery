@@ -6,9 +6,10 @@
       focus:bg-neutral-200 duration-300 transition-colors" title="{% translate 'Edit' %}"
       {% if updated_obj == record.id %} autofocus {% endif %}
       >
-      <svg class="w-5 h-5 fill-green-800" alt="" aria-hidden="true">
+      <svg class="w-5 h-5 fill-green-800" alt="" aria-hidden="true" focusable="false">
         <use href="{% static 'img/sprite.svg' %}#pen" />
       </svg>
+      <span class="sr-only">{% translate 'Edit' %}</span>
     </a>
     <button type="button" class="openModal px-1 py-0.5 border-red-300 rounded-md
       bg-inherit hover:bg-red-100 focus:bg-red-100 duration-300 transition-colors"
@@ -17,9 +18,10 @@
         hx-target="closest tr"
         hx-swap="outerHTML"
         confirm-swal="pozycję raportu: {{ record.child_name }} - {{ record.date_month|date:'F Y' }}">
-        <svg class="w-5 h-5 fill-red-400" alt="" aria-hidden="true">
+        <svg class="w-5 h-5 fill-red-400" alt="" aria-hidden="true" focusable="false">
           <use href="{% static 'img/sprite.svg' %}#trash" />
         </svg>
+        <span class="sr-only">{% translate 'Delete' %}</span>
     </button>
     <button
       class="flex items-center px-1 border-neutral-300 rounded-md bg-inherit hover:bg-neutral-200
@@ -31,13 +33,15 @@
       {% if updated_note == record.id %} autofocus {% endif %}
     >
      {% if record.note or record.info %}
-      <svg class="w-5 h-5 fill-sky-700" aria-hidden="true">
+      <svg class="w-5 h-5 fill-sky-700" aria-hidden="true" focusable="false">
         <use href="{% static 'img/sprite.svg' %}#memo-info" />
       </svg>
+      <span class="sr-only">{% translate 'Edit note' %}</span>
       {% else %}
-      <svg class="w-4 h-5 fill-neutral-800" aria-hidden="true">
+      <svg class="w-4 h-5 fill-neutral-800" aria-hidden="true" focusable="false">
         <use href="{% static 'img/sprite.svg' %}#memo" />
       </svg>
+      <span class="sr-only">{% translate 'Edit note. No note at the moment.' %}</span>
       {% endif %}
     </button>
   </div>

@@ -40,13 +40,13 @@ class="modal-wrapper flex flex-col justify-center items-center w-full {% if crea
               duration-300 transition-colors"
               hx-target="#children"
               hx-select="#children"
-              hx-get="{% url 'kids:create' %}?next={{ request.get_full_path|urlencode}}"
+              hx-get="{% url 'kids:create' %}?next={{ request.get_full_path|urlencode }}"
               hx-swap="outerHTML"
               hx-push-url="true">
-            <svg class="w-5 h-5" aria-hidden="true">
-              <use href="{% static 'img/sprite.svg' %}#plus" />
-            </svg>
-            {% translate 'Add' %}
+              <svg class="w-5 h-5" aria-hidden="true">
+                <use href="{% static 'img/sprite.svg' %}#plus" />
+              </svg>
+              {% translate 'Add' %}
           </button>
         </div>
       </div>
