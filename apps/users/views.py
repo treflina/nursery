@@ -5,8 +5,12 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import UpdateView
 from django_htmx.http import trigger_client_event
 
-from .forms import (GetParentForm, ParentChangeEmailForm,
-                    ParentChangePasswordForm, ParentForm)
+from .forms import (
+    GetParentForm,
+    ParentChangeEmailForm,
+    ParentChangePasswordForm,
+    ParentForm,
+)
 from .models import Parent
 
 

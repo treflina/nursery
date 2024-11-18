@@ -55,10 +55,13 @@ class Activities(models.Model):
     music = models.TextField(_("Musical activity"), blank=True, null=True)
     art = models.TextField(_("Art activity"), blank=True, null=True)
     other = models.TextField(_("Inne"), blank=True, null=True)
-    special_event = models.TextField(_("Dodakowe wydarzenia"), blank=True, null=True)
+    special_event = models.TextField(_("Dodatkowe wydarzenia"), blank=True, null=True)
 
     def __str__(self):
         return f"Activities {self.day}"
+
+    class Meta:
+        ordering = ("day",)
 
 
 # class ActivityType(models.Model):

@@ -1,12 +1,22 @@
 from datetime import date
+from io import BytesIO
 
-from django.http import Http404, HttpResponse
+from django.contrib.staticfiles import finders
+from django.http import FileResponse, Http404, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from django.views.generic import CreateView, ListView, UpdateView
 from django_htmx.http import trigger_client_event
+from reportlab.lib import colors
+from reportlab.lib.enums import TA_CENTER
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.lib.units import mm
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
 from apps.users.decorators import get_parent_context
 
@@ -184,3 +194,101 @@ def delete_main_topic(request, pk):
             return trigger_client_event(resp, "showToast", {"msg": msg})
         resp = HttpResponse(status=200)
         return trigger_client_event(resp, "htmx:abort")
+
+
+def get_pdf(request, pk):
+
+    font_normal = finders.find("fonts/Roboto-Regular.ttf")
+    font_medium = finders.find("fonts/Roboto-Medium.ttf")
+
+    pdfmetrics.registerFont(TTFont("roboto", font_normal))
+    pdfmetrics.registerFont(TTFont("roboto-medium", font_medium))
+    pdfmetrics.registerFontFamily("roboto", normal="roboto", bold="roboto-medium")
+
+    stylesheet = getSampleStyleSheet()
+    normalStyle = stylesheet["Normal"]
+    normalStyle.fontName = "roboto"
+
+    pdf_buffer = BytesIO()
+
+    doc = SimpleDocTemplate(
+        pdf_buffer,
+        pagesize=landscape(A4),
+        rightMargin=50,
+        leftMargin=50,
+        topMargin=30,
+        bottomMargin=30,
+    )
+    style = ParagraphStyle(
+        name="Title",
+        fontName="roboto-medium",
+        fontSize=12,
+        alignment=TA_CENTER,
+    )
+
+    topic = MainTopic.objects.get(id=pk)
+    activities = topic.activities.all().order_by("day")
+    first_date = activities.first()
+    if first_date:
+        first_day = f"{first_date.day.day}"
+
+    last_date = activities.last()
+    if last_date:
+        last_day = f"{last_date.day.day}.{last_date.day.month}.{last_date.day.year}"
+
+    if first_date and last_date and first_date != last_date:
+        week_dates = first_day + "-" + last_day
+    elif last_date:
+        week_dates = last_day
+    else:
+        week_dates = ""
+
+    data = [
+        [
+            "Temat dnia",
+            "Aktywność i działalność dziecka",
+            "Aktywność ruchowa",
+            "Aktywność muzyczna",
+            "Aktywność plastyczna",
+        ]
+    ]
+
+    for i, a in enumerate(activities):
+        a_topic = f"<b>Dzień {i+1}</b>: {a.topic}" if a.topic else f"<b>Dzień {i+1}</b>"
+        activity_data = [
+            Paragraph(a_topic, normalStyle),
+            Paragraph(a.activity, normalStyle),
+            Paragraph(a.movement, normalStyle),
+            Paragraph(a.music, normalStyle),
+            Paragraph(a.art, normalStyle),
+        ]
+        data.append(activity_data)
+
+    table = Table(
+        data, spaceBefore=20, colWidths=[45 * mm, 57 * mm, 57 * mm, 57 * mm, 57 * mm]
+    )
+
+    elems = []
+    elems.append(Paragraph((f"Tematyka tygodnia: {topic.description}"), style=style))
+    elems.append(Spacer(1, 8))
+
+    if week_dates:
+        elems.append(
+            Paragraph((f"{week_dates} r."), style=style),
+        )
+    elems.append(table)
+    style_table = TableStyle(
+        [
+            ("GRID", (0, 0), (-1, -1), 1, colors.black),
+            ("FONTNAME", (0, 0), (-1, 0), "roboto-medium"),
+            ("FONTNAME", (1, -1), (-1, 1), "roboto"),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]
+    )
+    table.setStyle(style_table)
+    doc.build(elems)
+
+    pdf_buffer.seek(0)
+    return FileResponse(
+        pdf_buffer, as_attachment=False, filename=f"tematyka{week_dates}.pdf"
+    )

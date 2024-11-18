@@ -1,8 +1,12 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-from .views import (change_email_parent, change_password_parent, create_parent,
-                    delete_parent)
+from .views import (
+    change_email_parent,
+    change_password_parent,
+    create_parent,
+    delete_parent,
+)
 
 app_name = "users"
 

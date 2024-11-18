@@ -2,9 +2,17 @@ from django.urls import path, register_converter
 
 from apps.core.converters import DateConverter
 
-from .views import (ActivitiesList, ActivityCreateView, ActivityUpdateView,
-                    delete_activity, delete_main_topic, get_info_about_day,
-                    main_topic_create, main_topic_update)
+from .views import (
+    ActivitiesList,
+    ActivityCreateView,
+    ActivityUpdateView,
+    delete_activity,
+    delete_main_topic,
+    get_info_about_day,
+    get_pdf,
+    main_topic_create,
+    main_topic_update,
+)
 
 register_converter(DateConverter, "date")
 
@@ -24,4 +32,5 @@ urlpatterns = [
     ),
     path("zajecia/usun/<int:pk>/", delete_activity, name="activity_delete"),
     path("zajecia/", ActivitiesList.as_view(), name="activities_list"),
+    path("pdf/<int:pk>/", get_pdf, name="get_pdf"),
 ]

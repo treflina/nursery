@@ -1,15 +1,28 @@
 from django.urls import path, register_converter
 
 from .converters import DateConverter
-from .views import (create_additional_day_off, create_food_price,
-                    create_gov_subsidy, create_local_subsidy,
-                    create_monthly_payment, create_other_subsidy, day_details,
-                    delete_additional_day_off, delete_food_price,
-                    delete_gov_subsidy, delete_monthly_payment,
-                    delete_other_subsidy, display_calendar, home,
-                    main_settings, update_food_price, update_gov_subsidy,
-                    update_local_subsidy, update_monthly_payment,
-                    update_other_subsidy)
+from .views import (
+    create_additional_day_off,
+    create_food_price,
+    create_gov_subsidy,
+    create_local_subsidy,
+    create_monthly_payment,
+    create_other_subsidy,
+    day_details,
+    delete_additional_day_off,
+    delete_food_price,
+    delete_gov_subsidy,
+    delete_monthly_payment,
+    delete_other_subsidy,
+    display_calendar,
+    home,
+    main_settings,
+    update_food_price,
+    update_gov_subsidy,
+    update_local_subsidy,
+    update_monthly_payment,
+    update_other_subsidy,
+)
 
 register_converter(DateConverter, "date")
 
