@@ -1,5 +1,6 @@
 from datetime import date, datetime, timedelta
 
+from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -15,6 +16,12 @@ from apps.core.utils.absent_days import get_holidays
 from apps.core.utils.helpers import daterange
 from apps.kids.models import Child
 from apps.users.decorators import get_parent_context
+from apps.users.permissions import (
+    EmployeePermissionMixin,
+    check_employee,
+    check_parent,
+    check_staff,
+)
 
 from .filters import AbsencesFilter
 from .forms import AbsenceForm, NurseryAbsenceForm, UpdateAbsenceForm
@@ -23,7 +30,7 @@ from .tables import AbsencesTable
 from .utils import resp_err
 
 
-class AbsencesView(SingleTableMixin, FilterView):
+class AbsencesView(EmployeePermissionMixin, SingleTableMixin, FilterView):
 
     table_class = AbsencesTable
     queryset = Absence.objects.all().order_by("-created_at")
@@ -60,6 +67,7 @@ class AbsencesView(SingleTableMixin, FilterView):
         return response
 
 
+@user_passes_test(check_staff)
 def top_info_about_absences(request):
 
     resp = render(request, "absences/includes/absences_top_info.html")
@@ -67,7 +75,7 @@ def top_info_about_absences(request):
     return resp
 
 
-class AbsenceUpdateView(UpdateView):
+class AbsenceUpdateView(EmployeePermissionMixin, UpdateView):
     model = Absence
     form_class = UpdateAbsenceForm
     template_name = "absences/absence_update.html"
@@ -81,6 +89,7 @@ class AbsenceUpdateView(UpdateView):
         return url
 
 
+@user_passes_test(check_employee)
 @require_http_methods(["DELETE"])
 def delete_absence(request, pk):
     if request.htmx:
@@ -88,6 +97,7 @@ def delete_absence(request, pk):
         return HttpResponse("", headers={"HX-Trigger": "absenceDeleted"})
 
 
+@user_passes_test(check_parent)
 @get_parent_context
 def create_absence(request, selected_child, children, chosendate=None):
 
@@ -189,6 +199,7 @@ for the submitted date."
     return trigger_client_event(resp, "createAbsenceForm", after="settle")
 
 
+@user_passes_test(check_employee)
 def nursery_create_absence(request):
 
     if request.method == "POST":

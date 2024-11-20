@@ -1,9 +1,12 @@
+from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import UpdateView
 from django_htmx.http import trigger_client_event
+
+from apps.users.permissions import EmployeePermissionMixin, check_employee
 
 from .forms import (
     GetParentForm,
@@ -14,7 +17,7 @@ from .forms import (
 from .models import Parent
 
 
-class ParentUpdate(UpdateView):
+class ParentUpdate(EmployeePermissionMixin, UpdateView):
 
     model = Parent
     template_name = "users/parent_form.html"
@@ -22,8 +25,8 @@ class ParentUpdate(UpdateView):
     success_url = reverse_lazy("kids:children")
 
 
+@user_passes_test(check_employee)
 def create_parent(request):
-
     if request.method == "POST":
         form = ParentForm(request.POST)
         if form.is_valid():
@@ -36,6 +39,7 @@ def create_parent(request):
     return render(request, "users/parent_form.html", {"form2": form, "add": True})
 
 
+@user_passes_test(check_employee)
 def change_password_parent(request):
     if request.method == "POST":
         form = ParentChangePasswordForm(request.POST)
@@ -54,6 +58,7 @@ def change_password_parent(request):
     return render(request, "users/parent_form.html", {"form2": form, "update": True})
 
 
+@user_passes_test(check_employee)
 def change_email_parent(request):
     if request.method == "POST":
         form = ParentChangeEmailForm(request.POST)
@@ -72,6 +77,7 @@ def change_email_parent(request):
     )
 
 
+@user_passes_test(check_employee)
 def delete_parent(request):
     if request.method == "POST":
         form = GetParentForm(request.POST)

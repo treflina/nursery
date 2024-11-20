@@ -1,6 +1,7 @@
 import calendar
 from datetime import date
 
+from django.contrib.auth.decorators import user_passes_test
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
@@ -19,6 +20,12 @@ from apps.core.utils.absent_days import get_all_absent_days
 from apps.core.utils.helpers import reverse_querystring
 from apps.kids.models import Child
 from apps.users.decorators import get_parent_context
+from apps.users.permissions import (
+    StaffPermissionMixin,
+    check_employee,
+    check_parent,
+    check_staff,
+)
 
 from .filters import BillingsFilter
 from .forms import BillingCreateForm, BillingForm, BillingNoteForm
@@ -26,7 +33,7 @@ from .models import Billing
 from .tables import BillingsHTMxBulkActionTable
 
 
-class BillingListView(ListView):
+class BillingListView(StaffPermissionMixin, ListView):
 
     template_name = "billings/billing_create.html"
     model = Billing
@@ -54,6 +61,7 @@ class BillingListView(ListView):
         return context
 
 
+@user_passes_test(check_staff)
 def generate_report(request):
     if request.method == "POST":
         form = BillingCreateForm(request.POST)
@@ -192,6 +200,7 @@ given period all are already confirmed."
         return render(request, "billings/billing_create.html", {"form2": form})
 
 
+@user_passes_test(check_parent)
 @get_parent_context
 def billing(request, selected_child, children, chosendate=None):
 
@@ -219,7 +228,7 @@ def billing(request, selected_child, children, chosendate=None):
     )
 
 
-class BillingsReportsView(SingleTableMixin, FilterView):
+class BillingsReportsView(StaffPermissionMixin, SingleTableMixin, FilterView):
 
     table_class = BillingsHTMxBulkActionTable
     queryset = (
@@ -301,6 +310,7 @@ class BillingsReportsView(SingleTableMixin, FilterView):
         return kwargs
 
 
+@user_passes_test(check_staff)
 def export_xlsx_file(request, year=None, month=None):
 
     if not year or not month:
@@ -386,6 +396,7 @@ def export_xlsx_file(request, year=None, month=None):
     return response
 
 
+@user_passes_test(check_staff)
 def billing_paid_update(request, pk):
     if request.method == "POST" and request.htmx:
         if request.htmx.trigger_name == "paid":
@@ -417,6 +428,7 @@ def billing_paid_update(request, pk):
     )
 
 
+@user_passes_test(check_staff)
 def billing_confirm(request, pk):
     if request.method == "POST" and request.htmx:
         if request.htmx.trigger_name == "confirm":
@@ -431,6 +443,7 @@ def billing_confirm(request, pk):
     return trigger_client_event(HttpResponse(""), "htmx:abort")
 
 
+@user_passes_test(check_staff)
 def billing_response_updateview(request):
     if request.method == "POST" and request.htmx:
         selected_billings = request.POST.getlist("selection")
@@ -476,7 +489,7 @@ def billing_response_updateview(request):
     )
 
 
-class BillingUpdateView(UpdateView):
+class BillingUpdateView(StaffPermissionMixin, UpdateView):
     model = Billing
     form_class = BillingForm
     template_name = "billings/billing_form.html"
@@ -496,6 +509,7 @@ class BillingUpdateView(UpdateView):
         return context
 
 
+@user_passes_test(check_staff)
 def billing_update_notes(request, pk):
 
     obj = Billing.objects.filter(id=pk).last()
@@ -529,6 +543,7 @@ def billing_update_notes(request, pk):
     )
 
 
+@user_passes_test(check_employee)
 def send_billing(request, pk):
     if request.method == "POST" and request.htmx:
         billing = Billing.objects.filter(id=pk).last()
@@ -572,6 +587,7 @@ def send_billing(request, pk):
     return trigger_client_event(resp, "showToast", {"msg": msg, "err": "true"})
 
 
+@user_passes_test(check_staff)
 @require_http_methods(["DELETE"])
 def delete_billing(request, pk):
     if request.htmx:
@@ -587,6 +603,7 @@ def delete_billing(request, pk):
         return trigger_client_event(resp, "htmx:abort")
 
 
+@user_passes_test(check_staff)
 @require_http_methods(["DELETE"])
 def delete_billings(request):
     if request.htmx:
@@ -611,6 +628,3 @@ def delete_billings(request):
             return trigger_client_event(resp, "showToast", {"msg": msg})
         resp = HttpResponse(status=200)
         return trigger_client_event(resp, "htmx:abort")
-
-
-#

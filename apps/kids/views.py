@@ -1,5 +1,6 @@
 from datetime import date, datetime
 
+from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
@@ -12,6 +13,7 @@ from django_tables2 import SingleTableMixin
 
 from apps.billings.models import Billing
 from apps.users.decorators import get_parent_context
+from apps.users.permissions import EmployeePermissionMixin, check_employee, check_parent
 
 from .filters import ChildFilter
 from .forms import ChildForm
@@ -19,6 +21,7 @@ from .models import Child
 from .tables import ChildrenTable
 
 
+@user_passes_test(check_parent)
 @get_parent_context
 def switch_child_profile(request, selected_child, children):
 
@@ -51,7 +54,7 @@ def switch_child_profile(request, selected_child, children):
     )
 
 
-class ChildrenList(SingleTableMixin, FilterView):
+class ChildrenList(EmployeePermissionMixin, SingleTableMixin, FilterView):
     table_class = ChildrenTable
     queryset = Child.objects.all().order_by("last_name")
     filterset_class = ChildFilter
@@ -85,7 +88,7 @@ class ChildrenList(SingleTableMixin, FilterView):
         return response
 
 
-class ChildCreateView(CreateView):
+class ChildCreateView(EmployeePermissionMixin, CreateView):
     model = Child
     form_class = ChildForm
     template_name = "kids/child_form.html"
@@ -101,7 +104,7 @@ class ChildCreateView(CreateView):
         return super().get_success_url()
 
 
-class ChildUpdateView(UpdateView):
+class ChildUpdateView(EmployeePermissionMixin, UpdateView):
     model = Child
     form_class = ChildForm
     template_name = "kids/child_form.html"
@@ -122,6 +125,7 @@ class ChildUpdateView(UpdateView):
         return context
 
 
+@user_passes_test(check_employee)
 @require_http_methods(["DELETE"])
 def delete_child(request, pk):
     if request.htmx:

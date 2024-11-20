@@ -1,6 +1,7 @@
 from datetime import date
 from io import BytesIO
 
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.staticfiles import finders
 from django.http import FileResponse, Http404, HttpResponse
 from django.shortcuts import redirect, render
@@ -19,11 +20,13 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
 from apps.users.decorators import get_parent_context
+from apps.users.permissions import EmployeePermissionMixin, check_employee, check_parent
 
 from .forms import ActivitiesInfoForm, MainTopicForm
 from .models import Activities, MainTopic, Menu
 
 
+@user_passes_test(check_parent)
 @get_parent_context
 def get_info_about_day(request, selected_child, children, chosendate=None):
 
@@ -53,7 +56,7 @@ def get_info_about_day(request, selected_child, children, chosendate=None):
     )
 
 
-class ActivitiesList(ListView):
+class ActivitiesList(EmployeePermissionMixin, ListView):
     queryset = MainTopic.objects.prefetch_related("activities").all()
     context_object_name = "main_topics"
     # paginate_by = 10
@@ -84,7 +87,7 @@ class ActivitiesList(ListView):
         return response
 
 
-class ActivityCreateView(CreateView):
+class ActivityCreateView(EmployeePermissionMixin, CreateView):
     model = Activities
     form_class = ActivitiesInfoForm
     template_name = "info/activity_form.html"
@@ -119,7 +122,7 @@ class ActivityCreateView(CreateView):
         return super().form_valid(form)
 
 
-class ActivityUpdateView(UpdateView):
+class ActivityUpdateView(EmployeePermissionMixin, UpdateView):
     model = Activities
     form_class = ActivitiesInfoForm
     template_name = "info/activity_form.html"
@@ -140,6 +143,7 @@ class ActivityUpdateView(UpdateView):
         return context
 
 
+@user_passes_test(check_employee)
 @require_http_methods(["DELETE"])
 def delete_activity(request, pk):
     if request.htmx:
@@ -154,6 +158,7 @@ def delete_activity(request, pk):
         return trigger_client_event(resp, "htmx:abort")
 
 
+@user_passes_test(check_employee)
 def main_topic_create(request):
     context = {}
     form = MainTopicForm(request.POST or None)
@@ -165,8 +170,8 @@ def main_topic_create(request):
     return render(request, "info/main_topic_form.html", context)
 
 
+@user_passes_test(check_employee)
 def main_topic_update(request, pk):
-
     obj = MainTopic.objects.get(id=pk)
     form = MainTopicForm(instance=obj)
     if request.method == "POST":
@@ -182,6 +187,7 @@ def main_topic_update(request, pk):
     )
 
 
+@user_passes_test(check_employee)
 @require_http_methods(["DELETE"])
 def delete_main_topic(request, pk):
     if request.htmx:
@@ -196,6 +202,7 @@ def delete_main_topic(request, pk):
         return trigger_client_event(resp, "htmx:abort")
 
 
+@user_passes_test(check_employee)
 def get_pdf(request, pk):
 
     font_normal = finders.find("fonts/Roboto-Regular.ttf")

@@ -1,6 +1,7 @@
 import calendar
 from datetime import date, datetime
 
+from django.contrib.auth.decorators import user_passes_test
 from django.db.models import ProtectedError
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -13,6 +14,7 @@ from apps.billings.models import Billing
 from apps.kids.models import Child
 from apps.users.decorators import get_parent_context
 from apps.users.models import Parent
+from apps.users.permissions import check_employee, check_parent
 
 from .forms import (
     AdditionalDayOffForm,
@@ -34,6 +36,7 @@ from .utils.absent_days import get_holidays, get_not_enrolled_days
 from .utils.helpers import get_next_prev_month
 
 
+# TODO protect route
 @get_parent_context
 def home(request, selected_child, children):
 
@@ -53,6 +56,7 @@ def home(request, selected_child, children):
     )
 
 
+@user_passes_test(check_parent)
 @get_parent_context
 def display_calendar(
     request, selected_child, children, year=None, month=None, day=None
@@ -124,6 +128,7 @@ def display_calendar(
     return render(request, "core/calendar.html", context=context)
 
 
+@user_passes_test(check_parent)
 @get_parent_context
 def day_details(request, selected_child, children, chosendate=None):
 
@@ -151,6 +156,7 @@ def day_details(request, selected_child, children, chosendate=None):
     )
 
 
+@user_passes_test(check_employee)
 def main_settings(request):
     today = date.today()
     additional_days_off = AdditionalDayOff.objects.filter(day__year__gte=today.year)
@@ -167,6 +173,7 @@ def main_settings(request):
     return render(request, "core/settings.html", context=context)
 
 
+@user_passes_test(check_employee)
 def create_additional_day_off(request):
     if request.method == "POST":
         form = AdditionalDayOffForm(request.POST)
@@ -181,6 +188,7 @@ def create_additional_day_off(request):
     return render(request, "core/settings_form.html", {"form": form, "add": True})
 
 
+@user_passes_test(check_employee)
 @require_http_methods(["DELETE"])
 def delete_additional_day_off(request, pk):
     if request.htmx:
@@ -190,8 +198,8 @@ def delete_additional_day_off(request, pk):
         return trigger_client_event(resp, "showToast", {"msg": msg})
 
 
+@user_passes_test(check_employee)
 def create_food_price(request):
-
     if request.method == "POST":
         form = FoodPriceForm(request.POST)
         if form.is_valid():
@@ -207,6 +215,7 @@ def create_food_price(request):
     )
 
 
+@user_passes_test(check_employee)
 @require_http_methods(["DELETE"])
 def delete_food_price(request, pk):
     if request.htmx:
@@ -225,6 +234,7 @@ def delete_food_price(request, pk):
             return retarget(resp, "#messages-box")
 
 
+@user_passes_test(check_employee)
 def update_food_price(request, pk):
     obj = FoodPrice.objects.get(id=pk)
 
@@ -240,6 +250,7 @@ def update_food_price(request, pk):
     )
 
 
+@user_passes_test(check_employee)
 def create_monthly_payment(request):
     if request.method == "POST":
         form = MonthlyPaymentForm(request.POST)
@@ -256,6 +267,7 @@ def create_monthly_payment(request):
     )
 
 
+@user_passes_test(check_employee)
 def update_monthly_payment(request, pk):
     obj = MonthlyPayment.objects.get(id=pk)
 
@@ -273,6 +285,7 @@ def update_monthly_payment(request, pk):
     )
 
 
+@user_passes_test(check_employee)
 @require_http_methods(["DELETE"])
 def delete_monthly_payment(request, pk):
     if request.htmx:
@@ -291,6 +304,7 @@ def delete_monthly_payment(request, pk):
             return retarget(resp, "#messages-box5")
 
 
+@user_passes_test(check_employee)
 def create_local_subsidy(request):
     if request.method == "POST":
         form = LocalSubsidyForm(request.POST)
@@ -305,6 +319,7 @@ def create_local_subsidy(request):
     return render(request, "core/settings_form.html", {"form": form, "add_local": True})
 
 
+@user_passes_test(check_employee)
 def update_local_subsidy(request, pk):
     obj = LocalSubsidy.objects.get(id=pk)
 
@@ -320,6 +335,7 @@ def update_local_subsidy(request, pk):
     )
 
 
+@user_passes_test(check_employee)
 def update_gov_subsidy(request, pk):
     obj = GovernmentSubsidy.objects.get(id=pk)
 
@@ -333,6 +349,7 @@ def update_gov_subsidy(request, pk):
     return render(request, "core/settings_form.html", {"form": form, "gov": True})
 
 
+@user_passes_test(check_employee)
 def create_gov_subsidy(request):
     if request.method == "POST":
         form = GovernmentSubsidyForm(request.POST)
@@ -347,6 +364,7 @@ def create_gov_subsidy(request):
     return render(request, "core/settings_form.html", {"form": form, "gov": True})
 
 
+@user_passes_test(check_employee)
 @require_http_methods(["DELETE"])
 def delete_gov_subsidy(request, pk):
     if request.htmx:
@@ -365,6 +383,7 @@ def delete_gov_subsidy(request, pk):
             return retarget(resp, "#messages-box2")
 
 
+@user_passes_test(check_employee)
 def update_other_subsidy(request, pk):
     obj = OtherSubsidy.objects.get(id=pk)
 
@@ -380,6 +399,7 @@ def update_other_subsidy(request, pk):
     )
 
 
+@user_passes_test(check_employee)
 @require_http_methods(["DELETE"])
 def delete_other_subsidy(request, pk):
     if request.htmx:
@@ -398,6 +418,7 @@ def delete_other_subsidy(request, pk):
             return retarget(resp, "#messages-box3")
 
 
+@user_passes_test(check_employee)
 def create_other_subsidy(request):
     if request.method == "POST":
         form = OtherSubsidyForm(request.POST)
