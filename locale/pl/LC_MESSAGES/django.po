@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-18 11:25+0100\n"
+"POT-Creation-Date: 2024-11-22 19:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -180,15 +180,15 @@ msgstr "Nie"
 msgid "No (Other)"
 msgstr "Nie (Inne)"
 
-#: .\apps\absences\views.py:56
+#: .\apps\absences\views.py:63
 msgid "Absence has been added."
 msgstr "Nieobecność została dodana."
 
-#: .\apps\absences\views.py:116
+#: .\apps\absences\views.py:125
 msgid "The child doesn't attent nursery in this period."
 msgstr "Dziecko nie uczęszczało do żłobka w wybranych okresie."
 
-#: .\apps\absences\views.py:139 .\apps\absences\views.py:225
+#: .\apps\absences\views.py:143 .\apps\absences\views.py:230
 #, fuzzy
 #| msgid ""
 #| "Check if there hasn't already been reported an absence     for the "
@@ -198,7 +198,7 @@ msgid ""
 "date."
 msgstr "Istnieje już wprowadzona nieobecność w podanym okresie."
 
-#: .\apps\absences\views.py:176 .\apps\absences\views.py:253
+#: .\apps\absences\views.py:180 .\apps\absences\views.py:258
 msgid "Chosen days are already off."
 msgstr "W wybranym okresie żłobek jest zamknięty."
 
@@ -290,7 +290,7 @@ msgstr "Informacja dla rodziców"
 
 #: .\apps\billings\models.py:49
 msgid "tag"
-msgstr ""
+msgstr "tag"
 
 #: .\apps\billings\models.py:51
 msgid "Confirmed"
@@ -302,17 +302,17 @@ msgstr "Wysłane"
 
 #: .\apps\billings\tables.py:38
 msgid "L.dni"
-msgstr ""
+msgstr "L.dni"
 
 #: .\apps\billings\tables.py:40
 msgid "Wyż. (dzień)"
-msgstr ""
+msgstr "Wyż. (dzień)"
 
 #: .\apps\billings\tables.py:42
 msgid "Wyż. (suma)"
-msgstr ""
+msgstr "Wyż. (suma)"
 
-#: .\apps\billings\views.py:177
+#: .\apps\billings\views.py:185
 msgid ""
 "No billings were created, because in the given period all are already "
 "confirmed."
@@ -320,7 +320,7 @@ msgstr ""
 "Nie wygenerowano nowych rachunków, ponieważ w wybranym okresie wszystkie są "
 "zatwierdzone. Możesz je usunąć, a następnie wygenerować na nowo."
 
-#: .\apps\billings\views.py:183
+#: .\apps\billings\views.py:191
 #, python-brace-format
 msgid ""
 "Billings have been successfully created.                     Created: "
@@ -330,41 +330,41 @@ msgstr ""
 "Rachunki zostały wygenerowane. Utworzono: {count} \n"
 " Pominięto: {confirmed_count}"
 
-#: .\apps\billings\views.py:513
+#: .\apps\billings\views.py:527
 msgid "Note has been added/changed."
 msgstr "Notatka została dodana."
 
-#: .\apps\billings\views.py:521
+#: .\apps\billings\views.py:535
 msgid "Nie znaleziono w bazie wybranego rachunku."
-msgstr ""
+msgstr "Nie znaleziono w bazie wybranego rachunku."
 
-#: .\apps\billings\views.py:536
+#: .\apps\billings\views.py:551
 msgid "Before sending, confirm the billing."
 msgstr "Przed wysłaniem, zatwierdź rachunek."
 
-#: .\apps\billings\views.py:543 .\apps\billings\views.py:570
+#: .\apps\billings\views.py:558 .\apps\billings\views.py:585
 msgid "Email was not sent because there is no parent account assigned."
 msgstr ""
 "Rachunek nie został wysłany, ponieważ dziecko nie ma przypisanego konta "
 "rodzica z e-mailem."
 
-#: .\apps\billings\views.py:558
+#: .\apps\billings\views.py:573
 msgid "Email has been sent."
 msgstr "Rachunek został wysłany."
 
-#: .\apps\billings\views.py:566
+#: .\apps\billings\views.py:581
 msgid "Email was not sent"
 msgstr "E-mail nie został wysłany."
 
-#: .\apps\billings\views.py:583
+#: .\apps\billings\views.py:599
 msgid "Billing has been deleted."
 msgstr "Rachunek został usunięty z bazy."
 
-#: .\apps\billings\views.py:609
+#: .\apps\billings\views.py:626
 msgid "Selected billings have been deleted."
 msgstr "Wybrane rachunki zostały usunięte z bazy."
 
-#: .\apps\core\forms.py:14
+#: .\apps\core\forms.py:20
 msgid "Enter date"
 msgstr "Wprowadź datę"
 
@@ -416,35 +416,35 @@ msgstr "Brak wyników"
 msgid "Start typing child's name"
 msgstr "Zacznij pisać aby wyszukać"
 
-#: .\apps\core\views.py:164
+#: .\apps\core\views.py:183
 msgid "Additional day off has been saved."
 msgstr "Dodatkowy dzień wolny został zapisany."
 
-#: .\apps\core\views.py:177
+#: .\apps\core\views.py:197
 msgid "Day off has been deleted."
 msgstr "Dodatkowy dzień wolny został usunięty."
 
-#: .\apps\core\views.py:188
+#: .\apps\core\views.py:208
 msgid "Food price has been added."
 msgstr "Stawka wyżywienia została dodana."
 
-#: .\apps\core\views.py:204
+#: .\apps\core\views.py:225
 msgid "Food price has been deleted."
 msgstr "Stawka wyżywienia została usunięta."
 
-#: .\apps\core\views.py:237
+#: .\apps\core\views.py:260
 msgid "Monthly payment has been added."
 msgstr "Stawka opłaty miesięcznej została dodana."
 
-#: .\apps\core\views.py:270
+#: .\apps\core\views.py:295
 msgid "Monthly payment has been deleted."
 msgstr "Stawka opłaty miesięcznej została usunięta."
 
-#: .\apps\core\views.py:288 .\apps\core\views.py:330 .\apps\core\views.py:395
+#: .\apps\core\views.py:314 .\apps\core\views.py:359 .\apps\core\views.py:428
 msgid "Subsidy has been added."
 msgstr "Dopłata została dodana."
 
-#: .\apps\core\views.py:344 .\apps\core\views.py:377
+#: .\apps\core\views.py:374 .\apps\core\views.py:409
 msgid "Subsidy has been deleted."
 msgstr "Dopłata została usunięta z bazy."
 
@@ -480,48 +480,48 @@ msgstr "Główny temat"
 msgid "Main Topics"
 msgstr "Główne tematy"
 
-#: .\apps\info\models.py:48
+#: .\apps\info\models.py:52
 msgid "Topic"
 msgstr "Temat dnia"
 
-#: .\apps\info\models.py:49
+#: .\apps\info\models.py:53
 msgid "Kids activity"
 msgstr "Aktywność dziecka"
 
-#: .\apps\info\models.py:50
+#: .\apps\info\models.py:54
 msgid "Motor activity"
 msgstr "Aktywność ruchowa"
 
-#: .\apps\info\models.py:51
+#: .\apps\info\models.py:55
 msgid "Musical activity"
 msgstr "Aktywność muzyczna"
 
-#: .\apps\info\models.py:52
+#: .\apps\info\models.py:56
 msgid "Art activity"
 msgstr "Aktywność plastyczna"
 
-#: .\apps\info\models.py:53
+#: .\apps\info\models.py:57
 msgid "Inne"
 msgstr "Inne"
 
-#: .\apps\info\models.py:54
-msgid "Dodakowe wydarzenia"
-msgstr ""
+#: .\apps\info\models.py:58
+msgid "Dodatkowe wydarzenia"
+msgstr "Dodatkowe wydarzenia"
 
-#: .\apps\info\views.py:72
+#: .\apps\info\views.py:85
 msgid "New activities have been added"
 msgstr "Tematyka dnia została dodana."
 
-#: .\apps\info\views.py:91
+#: .\apps\info\views.py:103
 #, python-brace-format
 msgid "No main topic with id {pk} found."
 msgstr "Temat główny z id {pk} nie został odnaleziony."
 
-#: .\apps\info\views.py:143
+#: .\apps\info\views.py:155
 msgid "Activity has been deleted."
 msgstr "Tematyka dnia została usunięta."
 
-#: .\apps\info\views.py:185
+#: .\apps\info\views.py:199
 msgid "Week's activities description has been deleted."
 msgstr "Tematyka tygodnia została usunięta."
 
@@ -575,17 +575,17 @@ msgstr "Wyż."
 
 #: .\apps\kids\tables.py:19
 msgid "Gm.Turawa"
-msgstr ""
+msgstr "Gm.Turawa"
 
 #: .\apps\kids\tables.py:25
 msgid "Subsidies"
 msgstr "Dopłaty"
 
-#: .\apps\kids\views.py:84
+#: .\apps\kids\views.py:86
 msgid "Child has been added"
 msgstr "Dziecko zostało dodane."
 
-#: .\apps\kids\views.py:136
+#: .\apps\kids\views.py:139
 msgid "Child has been deleted."
 msgstr "Dziecko zostało usunięte z bazy."
 
@@ -657,7 +657,7 @@ msgstr "Dodaj"
 #: .\apps\templates\core\settings.html:285
 #: .\apps\templates\core\settings.html:289
 #: .\apps\templates\info\includes\activities_list.html:18
-#: .\apps\templates\info\includes\activities_list.html:59
+#: .\apps\templates\info\includes\activities_list.html:73
 #: .\apps\templates\kids\includes\child_accions_links.html:7
 msgid "Edit"
 msgstr "Edytuj"
@@ -677,8 +677,8 @@ msgstr "Edytuj"
 #: .\apps\templates\core\settings.html:296
 #: .\apps\templates\core\settings.html:300
 #: .\apps\templates\info\includes\activities_list.html:29
-#: .\apps\templates\info\includes\activities_list.html:63
-#: .\apps\templates\info\includes\activities_list.html:71
+#: .\apps\templates\info\includes\activities_list.html:77
+#: .\apps\templates\info\includes\activities_list.html:85
 #: .\apps\templates\kids\child_form.html:100
 #: .\apps\templates\kids\child_form.html:104
 #: .\apps\templates\kids\includes\child_accions_links.html:14
@@ -724,7 +724,7 @@ msgid "Add absence"
 msgstr "Dodaj nieobecność"
 
 #: .\apps\templates\absences\includes\absence_form_nursery.html:79
-#: .\apps\users\models.py:15
+#: .\apps\users\models.py:16
 msgid "Type"
 msgstr "Rodzaj"
 
@@ -857,7 +857,7 @@ msgstr "Zmień opis zajęć"
 msgid "Add info about activities"
 msgstr "Dodaj opis zajęć"
 
-#: .\apps\templates\info\includes\activities_list.html:47
+#: .\apps\templates\info\includes\activities_list.html:61
 msgid "Add new day"
 msgstr "Dodaj opis dnia"
 
@@ -943,19 +943,19 @@ msgstr "Login do konta jest nieprwidłowy."
 msgid "I'm sure I want to delete the user."
 msgstr "Jestem pewna, że chcę usunąć powyższe konto."
 
-#: .\apps\users\views.py:28
+#: .\apps\users\views.py:35
 msgid "User's account has been created."
 msgstr "Konto rodziców zostało utworzone."
 
-#: .\apps\users\views.py:45
+#: .\apps\users\views.py:53
 msgid "User's password has been changed."
 msgstr "Hasło do konta rodziców zostało zmienione."
 
-#: .\apps\users\views.py:61
+#: .\apps\users\views.py:70
 msgid "User's email has been changed."
 msgstr "Adres e-mail został zmieniony."
 
-#: .\apps\users\views.py:78
+#: .\apps\users\views.py:88
 msgid "User's account has been deleted."
 msgstr "Konto rodziców zostało usunięte."
 
