@@ -5,8 +5,8 @@
     {% include 'billings/includes/back_button.html' %}
     {% if not nochild %}
     <div class="w-max mx-auto">
-        <h2 class="font-bold text-3xl mb-4 lg:mt-12">Rozliczenie miesiąca</h2>
-        <p class="font-semibold text-2xl uppercase">{{billing.date_month|date:"F Y"}}</p>
+        <h2 class="font-bold text-2xl mb-4 mt-4 lg:mt-12">Rozliczenie miesiąca</h2>
+        <p class="font-semibold text-xl uppercase">{{billing.date_month|date:"F Y"}}</p>
         <hr class="my-4"/>
         <div>
             <p class="text-lg"><span class="mr-2 py-1 inline-block">Liczba dni do rozliczenia:</span>{{billing.days_count}}</p>
@@ -22,8 +22,8 @@
         </div>
         <hr class="mt-4"/>
         <div class="relative">
-            <div class="pr-4 neutral-linear3 mt-4 py-4 text-center w-screen absolute top-0 right-0 z-10">
-                <p class="inline-block font-semibold text-2xl lg:ml-[45%] pl-2">Do zapłaty: {{billing.payments_sum}} zł</p>
+            <div class="pr-4 sky-linear-dark text-white lg:neutral-linear3 mt-4 py-4 text-right md:text-center lg:text-right w-screen absolute top-0 right-0 z-10">
+                <p class="inline-block font-semibold text-xl lg:ml-[45%] pl-2">Do zapłaty: {{billing.payments_sum}} zł</p>
             </div>
         </div>
     {% else %}

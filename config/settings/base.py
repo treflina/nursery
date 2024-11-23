@@ -135,3 +135,52 @@ MEDIA_URL = "/media/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 TESTING = "test" in sys.argv
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    # "filters": {
+    #     "require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}
+    # },
+    "loggers": {
+        "django": {
+            "handlers": ["logfile"],
+            "level": "WARNING",
+            "propagate": True,
+        },
+        "django.request": {
+            "handlers": [
+                # "mail_admins",
+                "logfile"
+            ],
+            "level": "ERROR",
+            "propagate": True,
+        },
+    },
+    "handlers": {
+        "logfile": {
+            "level": "WARNING",
+            "class": "logging.handlers.RotatingFileHandler",
+            "maxBytes": 10 * 1024 * 1024,
+            "backupCount": 3,
+            "filename": "django.log",
+            "formatter": "verbose",
+            "encoding": "utf-8",
+        },
+        # "mail_admins": {
+        #     "level": "ERROR",
+        #     "filters": ["require_debug_false"],
+        #     "class": "core.utils.log.CustomAdminEmailHandler",
+        # },
+    },
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+}

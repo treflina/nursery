@@ -119,7 +119,9 @@ def create_absence(request, selected_child, children, chosendate=None):
             date_to = form.cleaned_data.get("date_to")
             reason = form.cleaned_data.get("reason")
 
-            if child.leave_date < date_to or child.admission_date > date_from:
+            if (child.leave_date and child.leave_date < date_to) or (
+                child.admission_date and child.admission_date > date_from
+            ):
                 form.add_error(
                     None,
                     _(_("The child doesn't attent nursery in this period.")),

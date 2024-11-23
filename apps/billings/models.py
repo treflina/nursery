@@ -60,4 +60,4 @@ class Billing(TimeUserStampedModel):
         return self.local_subsidy + self.gov_subsidy + self.other_subsidies
 
     def __str__(self):
-        return f"{self.date_month.strftime("%m-%Y")}: {self.child}"
+        return f"{self.date_month.strftime('%m-%Y')}: {self.child}"

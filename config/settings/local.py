@@ -19,9 +19,7 @@ SECRET_KEY = getenv(
     "django-insecure-+zpoh9pvr1fo$^3e_u^yxr*$p5ebpmc4qgdkja9$y!j4@07gqv",
 )
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
-
-TESTING = True
+ALLOWED_HOSTS = getenv("ALLOWED_HOSTS").split()
 
 if not TESTING:
     INSTALLED_APPS = [
@@ -48,21 +46,3 @@ EMAIL_BACKEND = getenv(
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
-
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "verbose": {
-            "format": "%(levelname)s %(name)-12s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
-        }
-    },
-    "handlers": {
-        "console": {
-            "level": "DEBUG",
-            "class": "logging.StreamHandler",
-            "formatter": "verbose",
-        }
-    },
-    "root": {"level": "INFO", "handlers": ["console"]},
-}

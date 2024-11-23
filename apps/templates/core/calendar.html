@@ -6,6 +6,7 @@
     <a tabindex="0"
     hx-get="{% url 'core:day' %}{{prev_year}}-{{prev_month}}-{{prev_month_num_days}}"
     hx-target="#main"
+    hx-indicator="#spinner,.loaded-content"
     class="cursor-pointer font-bold text-2xl focus:text-sm"
     title="Poprzedni miesiąc" >
         <svg class="w-8 h-8"><use href="{% static 'img/sprite.svg' %}#arrow-left" /></svg>
@@ -14,6 +15,7 @@
     <a tabindex="0"
         hx-get="{% url 'core:day' %}{{next_year}}-{{next_month}}-1"
         hx-target="#main"
+        hx-indicator="#spinner,.loaded-content"
         class="cursor-pointer font-bold text-2xl"
         title="Następny miesiąc">
         <svg class="w-8 h-8 rotate-180"><use href="{% static 'img/sprite.svg' %}#arrow-left" /></svg>
@@ -38,21 +40,21 @@
     <ol
         class="calendar-days gap-1 text-center grid list-none"
         style="grid-template-columns: repeat(7, auto)">
-    {% for num in num_days %}
-        {% if num in days_off or num in not_enrolled %}
-            {% include 'core/includes/calendar-day.html' with bg_color='bg-neutral-100' year=year month=month day=day num=num %}
-        {% elif num in absences_nr %}
-            {% include 'core/includes/calendar-day.html' with bg_color='bg-red-300' year=year month=month day=day num=num %}
-        {% elif num in absences_fdr %}
-            {% include 'core/includes/calendar-day.html' with bg_color='bg-[#F3C892]' year=year month=month day=day num=num %}
-        {% elif num in absences_r %}
-            {% include 'core/includes/calendar-day.html' with bg_color='bg-[#FFF1BD]' year=year month=month day=day num=num %}
-        {% elif num in absences_o %}
-            {% include 'core/includes/calendar-day.html' with bg_color='bg-[#CEE8BC]' year=year month=month day=day num=num %}
-        {% else %}
-            {% include 'core/includes/calendar-day.html' with bg_color='bg-[#9aec04]' year=year month=month day=day num=num %}
-        {% endif %}
-     {% endfor %}
+        {% for num in num_days %}
+            {% if num in days_off or num in not_enrolled %}
+                {% include 'core/includes/calendar-day.html' with bg_color='bg-neutral-100' year=year month=month day=day num=num %}
+            {% elif num in absences_nr %}
+                {% include 'core/includes/calendar-day.html' with bg_color='bg-red-300' year=year month=month day=day num=num %}
+            {% elif num in absences_fdr %}
+                {% include 'core/includes/calendar-day.html' with bg_color='bg-[#F3C892]' year=year month=month day=day num=num %}
+            {% elif num in absences_r %}
+                {% include 'core/includes/calendar-day.html' with bg_color='bg-[#FFF1BD]' year=year month=month day=day num=num %}
+            {% elif num in absences_o %}
+                {% include 'core/includes/calendar-day.html' with bg_color='bg-[#CEE8BC]' year=year month=month day=day num=num %}
+            {% else %}
+                {% include 'core/includes/calendar-day.html' with bg_color='bg-[#9aec04]' year=year month=month day=day num=num %}
+            {% endif %}
+        {% endfor %}
     </ol>
 </div>
 

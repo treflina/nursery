@@ -2,6 +2,9 @@ node_modules/
 .env.local
 .env.prod
 dane.csv
+django.log
+fixture.py
+fixture.json
 
 
 # Byte-compiled / optimized / DLL files
@@ -58,7 +61,6 @@ coverage.xml
 cover/
 
 # Translations
-*.mo
 *.pot
 
 # Django stuff:

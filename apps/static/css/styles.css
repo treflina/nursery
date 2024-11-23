@@ -1051,6 +1051,11 @@ input:checked + .toggle-bg {
   }
 }
 
+.sky-linear-dark {
+  background: rgb(245,244,249);
+  background: linear-gradient(90deg, rgb(112, 173, 204) 0%, rgb(112, 173, 204) 15%, rgba(3,105,161,1) 100%);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -1105,6 +1110,10 @@ input:checked + .toggle-bg {
 
 .inset-0 {
   inset: 0px;
+}
+
+.inset-1\/2 {
+  inset: 50%;
 }
 
 .inset-y-0 {
@@ -1768,6 +1777,10 @@ input:checked + .toggle-bg {
   overflow: hidden;
 }
 
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
 .\!rounded-full {
   border-radius: 9999px !important;
 }
@@ -2312,6 +2325,10 @@ input:checked + .toggle-bg {
   padding-top: 0.5rem;
 }
 
+.pt-3 {
+  padding-top: 0.75rem;
+}
+
 .pt-8 {
   padding-top: 2rem;
 }
@@ -2723,33 +2740,44 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
   filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#ECE5E1", endColorstr="#0369A1", GradientType=1 );
 }
 
-.sky-linear2 {
-  background: rgb(245,244,249);
-  background: linear-gradient(90deg, rgba(245,244,249,1) 0%, rgba(61,138,180,1) 47%, rgba(3,105,161,1) 100%);
-}
-
-.sky-linear {
-  background: rgb(245,244,249);
-  background: linear-gradient(90deg, rgba(245,244,249,1) 0%, rgba(152,187,205,1) 47%, rgba(3,105,161,1) 100%);
-}
-
-.neutral-linear2 {
-  background: rgb(229,229,229);
-  background: linear-gradient(90deg, rgba(229,229,229,1) 0%, rgba(212,212,212,1) 100%);
-}
-
-.neutral-linear {
-  background: rgb(229,229,229);
-  background: linear-gradient(90deg, rgba(229,229,229,1) 0%, rgba(3,105,161,1) 100%);
-}
-
-.neutral-linear3 {
-  background: rgb(229,229,229);
-  background: linear-gradient(90deg, rgba(229,229,229,1) 30%, rgba(196,211,219,1) 58%, rgba(3,105,161,1) 100%);
-}
-
 .footer-calc {
   height: calc(100dvh - 3rem);
+}
+
+/* loader */
+
+.request-indicator {
+  display: none;
+}
+
+.htmx-request .request-indicator {
+  display: flex;
+}
+
+.htmx-request.request-indicator {
+  display: flex;
+}
+
+.htmx-request .loaded-content {
+  display: none;
+}
+
+.htmx-request.loaded-content {
+  display: none;
+}
+
+.loader-circle {
+  width: 60px;
+  aspect-ratio: 4;
+  background: radial-gradient(circle closest-side,#000 90%,#0000) 0/calc(100%/3) 100% space;
+  clip-path: inset(0 100% 0 0);
+  animation: l1 1s steps(4) infinite;
+}
+
+@keyframes l1 {
+  to{
+    clip-path: inset(0 -34% 0 0)
+  }
 }
 
 /* modal */
@@ -3138,6 +3166,18 @@ ul.pagination {
   align-items: center;
   flex-wrap: wrap;
   margin: .5rem;
+}
+
+@media (min-width: 1024px) {
+  .lg\:sky-linear {
+    background: rgb(245,244,249);
+    background: linear-gradient(90deg, rgba(245,244,249,1) 0%, rgba(152,187,205,1) 47%, rgba(3,105,161,1) 100%);
+  }
+
+  .lg\:neutral-linear3 {
+    background: rgb(229,229,229);
+    background: linear-gradient(90deg, rgba(229,229,229,1) 30%, rgba(196,211,219,1) 58%, rgba(3,105,161,1) 100%);
+  }
 }
 
 .after\:absolute::after {
@@ -3703,10 +3743,6 @@ ul.pagination {
     padding: 1rem;
   }
 
-  .md\:p-6 {
-    padding: 1.5rem;
-  }
-
   .md\:px-2 {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
@@ -3720,6 +3756,15 @@ ul.pagination {
   .md\:py-2 {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
+  }
+
+  .md\:text-center {
+    text-align: center;
+  }
+
+  .md\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
   }
 }
 
@@ -3744,8 +3789,8 @@ ul.pagination {
     top: 0px;
   }
 
-  .lg\:top-4 {
-    top: 1rem;
+  .lg\:top-6 {
+    top: 1.5rem;
   }
 
   .lg\:mb-4 {
@@ -3903,6 +3948,10 @@ ul.pagination {
 
   .lg\:pt-5 {
     padding-top: 1.25rem;
+  }
+
+  .lg\:text-right {
+    text-align: right;
   }
 
   .lg\:shadow-md {

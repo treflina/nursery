@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+    .sky-linear {
+        background: rgb(245,244,249);
+        background: linear-gradient(90deg, rgba(245,244,249,1) 0%, rgba(152,187,205,1) 47%, rgba(3,105,161,1) 100%);
+    }
+    .sky-linear-dark {
+        background: rgb(245,244,249);
+        background: linear-gradient(90deg, rgb(112, 173, 204) 0%, rgb(112, 173, 204) 15%, rgba(3,105,161,1) 100%);
+    }
+
+    .neutral-linear3 {
+        background: rgb(229,229,229);
+        background: linear-gradient(90deg, rgba(229,229,229,1) 30%, rgba(196,211,219,1) 58%, rgba(3,105,161,1) 100%);
+    }
+}
 
 .sr-only {
     border: 0;
@@ -78,6 +93,7 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
     color: #525252;
 }
 
+
 .sky-gradient {
     background: hsla(22, 22%, 90%, 1);
     background: radial-gradient(circle, hsla(22, 22%, 90%, 1) 0%, hsla(201, 96%, 32%, 1) 100%);
@@ -86,34 +102,37 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
     filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#ECE5E1", endColorstr="#0369A1", GradientType=1 );
 }
 
-.sky-linear2 {
-    background: rgb(245,244,249);
-    background: linear-gradient(90deg, rgba(245,244,249,1) 0%, rgba(61,138,180,1) 47%, rgba(3,105,161,1) 100%);
-}
-
-.sky-linear {
-    background: rgb(245,244,249);
-    background: linear-gradient(90deg, rgba(245,244,249,1) 0%, rgba(152,187,205,1) 47%, rgba(3,105,161,1) 100%);
-}
-
-.neutral-linear2 {
-    background: rgb(229,229,229);
-    background: linear-gradient(90deg, rgba(229,229,229,1) 0%, rgba(212,212,212,1) 100%);
-}
-
-.neutral-linear {
-    background: rgb(229,229,229);
-    background: linear-gradient(90deg, rgba(229,229,229,1) 0%, rgba(3,105,161,1) 100%);
-}
-
-.neutral-linear3 {
-    background: rgb(229,229,229);
-    background: linear-gradient(90deg, rgba(229,229,229,1) 30%, rgba(196,211,219,1) 58%, rgba(3,105,161,1) 100%);
-}
-
 .footer-calc {
     height: calc(100dvh - 3rem);
 }
+/* loader */
+.request-indicator {
+    display: none;
+}
+
+.htmx-request .request-indicator {
+    display: flex;
+}
+.htmx-request.request-indicator {
+    display: flex;
+}
+
+.htmx-request .loaded-content {
+    display: none;
+}
+
+.htmx-request.loaded-content {
+    display: none;
+}
+
+.loader-circle {
+  width: 60px;
+  aspect-ratio: 4;
+  background: radial-gradient(circle closest-side,#000 90%,#0000) 0/calc(100%/3) 100% space;
+  clip-path: inset(0 100% 0 0);
+  animation: l1 1s steps(4) infinite;
+}
+@keyframes l1 {to{clip-path: inset(0 -34% 0 0)}}
 
 /* modal */
 .modalbox {
