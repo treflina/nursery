@@ -53,8 +53,20 @@ def get_holidays(year, month):
 def get_not_enrolled_days(child, year, month):
 
     num_days_in_month = calendar.monthrange(year, month)[1]
+    last_day = date(year, month, num_days_in_month)
+    last_month_end = date(year, month, 1) - timedelta(days=1)
 
-    if child.admission_date.month == month and child.admission_date.day != 1:
+    if child.leave_date and child.leave_date <= last_month_end:
+        return range(1, num_days_in_month + 1)
+
+    if child.admission_date and child.admission_date > last_day:
+        return range(1, num_days_in_month + 1)
+
+    if (
+        child.admission_date
+        and child.admission_date.month == month
+        and child.admission_date.day != 1
+    ):
         days_before_admission = [
             int(d) for d in range(1, int(child.admission_date.day))
         ]

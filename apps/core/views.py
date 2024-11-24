@@ -1,5 +1,5 @@
 import calendar
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import ProtectedError
@@ -81,49 +81,61 @@ def display_calendar(
 
     child = None
     not_enrolled_days = None
-    if selected_child:
-        child = Child.objects.get(id=selected_child)
+    context = {}
+
+    child = Child.objects.get(id=selected_child)
+    if child is not None:
+        num_days_in_month = calendar.monthrange(year, month)[1]
         not_enrolled_days = get_not_enrolled_days(child, year, month)
 
-    absences_not_reported = Absence.objects.filter(
-        child=child, a_date__month=month, a_date__year=year, absence_type="NR"
-    )
-    absences_reported = Absence.objects.filter(
-        child=child, a_date__month=month, a_date__year=year, absence_type="R"
-    )
-    absences_first_day = Absence.objects.filter(
-        child=child, a_date__month=month, a_date__year=year, absence_type="FR"
-    )
-    absences_other = Absence.objects.filter(
-        child=child, a_date__month=month, a_date__year=year, absence_type="O"
-    )
+        if num_days_in_month == len(not_enrolled_days):
+            anr_days = []
+            ar_days = []
+            afd_days = []
+            ao_days = []
+            days_off = []
+        else:
+            absences_not_reported = Absence.objects.filter(
+                child=child, a_date__month=month, a_date__year=year, absence_type="NR"
+            )
+            absences_reported = Absence.objects.filter(
+                child=child, a_date__month=month, a_date__year=year, absence_type="R"
+            )
+            absences_first_day = Absence.objects.filter(
+                child=child, a_date__month=month, a_date__year=year, absence_type="FR"
+            )
+            absences_other = Absence.objects.filter(
+                child=child, a_date__month=month, a_date__year=year, absence_type="O"
+            )
 
-    anr_days = [absence.a_date.day for absence in absences_not_reported]
-    ar_days = [absence.a_date.day for absence in absences_reported]
-    afd_days = [absence.a_date.day for absence in absences_first_day]
-    ao_days = [absence.a_date.day for absence in absences_other]
+            anr_days = [absence.a_date.day for absence in absences_not_reported]
+            ar_days = [absence.a_date.day for absence in absences_reported]
+            afd_days = [absence.a_date.day for absence in absences_first_day]
+            ao_days = [absence.a_date.day for absence in absences_other]
 
-    days_off = get_holidays(year, month)[0]
+            days_off = get_holidays(year, month)[0]
+            enrolled = True
 
-    context = {
-        "days_off": days_off,
-        "year": year,
-        "month": month,
-        "day": day,
-        "displayed_month": date(year, month, 1),
-        "prev_year": prev_year,
-        "prev_month": prev_month,
-        "prev_month_num_days": prev_month_num_days,
-        "next_month": cal_months["next_month"],
-        "next_year": cal_months["next_year"],
-        "num_days": range(1, num_days + 1),
-        "first_day": first_day,
-        "absences_fdr": afd_days,
-        "absences_r": ar_days,
-        "absences_nr": anr_days,
-        "absences_o": ao_days,
-        "not_enrolled": not_enrolled_days,
-    }
+        context = {
+            "days_off": days_off,
+            "year": year,
+            "month": month,
+            "day": day,
+            "displayed_month": date(year, month, 1),
+            "prev_year": prev_year,
+            "prev_month": prev_month,
+            "prev_month_num_days": prev_month_num_days,
+            "next_month": cal_months["next_month"],
+            "next_year": cal_months["next_year"],
+            "num_days": range(1, num_days + 1),
+            "first_day": first_day,
+            "absences_fdr": afd_days,
+            "absences_r": ar_days,
+            "absences_nr": anr_days,
+            "absences_o": ao_days,
+            "not_enrolled": not_enrolled_days,
+            "enrolled": enrolled,
+        }
 
     return render(request, "core/calendar.html", context=context)
 

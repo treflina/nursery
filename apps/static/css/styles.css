@@ -1112,10 +1112,6 @@ input:checked + .toggle-bg {
   inset: 0px;
 }
 
-.inset-1\/2 {
-  inset: 50%;
-}
-
 .inset-y-0 {
   top: 0px;
   bottom: 0px;
@@ -1135,6 +1131,10 @@ input:checked + .toggle-bg {
 
 .left-0 {
   left: 0px;
+}
+
+.left-1\/2 {
+  left: 50%;
 }
 
 .right-0 {
@@ -1159,6 +1159,10 @@ input:checked + .toggle-bg {
 
 .top-1 {
   top: 0.25rem;
+}
+
+.top-1\/2 {
+  top: 50%;
 }
 
 .top-3 {
@@ -1289,6 +1293,10 @@ input:checked + .toggle-bg {
 
 .mb-8 {
   margin-bottom: 2rem;
+}
+
+.ml-1 {
+  margin-left: 0.25rem;
 }
 
 .ml-2 {
@@ -1548,6 +1556,10 @@ input:checked + .toggle-bg {
   max-width: 1000px;
 }
 
+.max-w-\[100vw\] {
+  max-width: 100vw;
+}
+
 .max-w-\[1200px\] {
   max-width: 1200px;
 }
@@ -1597,8 +1609,9 @@ input:checked + .toggle-bg {
   flex-grow: 1;
 }
 
-.border-collapse {
-  border-collapse: collapse;
+.-translate-x-1\/2 {
+  --tw-translate-x: -50%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 .-translate-x-full {
@@ -1775,6 +1788,10 @@ input:checked + .toggle-bg {
 
 .overflow-hidden {
   overflow: hidden;
+}
+
+.overflow-x-hidden {
+  overflow-x: hidden;
 }
 
 .scroll-smooth {
@@ -2746,15 +2763,24 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
 
 /* loader */
 
-.request-indicator {
+.request-indicator,
+.request-indicator2 {
   display: none;
 }
 
 .htmx-request .request-indicator {
-  display: flex;
+  display: block;
 }
 
 .htmx-request.request-indicator {
+  display: block;
+}
+
+.htmx-request .request-indicator2 {
+  display: flex;
+}
+
+.htmx-request.request-indicator2 {
   display: flex;
 }
 
@@ -2763,6 +2789,14 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
 }
 
 .htmx-request.loaded-content {
+  display: none;
+}
+
+.htmx-request .loaded-box {
+  display: none;
+}
+
+.htmx-request.loaded-box {
   display: none;
 }
 
@@ -2816,6 +2850,10 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
 .form-control {
   border: 2px solid #ccc;
   border-radius: 6px;
+}
+
+.table-container {
+  width: 100%;
 }
 
 table {
@@ -2887,6 +2925,12 @@ thead th {
 .children .table-container td:nth-child(6),
 .children .table-header th:nth-child(6)  {
   width: 6.5rem;
+  text-align: center;
+}
+
+.children .table-container td:nth-child(8),
+.children .table-header th:nth-child(8)  {
+  width: 8.8rem;
   text-align: center;
 }
 
@@ -3795,6 +3839,10 @@ ul.pagination {
 
   .lg\:mb-4 {
     margin-bottom: 1rem;
+  }
+
+  .lg\:ml-3 {
+    margin-left: 0.75rem;
   }
 
   .lg\:ml-\[45\%\] {

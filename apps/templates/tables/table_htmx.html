@@ -4,7 +4,7 @@
 {% load i18n %}
 
 {% block table %}
-    <div class="skipnav"><a href="#pagination">Przejdź do paginacji</a></div>
+    {% comment %} <div class="skipnav"><a href="#pagination">Przejdź do paginacji</a></div> {% endcomment %}
     <table {% render_attrs table.attrs %} class="table table-header checkcolumn-table header bg-white">
         {% block table.thead %}
         <thead {{ table.attrs.thead.as_html }} class="bg-[#bdf3c1]">

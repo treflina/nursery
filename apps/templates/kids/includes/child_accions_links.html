@@ -1,5 +1,5 @@
 {% load static i18n %}
-<div class="flex gap-2" hx-push-url="false">
+<div class="flex w-full gap-2" hx-push-url="false">
     <a  href="{% url 'kids:update' record.id %}?next={{ request.get_full_path|urlencode}}"
     class="px-2 pt-0.7 py-0.5 border-2 border-neutral-300 rounded-md bg-neutral-100 hover:bg-neutral-200
     focus:bg-neutral-200 duration-300 transition-colors"

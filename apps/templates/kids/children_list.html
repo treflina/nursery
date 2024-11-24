@@ -5,85 +5,83 @@
 {% load static django_tables2 i18n %}
 
 {% block content %}
-<div id="children-wrapper">
-{% include 'absences/includes/absences_top_info.html' %}
-{% include 'includes/logout_form.html' %}
-<main id="children-main"
-class="modal-wrapper flex flex-col justify-center items-center w-full {% if creating or updating %}bg-cyan-50 {% endif %}">
-  {% comment %} <div class="modalBackground hidden"></div> {% endcomment %}
-  {% if messages %}
-  <div x-data="{showMsg : true}" @click.outside="showMsg = false" class="fixed top-3 right-3 z-10">
-    <div x-show="showMsg" class="relative pr-5 pl-3 pb-4 bg-[#e0f6e2] rounded-md border-2 border-[#77ef7f] shadow-sm">
-      <button @click="showMsg = false" class="ml-auto -mr-4 flex justify-center items-center px-2 rounded-md after:absolute after:inset-0"
-      aria-label="Zamknij"><span aria-hidden="true">x</span></button>
-      {% for m in messages %}
-      <p {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ m }}</p>
-      {% endfor %}
+<div id="children-wrapper" class="overflow-x-hidden">
+  {% include 'absences/includes/absences_top_info.html' %}
+  {% include 'includes/logout_form.html' %}
+  <main id="children-main"
+  class="modal-wrapper flex flex-col justify-center items-center w-full {% if creating or updating %}bg-cyan-50 {% endif %}">
+    {% comment %} <div class="modalBackground hidden"></div> {% endcomment %}
+    {% if messages %}
+    <div x-data="{showMsg : true}" @click.outside="showMsg = false" class="fixed top-3 right-3 z-10">
+      <div x-show="showMsg" class="relative pr-5 pl-3 pb-4 bg-[#e0f6e2] rounded-md border-2 border-[#77ef7f] shadow-sm">
+        <button @click="showMsg = false" class="ml-auto -mr-4 flex justify-center items-center px-2 rounded-md after:absolute after:inset-0"
+        aria-label="Zamknij"><span aria-hidden="true">x</span></button>
+        {% for m in messages %}
+        <p {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ m }}</p>
+        {% endfor %}
+      </div>
     </div>
-  </div>
-  {% endif %}
-  <section id="children" class="my-8 px-1 relative">
-    <h1 class="text-2xl font-semibold mb-8 text-center">{% translate 'Children list' %}</h1>
-    {% comment %} Filters {% endcomment %}
-    <div class="table-top-container">
-      <div class="flex flex-wrap justify-center items-end gap-3 mt-2 p-2 border-2 rounded-sm bg-neutral-200 border-neutral-300">
-        <div class="flex gap-2 items-end">
-          <div class="flex gap-2 flex-wrap items-center justify-center">
-            <label for="id_query" class="font-semibold text-neutral-800">{% translate 'Find child' %}</label>
-            <input type="search" name="query" placeholder="{% translate 'Enter child' %}" class="searchinput form-control" id="id_query"
-              hx-trigger="keyup changed delay:500ms, search" hx-get="{% url 'kids:children' %}" hx-indicator=".progress"
-              hx-target=".table-container" x-data
-              x-on:htmx:before-request="$dispatch('clear-pagination-and-sort')">
+    {% endif %}
+    <section id="children" class="my-8 px-1 relative">
+      <h1 class="text-2xl font-semibold mb-8 text-center">{% translate 'Children list' %}</h1>
+      {% comment %} Filters {% endcomment %}
+      <div class="table-top-container">
+        <div class="flex flex-wrap justify-center items-end gap-3 mt-2 p-2 border-2 rounded-sm bg-neutral-200 border-neutral-300">
+          <div class="flex gap-2 items-end">
+            <div class="flex gap-2 flex-wrap items-center justify-center">
+              <label for="id_query" class="font-semibold text-neutral-800">{% translate 'Find child' %}</label>
+              <input type="search" name="query" placeholder="{% translate 'Enter child' %}" class="searchinput form-control" id="id_query"
+                hx-trigger="keyup changed delay:500ms, search" hx-get="{% url 'kids:children' %}" hx-indicator=".progress"
+                hx-target=".table-container" x-data
+                x-on:htmx:before-request="$dispatch('clear-pagination-and-sort')">
+            </div>
+            <button class="flex items-center h-11 px-2 gap-1 border-2 border-neutral-300
+                rounded-md bg-amber-100 hover:bg-amber-200 focus:bg-amber-200
+                duration-300 transition-colors"
+                hx-target="#children"
+                hx-select="#children"
+                hx-get="{% url 'kids:create' %}?next={{ request.get_full_path|urlencode }}"
+                hx-swap="outerHTML"
+                hx-push-url="true">
+                <svg class="w-5 h-5" aria-hidden="true">
+                  <use href="{% static 'img/sprite.svg' %}#plus" />
+                </svg>
+                {% translate 'Add' %}
+            </button>
           </div>
-          <button class="flex items-center h-11 px-2 gap-1 border-2 border-neutral-300
-              rounded-md bg-amber-100 hover:bg-amber-200 focus:bg-amber-200
-              duration-300 transition-colors"
-              hx-target="#children"
-              hx-select="#children"
-              hx-get="{% url 'kids:create' %}?next={{ request.get_full_path|urlencode }}"
-              hx-swap="outerHTML"
-              hx-push-url="true">
-              <svg class="w-5 h-5" aria-hidden="true">
-                <use href="{% static 'img/sprite.svg' %}#plus" />
-              </svg>
-              {% translate 'Add' %}
-          </button>
+        </div>
+
+        <div x-data="{paginationClicked: false}" class="children scroll-wrapper" tabindex="0">
+              {# Progress indicator #}
+            <div class="progress">
+              <div class="indeterminate"></div>
+            </div>
+
+          {# Table header #}
+          <form class="w-full" id="bulk-actions" hx-get="{% url 'kids:children' %}" hx-target=".table-container"
+            hx-trigger="sort-initiated, pagination-initiated" hx-swap="outerHTML" hx-push-url="true"
+            hx-include="#id_query" hx-indicator=".progress" x-data="{
+                      page_by: new URLSearchParams(location.search).get('page') || 1,
+                      sort_by: new URLSearchParams(location.search).get('sort') || ''}"
+                      @clear-pagination-and-sort.window="page_by = 1; sort_by = ''">
+
+            {# Hidden input to store pagination page and column to sort by #}
+            <input type="hidden" name="sort" x-ref="sort_input" x-model="sort_by" x-init="$watch('sort_by',
+                              () => $refs.sort_input.dispatchEvent(
+                                        new Event('sort-initiated',
+                                                  { bubbles: true })))">
+
+            <input type="hidden" name="page" x-ref="paginate_input" x-model="page_by" x-init="$watch('page_by',
+                              () => $refs.paginate_input.dispatchEvent(
+                                        new Event('pagination-initiated',
+                                                  { bubbles: true })))">
+            {# Content table #}
+              {% render_table table %}
+          </form>
         </div>
       </div>
-
-      <div x-data="{paginationClicked: false}" class="children scroll-wrapper" tabindex="0">
-            {# Progress indicator #}
-          <div class="progress">
-            <div class="indeterminate"></div>
-          </div>
-
-        {# Table header #}
-        <form id="bulk-actions" hx-get="{% url 'kids:children' %}" hx-target=".table-container"
-          hx-trigger="sort-initiated, pagination-initiated" hx-swap="outerHTML" hx-push-url="true"
-          hx-include="#id_query" hx-indicator=".progress" x-data="{
-                    page_by: new URLSearchParams(location.search).get('page') || 1,
-                    sort_by: new URLSearchParams(location.search).get('sort') || ''}"
-                    @clear-pagination-and-sort.window="page_by = 1; sort_by = ''">
-
-          {# Hidden input to store pagination page and column to sort by #}
-          <input type="hidden" name="sort" x-ref="sort_input" x-model="sort_by" x-init="$watch('sort_by',
-                            () => $refs.sort_input.dispatchEvent(
-                                      new Event('sort-initiated',
-                                                { bubbles: true })))">
-
-          <input type="hidden" name="page" x-ref="paginate_input" x-model="page_by" x-init="$watch('page_by',
-                            () => $refs.paginate_input.dispatchEvent(
-                                      new Event('pagination-initiated',
-                                                { bubbles: true })))">
-          {# Content table #}
-          <div class="">
-            {% render_table table %}
-          </div>
-        </form>
-      </div>
-    </div>
-  </section>
-</main>
+    </section>
+  </main>
 </div>
 {% include 'absences/includes/absences_modals.html' %}
 {% endblock %}

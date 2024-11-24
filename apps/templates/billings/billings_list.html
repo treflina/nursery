@@ -4,79 +4,11 @@
 
 {% load django_tables2 i18n static %}
 
- {% block extra_styles %}
-<style>
-.wrapper {
-	overflow: scroll;
-  padding-bottom: .5rem;
-}
-
-table {
-	border-collapse: collapse;
-	width: max(65rem, 100%);
-	table-layout: fixed;
-}
-
-th,
-caption {
-	text-align: start;
-}
-
-caption {
-	margin-block: 0.75rem;
-}
-
-thead th:not(:first-child),
-td {
-	text-align: start;
-}
-
-thead {
-	background: whitesmoke;
-}
-
-
-th,
-td {
-	border: 1px solid lightgrey;
-	padding: 0.25rem 0.75rem;
-	vertical-align: baseline;
-}
-
-
-tbody th {
-	background: white;
-}
-
-thead th,
-tfoot th {
-	background: whitesmoke;
-}
-
-thead th {
-	vertical-align: bottom;
-}
-
-/* For the shadow: https://adrianroselli.com/2020/01/fixed-table-headers.html */
-div[tabindex="0"][aria-labelledby][role="region"] {
-  background:
-    linear-gradient(to right, transparent 30%, rgba(255,255,255,0)),
-    linear-gradient(to right, rgba(255,255,255,0), white 70%) 0 100%,
-    radial-gradient(farthest-side at 0% 50%, rgba(0,0,0,0.2), rgba(0,0,0,0)),
-    radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,0.2), rgba(0,0,0,0)) 0 100%;
-  background-repeat: no-repeat;
-  background-color: #fff;
-  background-size: 4em 100%, 4em 100%, 1.4em 100%, 1.4em 100%;
-  background-position: 0 0, 100%, 0 0, 100%;
-  background-attachment: local, local, scroll, scroll;
-}</style>
-{% endblock extra_styles %}
 {% block content %}
-
 <main id="billings-main"
-  class="modal-wrapper"
+  class="modal-wrapper overflow-x-hidden"
   >
-  <div class="fixed top-0  items-center gap-4 bg-sky-700 w-full z-20">
+  <div class="fixed top-0 items-center gap-4 bg-sky-700 w-full max-w-[100vw] z-20">
     <div class="nav-wrapper flex items-center flex-wrap justify-between lg:justify-around max-w-[1200px] mx-auto h-14">
       <a href="/" class="inline-block h-full bg-neutral-100 rounded-md border-2 border-neutral-300 mx-2">
         <img class="inline-block h-full w-full" src="{% static 'img/logozlobeknobg.png' %}" alt="logo">
@@ -215,20 +147,20 @@ div[tabindex="0"][aria-labelledby][role="region"] {
     <div x-data="{paginationClicked: false}" class="scroll-wrapper max-w-[1200px]" tabindex="0">
       {# Table header #}
       <form id="bulk-actions"
-            hx-get="{% url 'billings:billings' %}"
-            hx-target=".table-container"
-            hx-trigger="sort-initiated, pagination-initiated, billingsDeleted from:body, noteUpdateCalled from:body, newReport from:body"
-            hx-swap="outerHTML"
-            hx-include="#id_query, #id_month, #id_year"
-            hx-indicator=".progress"
-            hx-push-url="true"
-            x-data="{ sort_by: '',
-                      page_by: 1,
-                      select_all: false,
-                      last_checked: false }"
-            @clear-pagination-and-sort.window="page_by = 1; sort_by = ''"
-            x-on:htmx:after-swap="select_all = false">
-
+        hx-get="{% url 'billings:billings' %}"
+        hx-target=".table-container"
+        hx-trigger="sort-initiated, pagination-initiated, billingsDeleted from:body, noteUpdateCalled from:body, newReport from:body"
+        hx-swap="outerHTML"
+        hx-include="#id_query, #id_month, #id_year"
+        hx-indicator=".progress"
+        hx-push-url="true"
+        x-data="{ sort_by: '',
+                  page_by: 1,
+                  select_all: false,
+                  last_checked: false }"
+        @clear-pagination-and-sort.window="page_by = 1; sort_by = ''"
+        x-on:htmx:after-swap="select_all = false"
+        >
         {# Hidden input to store pagination page and column to sort by #}
         <input type="hidden" name="sort" x-ref="sort_input" x-model="sort_by"
               x-init="$watch('sort_by',

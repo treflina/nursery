@@ -1,6 +1,7 @@
 import Datepicker from "flowbite-datepicker/Datepicker";
 import DateRangePicker from "flowbite-datepicker/DateRangePicker";
-import pl from "../../node_modules/flowbite-datepicker/js/i18n/locales/pl"
+// import pl from "../../node_modules/flowbite-datepicker/js/i18n/locales/pl"
+import pl from "flowbite-datepicker/locales/pl";
 import Alpine from 'alpinejs'
 
 (() => {
@@ -8,7 +9,9 @@ import Alpine from 'alpinejs'
     Alpine.start()
 
     document.addEventListener("createAbsenceForm", function (e) {
-        Datepicker.locales.pl = pl.pl;
+        Datepicker.locales.pl = pl.pl
+
+        console.log(Datepicker.locales.pl);
 
         const datepickerOptions = {
             allowOneSidedRange: true,
@@ -28,8 +31,8 @@ import Alpine from 'alpinejs'
         }
 
         const daterangepicker = document.querySelector(".daterangepicker");
-        const datepickerStart = document.querySelector(".datepicker1");
         const rangePicker = new DateRangePicker(daterangepicker, datepickerOptions);
+        const datepickerStart = document.querySelector(".datepicker1");
 
         const setEndValue = () => {
             let endValue;

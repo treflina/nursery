@@ -10,7 +10,6 @@ if path.isfile(prod_env_file):
     load_dotenv(prod_env_file)
 
 DEBUG = False
-TESTING = False
 
 STORAGES = {
     "default": {
@@ -22,6 +21,15 @@ STORAGES = {
 }
 
 MIDDLEWARE = [*MIDDLEWARE, "whitenoise.middleware.WhiteNoiseMiddleware"]
+if not TESTING:
+    INSTALLED_APPS = [
+        *INSTALLED_APPS,
+        "debug_toolbar",
+    ]
+    MIDDLEWARE = [
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+        *MIDDLEWARE,
+    ]
 
 DATABASES = {
     "default": {
@@ -40,14 +48,19 @@ SECRET_KEY = getenv("DJANGO_SECRET_KEY")
 
 ALLOWED_HOSTS = getenv("ALLOWED_HOSTS").split()
 
-if not TESTING:
-    INSTALLED_APPS = [
-        *INSTALLED_APPS,
-        "debug_toolbar",
-    ]
-    MIDDLEWARE = [
-        "debug_toolbar.middleware.DebugToolbarMiddleware",
-        *MIDDLEWARE,
-    ]
-
 ADMIN_URL = getenv("DJANGO_ADMIN_URL")
+
+# SECURITY
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# https://docs.djangoproject.com/en/dev/ref/settings/#secure-ssl-redirect
+SECURE_SSL_REDIRECT = True
+# https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-secure
+SESSION_COOKIE_SECURE = True
+# https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-name
+SESSION_COOKIE_NAME = "__Secure-sessionid"
+# https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-secure
+CSRF_COOKIE_SECURE = True
+# https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-name
+CSRF_COOKIE_NAME = "__Secure-csrftoken"

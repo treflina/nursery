@@ -106,14 +106,24 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
     height: calc(100dvh - 3rem);
 }
 /* loader */
-.request-indicator {
+.request-indicator,
+.request-indicator2 {
     display: none;
 }
 
 .htmx-request .request-indicator {
+    display: block;
+}
+
+.htmx-request.request-indicator {
+    display: block;
+}
+
+.htmx-request .request-indicator2 {
     display: flex;
 }
-.htmx-request.request-indicator {
+
+.htmx-request.request-indicator2 {
     display: flex;
 }
 
@@ -122,6 +132,14 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
 }
 
 .htmx-request.loaded-content {
+    display: none;
+}
+
+.htmx-request .loaded-box {
+    display: none;
+}
+
+.htmx-request.loaded-box {
     display: none;
 }
 
@@ -167,6 +185,10 @@ max-width: 1200px;
 .form-control {
 border: 2px solid #ccc;
 border-radius: 6px;
+}
+
+.table-container {
+    width: 100%;
 }
 
 table {
@@ -221,11 +243,13 @@ text-align: left;
 .children .table-header th:nth-child(1)  {
     width: 16rem;
 }
+
 .children .table-container td:nth-child(2),
 .children .table-header th:nth-child(2)  {
     width: 7rem;
     text-align: center;
 }
+
 .children .table-container td:nth-child(3),
 .children .table-header th:nth-child(3)  {
     width: 7rem;
@@ -235,6 +259,12 @@ text-align: left;
 .children .table-container td:nth-child(6),
 .children .table-header th:nth-child(6)  {
     width: 6.5rem;
+    text-align: center;
+}
+
+.children .table-container td:nth-child(8),
+.children .table-header th:nth-child(8)  {
+    width: 8.8rem;
     text-align: center;
 }
 

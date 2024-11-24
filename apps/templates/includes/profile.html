@@ -4,7 +4,7 @@
     lg:w-min">
     {% if session_child %}
     <div class="flex gap-2 p-2 bg-neutral-50 rounded-lg shadow-sm lg:shadow-md
-        hover:bg-neutral-200 transition-colors duration-300 cursor-pointer"
+        hover:bg-neutral-200 transition-colors duration-300 cursor-pointer relative z-20"
         {% if children_count > 1 %}
         role="button"
         tabindex="0"
@@ -20,7 +20,7 @@
         <p class="font-semibold text-xl">{{session_child.first_name}}</p>
     </div>
     {% endif %}
-    <form class="flex gap-2 bg-neutral-50 rounded-lg shadow-sm lg:shadow-md" method="post" action="{% url 'logout' %}">
+    <form class="relative flex gap-2 bg-neutral-50 rounded-lg shadow-sm lg:shadow-md z-20" method="post" action="{% url 'logout' %}">
     {% csrf_token %}
         <button type="submit" class="flex gap-2 justify-center items-center p-2 hover:bg-neutral-200
             transition-colors duration-300 rounded-lg">
