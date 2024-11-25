@@ -41,7 +41,7 @@ def check_staff(u):
     if u.is_superuser:
         return True
     if (
-        u.type == (User.Types.ACOUNTANT or u.type == User.Types.EMPLOYEE)
+        (u.type == User.Types.ACOUNTANT or u.type == User.Types.EMPLOYEE)
         and u.is_active
     ):
         return True

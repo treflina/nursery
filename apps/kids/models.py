@@ -1,3 +1,4 @@
+import calendar
 from datetime import date
 
 from django.db import models
@@ -36,6 +37,18 @@ class Child(models.Model):
         blank=True,
         null=True,
     )
+
+    def is_enrolled_month(self, day):
+        month_start = date(day.year, day.month, 1)
+        last_day_of_month = calendar.monthrange(day.year, day.month)[1]
+        month_end = date(day.year, day.month, last_day_of_month)
+        if self.leave_date:
+            if self.leave_date < month_start:
+                return False
+        if self.admission_date > month_end:
+            return False
+        else:
+            return True
 
     @property
     def full_name(self):
