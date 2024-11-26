@@ -9,7 +9,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
-from django.views.generic import ListView, UpdateView
+from django.views.generic import UpdateView
 from django_filters.views import FilterView
 from django_htmx.http import HttpResponseClientRedirect, trigger_client_event
 from django_tables2 import SingleTableMixin
@@ -31,34 +31,6 @@ from .filters import BillingsFilter
 from .forms import BillingCreateForm, BillingForm, BillingNoteForm
 from .models import Billing
 from .tables import BillingsHTMxBulkActionTable
-
-
-class BillingListView(StaffPermissionMixin, ListView):
-
-    template_name = "billings/billing_create.html"
-    model = Billing
-
-    def get_context_data(self):
-        context = super().get_context_data()
-        year = self.kwargs.get("year")
-        month = self.kwargs.get("month")
-        if year is None:
-            year = date.today().year
-
-        if month is None:
-            month = date.today().month
-
-        try:
-            report_date = date(year, month, 1)
-        except Exception:
-            return context
-
-        context["data"] = Billing.objects.filter(date_month=report_date).order_by(
-            "child"
-        )
-        context["year"] = year
-        context["month"] = month
-        return context
 
 
 @user_passes_test(check_staff)
@@ -245,6 +217,7 @@ class BillingsReportsView(StaffPermissionMixin, SingleTableMixin, FilterView):
         if self.request.htmx and self.request.htmx.target not in [
             "billings",
             "billings-main",
+            "body",
         ]:
             template_name = "tables/billings_table_partial.html"
         else:

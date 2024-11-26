@@ -39,7 +39,7 @@ class AbsencesView(EmployeePermissionMixin, SingleTableMixin, FilterView):
 
     def get_template_names(self):
         if self.request.htmx and (
-            self.request.headers.get("HX-Target") != "absences-main"
+            self.request.headers.get("HX-Target") not in ["absences-main", "body"]
         ):
             template_name = "tables/base_table_partial.html"
         else:

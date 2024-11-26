@@ -28,70 +28,72 @@ register_converter(DateConverter, "date")
 app_name = "core"
 
 urlpatterns = [
-    path("day/<date:chosendate>/", day_details, name="day"),
-    path("day/", day_details, name="day"),
-    path("settings/", main_settings, name="settings"),
-    path("settings/createday/", create_additional_day_off, name="day_create"),
-    path("settings/deleteday/<int:pk>/", delete_additional_day_off, name="day_delete"),
-    path("settings/createfoodprice/", create_food_price, name="food_price_create"),
+    path("promyczki/<date:chosendate>/", day_details, name="day"),
+    path("promyczki/", day_details, name="day"),
+    path("ustawienia/", main_settings, name="settings"),
+    path("ustawienia/createday/", create_additional_day_off, name="day_create"),
     path(
-        "settings/deletefoodprice/<int:pk>/",
+        "ustawienia/deleteday/<int:pk>/", delete_additional_day_off, name="day_delete"
+    ),
+    path("ustawienia/createfoodprice/", create_food_price, name="food_price_create"),
+    path(
+        "ustawienia/deletefoodprice/<int:pk>/",
         delete_food_price,
         name="food_price_delete",
     ),
     path(
-        "settings/updatefoodprice/<int:pk>/",
+        "ustawienia/updatefoodprice/<int:pk>/",
         update_food_price,
         name="food_price_update",
     ),
     path(
-        "settings/createmonthlypayment/",
+        "ustawienia/createmonthlypayment/",
         create_monthly_payment,
         name="monthly_payment_create",
     ),
     path(
-        "settings/updatemonthlypayment/<int:pk>/",
+        "ustawienia/updatemonthlypayment/<int:pk>/",
         update_monthly_payment,
         name="monthly_payment_update",
     ),
     path(
-        "settings/deletemonthlypayment/<int:pk>/",
+        "ustawienia/deletemonthlypayment/<int:pk>/",
         delete_monthly_payment,
         name="monthly_payment_delete",
     ),
     path(
-        "settings/createlocalsubsidy/",
+        "ustawienia/createlocalsubsidy/",
         create_local_subsidy,
         name="local_subsidy_create",
     ),
     path(
-        "settings/updatelocalsubsidy/<int:pk>/",
+        "ustawienia/updatelocalsubsidy/<int:pk>/",
         update_local_subsidy,
         name="local_subsidy_update",
     ),
     path(
-        "settings/createothersubsidy/",
+        "ustawienia/createothersubsidy/",
         create_other_subsidy,
         name="other_subsidy_create",
     ),
     path(
-        "settings/deleteothersubsidy/<int:pk>/",
+        "ustawienia/deleteothersubsidy/<int:pk>/",
         delete_other_subsidy,
         name="other_subsidy_delete",
     ),
     path(
-        "settings/updateothersubsidy/<int:pk>/",
+        "ustawienia/updateothersubsidy/<int:pk>/",
         update_other_subsidy,
         name="other_subsidy_update",
     ),
     path(
-        "settings/updategovsubsidy/<int:pk>/",
+        "ustawienia/updategovsubsidy/<int:pk>/",
         update_gov_subsidy,
         name="gov_subsidy_update",
     ),
-    path("settings/creategovsubsidy/", create_gov_subsidy, name="gov_subsidy_create"),
+    path("ustawienia/creategovsubsidy/", create_gov_subsidy, name="gov_subsidy_create"),
     path(
-        "settings/deletegovsubsidy/<int:pk>/",
+        "ustawienia/deletegovsubsidy/<int:pk>/",
         delete_gov_subsidy,
         name="gov_subsidy_delete",
     ),

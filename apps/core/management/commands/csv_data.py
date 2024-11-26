@@ -1,5 +1,5 @@
 import csv
-from datetime import date, datetime
+from datetime import datetime
 
 from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError

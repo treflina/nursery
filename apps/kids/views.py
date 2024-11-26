@@ -54,7 +54,7 @@ class ChildrenList(EmployeePermissionMixin, SingleTableMixin, FilterView):
     def get_template_names(self):
         if self.request.htmx and (
             self.request.headers.get("HX-Target")
-            not in ["children-main", "children", "children-wrapper"]
+            not in ["children-main", "children", "children-wrapper", "body"]
         ):
             template_name = "tables/base_table_partial.html"
         else:

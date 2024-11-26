@@ -12,16 +12,22 @@ from .views import (
 app_name = "absences"
 
 urlpatterns = [
-    path("absence/create/", create_absence, name="absence_create"),
+    path("nieobecnosc/dodaj/", create_absence, name="absence_create"),
     path(
-        "absence/nursery-create/", nursery_create_absence, name="absence_create_nursery"
+        "nieobecnosc/zlobek-create/",
+        nursery_create_absence,
+        name="absence_create_nursery",
     ),
-    path("absence/update/<int:pk>", AbsenceUpdateView.as_view(), name="absence_update"),
-    path("absence/delete/<int:pk>", delete_absence, name="absence_delete"),
     path(
-        "absences/",
+        "nieobecnosc/edytuj/<int:pk>",
+        AbsenceUpdateView.as_view(),
+        name="absence_update",
+    ),
+    path("nieobecnosc/usun/<int:pk>", delete_absence, name="absence_delete"),
+    path(
+        "nieobecnosci/",
         AbsencesView.as_view(),
         name="absences_list",
     ),
-    path("absences/info/", top_info_about_absences, name="absences_top_info"),
+    path("nieobecnosci/info/", top_info_about_absences, name="absences_top_info"),
 ]
