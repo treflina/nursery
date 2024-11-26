@@ -1,11 +1,10 @@
 {% load static %}
-{% block content %}
-<div class="flex flex-col">
+<div id="info-day" class="flex flex-col">
     <div class="flex gap-2 justify-start items-center lg:mb-4">
         <div class="ml-2 w-14 h-14 ">
             <img src="{% static 'img/logozlobeknobg.png' %}" class="w-full h-full inline-block" alt="Logo"/>
         </div>
-        <h2 class="font-bold text-3xl px-2 lg:px-0">{{chosen_date|date:"d.m.Y"}}</h2>
+        <h2 class="font-bold text-3xl px-2 lg:px-0">{{chosendate|date:"d.m.Y"}}</h2>
     </div>
     {% if activities.main_topic or activities.topic %}
     <div class="relative lg:h-28 mt-4">
@@ -60,9 +59,7 @@
     <h3>Dziękujemy za zgłoszenie nieobecności dziecka!</h3>
     {% endif %}
 
-
     <div id="absence-form" class="w-full text-center my-4">
         <div id="form-container" class="p-2 md:p-4 rounded-md"></div>
     </div>
 </div>
-{% endblock content %}

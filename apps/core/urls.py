@@ -14,7 +14,6 @@ from .views import (
     delete_gov_subsidy,
     delete_monthly_payment,
     delete_other_subsidy,
-    display_calendar,
     home,
     main_settings,
     update_food_price,
@@ -29,11 +28,6 @@ register_converter(DateConverter, "date")
 app_name = "core"
 
 urlpatterns = [
-    path(
-        "calendar/<int:year>/<int:month>/<int:day>/", display_calendar, name="calendar"
-    ),
-    path("calendar/<int:year>/<int:month>/", display_calendar, name="calendar"),
-    path("calendar/", display_calendar, name="calendar"),
     path("day/<date:chosendate>/", day_details, name="day"),
     path("day/", day_details, name="day"),
     path("settings/", main_settings, name="settings"),

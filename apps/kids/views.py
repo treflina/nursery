@@ -2,7 +2,7 @@ from datetime import date, datetime
 
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
@@ -11,7 +11,6 @@ from django_filters.views import FilterView
 from django_htmx.http import trigger_client_event
 from django_tables2 import SingleTableMixin
 
-from apps.billings.models import Billing
 from apps.users.decorators import get_parent_context
 from apps.users.permissions import EmployeePermissionMixin, check_employee, check_parent
 
@@ -43,15 +42,7 @@ def switch_child_profile(request, selected_child, children):
     else:
         chosendate = datetime.strptime(session_chosendate, "%Y-%m-%d").date()
 
-    billing = Billing.objects.filter(
-        date_month=date(chosendate.year, chosendate.month, 1), child_id=new_selected_id
-    ).exists()
-
-    return render(
-        request,
-        "core/base-day.html",
-        {"chosendate": chosendate, "children": children, "billing": billing},
-    )
+    return redirect(reverse("core:day", kwargs={"chosendate": chosendate}))
 
 
 class ChildrenList(EmployeePermissionMixin, SingleTableMixin, FilterView):

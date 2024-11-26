@@ -5,7 +5,7 @@
 {% load static django_tables2 i18n %}
 
 {% block content %}
-<div id="children-wrapper" class="overflow-x-hidden">
+<div id="children-wrapper" class="overflow-x-hidden min-h-dvh flex flex-col">
   {% include 'absences/includes/absences_top_info.html' %}
   {% include 'includes/logout_form.html' %}
   <main id="children-main"
@@ -82,6 +82,7 @@
       </div>
     </section>
   </main>
+  {% include 'includes/footer.html' %}
 </div>
 {% include 'absences/includes/absences_modals.html' %}
 {% endblock %}

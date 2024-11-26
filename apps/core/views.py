@@ -1,7 +1,7 @@
 import calendar
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import ProtectedError
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -11,6 +11,7 @@ from django_htmx.http import reswap, retarget, trigger_client_event
 
 from apps.absences.models import Absence
 from apps.billings.models import Billing
+from apps.info.models import Activities, Menu
 from apps.kids.models import Child
 from apps.users.decorators import get_parent_context
 from apps.users.models import Parent
@@ -36,7 +37,7 @@ from .utils.absent_days import get_holidays, get_not_enrolled_days
 from .utils.helpers import get_next_prev_month
 
 
-# TODO protect route
+@login_required
 @get_parent_context
 def home(request, selected_child, children):
 
@@ -58,17 +59,29 @@ def home(request, selected_child, children):
 
 @user_passes_test(check_parent)
 @get_parent_context
-def display_calendar(
-    request, selected_child, children, year=None, month=None, day=None
-):
-    """Display calendar"""
+def day_details(request, selected_child, children, chosendate=None):
 
-    if month is None:
-        month = date.today().month
-    if year is None:
-        year = date.today().year
-    if day is None:
-        day = date.today().day
+    if chosendate is None:
+        session_chosendate = request.session.get("chosendate")
+        if session_chosendate is None:
+            chosendate = date.today()
+        else:
+            chosendate = datetime.strptime(session_chosendate, "%Y-%m-%d").date()
+    else:
+        request.session["chosendate"] = chosendate.strftime("%Y-%m-%d")
+
+    menu = Menu.objects.filter(menu_date=chosendate).last()
+    activities = Activities.objects.filter(day=chosendate).last()
+    context = {
+        "chosendate": chosendate,
+        "children": children,
+        "menu": menu,
+        "activities": activities,
+    }
+
+    year = chosendate.year
+    month = chosendate.month
+    day = chosendate.day
 
     first_day = calendar.monthrange(year, month)[0]
     num_days = calendar.monthrange(year, month)[1]
@@ -79,14 +92,18 @@ def display_calendar(
 
     prev_month_num_days = calendar.monthrange(prev_year, prev_month)[1]
 
-    child = None
     not_enrolled_days = None
-    context = {}
 
-    child = Child.objects.get(id=selected_child)
+    child = Child.objects.filter(id=selected_child).last()
     if child is not None:
-        num_days_in_month = calendar.monthrange(year, month)[1]
+        billing = Billing.objects.filter(
+            date_month=date(year, month, 1), child=selected_child, confirmed=True
+        ).exists()
+
+        num_days_in_month = num_days
         not_enrolled_days = get_not_enrolled_days(child, year, month)
+
+        enrolled = child.is_enrolled_month(chosendate)
 
         if num_days_in_month == len(not_enrolled_days):
             anr_days = []
@@ -94,6 +111,7 @@ def display_calendar(
             afd_days = []
             ao_days = []
             days_off = []
+
         else:
             absences_not_reported = Absence.objects.filter(
                 child=child, a_date__month=month, a_date__year=year, absence_type="NR"
@@ -114,58 +132,32 @@ def display_calendar(
             ao_days = [absence.a_date.day for absence in absences_other]
 
             days_off = get_holidays(year, month)[0]
-            enrolled = True
 
-        context = {
-            "days_off": days_off,
-            "year": year,
-            "month": month,
-            "day": day,
-            "displayed_month": date(year, month, 1),
-            "prev_year": prev_year,
-            "prev_month": prev_month,
-            "prev_month_num_days": prev_month_num_days,
-            "next_month": cal_months["next_month"],
-            "next_year": cal_months["next_year"],
-            "num_days": range(1, num_days + 1),
-            "first_day": first_day,
-            "absences_fdr": afd_days,
-            "absences_r": ar_days,
-            "absences_nr": anr_days,
-            "absences_o": ao_days,
-            "not_enrolled": not_enrolled_days,
-            "enrolled": enrolled,
-        }
+        context.update(
+            {
+                "days_off": days_off,
+                "year": year,
+                "month": month,
+                "day": day,
+                "displayed_month": date(year, month, 1),
+                "prev_year": prev_year,
+                "prev_month": prev_month,
+                "prev_month_num_days": prev_month_num_days,
+                "next_month": cal_months["next_month"],
+                "next_year": cal_months["next_year"],
+                "num_days": range(1, num_days + 1),
+                "first_day": first_day,
+                "absences_fdr": afd_days,
+                "absences_r": ar_days,
+                "absences_nr": anr_days,
+                "absences_o": ao_days,
+                "not_enrolled": not_enrolled_days,
+                "enrolled": enrolled,
+                "billing": billing,
+            }
+        )
 
-    return render(request, "core/calendar.html", context=context)
-
-
-@user_passes_test(check_parent)
-@get_parent_context
-def day_details(request, selected_child, children, chosendate=None):
-
-    if chosendate is None:
-        session_chosendate = request.session.get("chosendate")
-        if session_chosendate is None:
-            chosendate = date.today()
-        else:
-            chosendate = datetime.strptime(session_chosendate, "%Y-%m-%d").date()
-
-    billing = (
-        Billing.objects.filter(date_month=date(chosendate.year, chosendate.month, 1))
-        .filter(child=selected_child)
-        .exists()
-    )
-
-    return render(
-        request,
-        "core/base-day.html",
-        context={
-            "chosendate": chosendate,
-            "children": children,
-            "billing": billing,
-        },
-    )
+    return render(request, "core/base-day.html", context=context)
 
 
 @user_passes_test(check_employee)

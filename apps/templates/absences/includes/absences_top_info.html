@@ -5,73 +5,75 @@
     childDeleted from:body,
     updateTopNav from:body"
     hx-swap="outerHTML"
-    class="flex flex-wrap justify-center items-center gap-4 py-1 bg-sky-700 w-full ">
-    <div class="h-[70px] bg-neutral-50 rounded-md border-2 border-neutral-300 mx-2">
-        <a href="/">
-            <img class="h-full w-full" src="{% static 'img/logozlobeknobg.png' %}" alt="logo">
-        </a>
-    </div>
-    {% if not today_off or not tomorrow_off %}
-        <div class="font-semibold">
-            <p class="text-white">{% translate 'Number of children' %}:
-            <span class="px-2 py-1 bg-neutral-50 rounded-md shadow-md text-black" title="{% translate 'Total today' %}">{{ num_children_today }} </span>
-            </p>
+    class="flex items-center justify-center bg-sky-700 w-full ">
+    <div class="flex flex-wrap justify-between items-center gap-4 py-1 w-full mx-auto max-w-[1200px]">
+        <div class="h-[70px] bg-neutral-50 rounded-md border-2 border-neutral-300 ml-2 mr-auto">
+            <a href="/">
+                <img class="h-full w-full" src="{% static 'img/logozlobeknobg.png' %}" alt="logo">
+            </a>
         </div>
-    {% endif %}
-    <div class="flex flex-wrap gap-4 justify-center">
-        {% if not today_off %}
-            <div class="flex gap-2 items-center">
-            <p class="text-white">{{ today|date:"l (j.m)"}}</p>
-            <div class="w-40 flex justify-between px-2 py-1 rounded-lg shadow-md font-semibold"
-            style="background: linear-gradient(to right,
-            #92F398 {{ perc_present_today }}%,
-            rgb(254 243 199) {{ perc_present_today }}% 100%)">
-                <p>{{ present_today }}</p>
-                <div class="flex items-center gap-2 relative">
-                    {% if absent_today > 0 %}
-                    <button class="openModal absentToday after:absolute after:inset-0"
-                        data-target="#absent-today">
-                        <svg class="w-5 h-5" aria-hidden="true">
-                            <use href="{% static 'img/sprite.svg' %}#list" />
-                        </svg>
-                    </button>
-                    <span class="sr-only">{% translate 'Absent children list' %} </span>
-                    {% endif %}
-                    <p>{{ absent_today }}</p>
-                </div>
-            </div>
-            </div>
-        {% endif %}
-        {% if not tomorrow_off %}
-            <div class="flex items-center gap-2">
-            <p class="text-white">{{ tomorrow|date:"l (j.m)"}}</p>
-            <div class="w-40 flex justify-between px-2 py-1 rounded-lg shadow-md font-semibold"
-                style="background: linear-gradient(to right,
-                #92F398 {{ perc_present_tomorrow }}%,
-                rgb(254 243 199)  {{ perc_present_tomorrow }}% 100%)">
-                <p>{{ present_tomorrow }}</p>
-                <div class="flex items-center gap-2 relative">
-                    {% if absent_tomorrow > 0 %}
-                    <button class="openModal absentTomorrow after:absolute after:inset-0" data-target="#absent-tomorrow">
-                        <svg class="w-5 h-5" aria-hidden="true">
-                            <use href="{% static 'img/sprite.svg' %}#list" />
-                        </svg>
-                        <span class="sr-only"> {% translate 'Absent children list' %} </span>
-                    </button>
-                    {% endif %}
-                    <p>{{ absent_tomorrow }}</p>
-                </div>
-            </div>
-            </div>
-        {% endif %}
         {% if not today_off or not tomorrow_off %}
-        <div class="w-max flex gap-2 justify-between px-1 py-1 rounded-lg shadow-md font-semibold"
-                style="background: linear-gradient(to right,
-                #92F398 50%,
-                rgb(254 243 199) 50% 100%)">
-            <span class="text-black"> * {% translate 'present' %}</span>
-            <span class="text-black"> {% translate 'absent' %}</span>
-         </div>
+            <div class="text-white hidden lg:flex items-center gap-1 mr-2">
+                <span class="font-semibold px-2 py-1 bg-neutral-50 rounded-md shadow-md text-black" title="{% translate 'Total today' %}">{{ num_children_today }} </span>
+                {% comment %} <p class="text-white">{% translate 'children' %}</p> {% endcomment %}
+                <p class="text-white">dzieci</p>
+            </div>
         {% endif %}
+        <div class="flex flex-wrap gap-4 justify-center ml-2">
+            {% if not today_off %}
+                <div class="flex gap-2 items-center">
+                <p class="text-white">{{ today|date:"l (j.m)"}}</p>
+                <div class="w-40 flex justify-between px-2 py-1 rounded-lg shadow-md font-semibold"
+                style="background: linear-gradient(to right,
+                #92F398 {{ perc_present_today }}%,
+                rgb(254 243 199) {{ perc_present_today }}% 100%)">
+                    <p>{{ present_today }}</p>
+                    <div class="flex items-center gap-2 relative">
+                        {% if absent_today > 0 %}
+                        <button class="openModal absentToday after:absolute after:inset-0"
+                            data-target="#absent-today">
+                            <svg class="w-5 h-5" aria-hidden="true">
+                                <use href="{% static 'img/sprite.svg' %}#list" />
+                            </svg>
+                        </button>
+                        <span class="sr-only">{% translate 'Absent children list' %} </span>
+                        {% endif %}
+                        <p>{{ absent_today }}</p>
+                    </div>
+                </div>
+                </div>
+            {% endif %}
+            {% if not tomorrow_off %}
+                <div class="flex items-center gap-2">
+                <p class="text-white">{{ tomorrow|date:"l (j.m)"}}</p>
+                <div class="w-40 flex justify-between px-2 py-1 rounded-lg shadow-md font-semibold"
+                    style="background: linear-gradient(to right,
+                    #92F398 {{ perc_present_tomorrow }}%,
+                    rgb(254 243 199)  {{ perc_present_tomorrow }}% 100%)">
+                    <p>{{ present_tomorrow }}</p>
+                    <div class="flex items-center gap-2 relative">
+                        {% if absent_tomorrow > 0 %}
+                        <button class="openModal absentTomorrow after:absolute after:inset-0" data-target="#absent-tomorrow">
+                            <svg class="w-5 h-5" aria-hidden="true">
+                                <use href="{% static 'img/sprite.svg' %}#list" />
+                            </svg>
+                            <span class="sr-only"> {% translate 'Absent children list' %} </span>
+                        </button>
+                        {% endif %}
+                        <p>{{ absent_tomorrow }}</p>
+                    </div>
+                </div>
+                </div>
+            {% endif %}
+            {% if not today_off or not tomorrow_off %}
+            <div class="w-max hidden lg:flex gap-2 justify-between px-1 py-1 rounded-lg shadow-md font-semibold"
+                    style="background: linear-gradient(to right,
+                    #92F398 50%,
+                    rgb(254 243 199) 50% 100%)">
+                <span class="text-black"> * {% translate 'present' %}</span>
+                <span class="text-black"> {% translate 'absent' %}</span>
+            </div>
+            {% endif %}
+        </div>
     </div>
 </div>

@@ -19,16 +19,13 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
-from apps.users.decorators import get_parent_context
-from apps.users.permissions import EmployeePermissionMixin, check_employee, check_parent
+from apps.users.permissions import EmployeePermissionMixin, check_employee
 
 from .forms import ActivitiesInfoForm, MainTopicForm
 from .models import Activities, MainTopic, Menu
 
 
-@user_passes_test(check_parent)
-@get_parent_context
-def get_info_about_day(request, selected_child, children, chosendate=None):
+def get_info_about_day(request, chosendate=None):
 
     if chosendate is None:
         chosendate = date.today()
@@ -41,9 +38,7 @@ def get_info_about_day(request, selected_child, children, chosendate=None):
     context = {
         "menu": menu,
         "activities": activities,
-        "chosen_date": chosendate,
-        "children": children,
-        "selected_child": selected_child,
+        "chosendate": chosendate,
     }
 
     response = render(request, template_name="info/infoday.html", context=context)

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static i18n %}
 {% block content %}
-<div id="activities-wrapper">
+<div id="activities-wrapper" class="min-h-dvh flex flex-col">
 {% include 'absences/includes/absences_top_info.html' %}
 {% include 'includes/logout_form.html' %}
     <main id="activities-main">
@@ -13,6 +13,7 @@
             {% include 'info/includes/activities_list.html' %}
         </section>
     </main>
+    {% include 'includes/footer.html' %}
 </div>
 {% include 'absences/includes/absences_modals.html' %}
 {% endblock content %}

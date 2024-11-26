@@ -219,7 +219,7 @@ def billing(request, selected_child, children, chosendate=None):
         child__parent_id=request.user.id,
         child_id=selected_child,
         date_month=billing_date,
-        confirmed=True
+        confirmed=True,
     ).last()
 
     return render(

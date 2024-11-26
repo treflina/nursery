@@ -6,14 +6,12 @@
 <div class="bg-amber-100">
   {% if user.is_authenticated %}
     <p class="p-2 text-center">Twoje konto nie ma dostępu do żądanej strony.</p>
-  {% else %}
-    <p class="p-2 text-center">Prosimy zalogować się aby móc wyświetlić żądaną stronę.</p>
   {% endif %}
 </div>
 {% endif %}
 <div class="min-h-dvh flex flex-col">
 <div class="sky-gradient footer-calc relative flex flex-wrap justify-center items-center">
-  <div class="flex flex-wrap gap-6 lg:gap-12 items-center justify-center px-6 py-4 lg:px-10 lg:py-8 mx-4 bg-neutral-50
+  <div class="flex flex-wrap gap-6 lg:gap-12 items-center justify-center px-6 pt-4 pb-10 md:pb-8 lg:px-10 lg:py-8 mx-4 bg-neutral-50
     rounded-md border-2 border-neutral-300">
     <img src="{% static 'img/logozlobeknobg.png' %}" class="w-40 sm:w-64"/>
     <form class="max-w-[600px] "  method="post" action="{% url 'login' %}">
@@ -48,12 +46,6 @@
     </form>
   </div>
 </div>
-  <footer class="mt-auto px-1 flex justify-center items-center text-center w-full h-12 text-white text-lg bg-sky-700">
-  <p >Żłobek Gminny "Promyczki" w&nbsp;Kotorzu&nbsp;Małym</p>
-</footer>
+{% include 'includes/footer.html' %}
 </div>
-
-  {# Assumes you set up the password_reset view in your URLconf #}
-  {% comment %} <p><a href="{% url 'password_reset' %}">Lost password?</a></p> {% endcomment %}
-
 {% endblock %}

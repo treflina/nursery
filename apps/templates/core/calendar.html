@@ -1,11 +1,11 @@
 
 {% load static core_extras %}
-{% block content %}
-
 <div class="flex gap-2 items-center justify-center pb-2">
     <a tabindex="0"
     hx-get="{% url 'core:day' %}{{prev_year}}-{{prev_month}}-{{prev_month_num_days}}"
     hx-target="#main"
+    hx-select="#main"
+    hx-swap="outerHTML"
     hx-indicator="#spinner,.loaded-content"
     class="cursor-pointer font-bold text-2xl focus:text-sm"
     title="Poprzedni miesiąc" >
@@ -15,6 +15,8 @@
     <a tabindex="0"
         hx-get="{% url 'core:day' %}{{next_year}}-{{next_month}}-1"
         hx-target="#main"
+        hx-select="#main"
+        hx-swap="outerHTML"
         hx-indicator="#spinner,.loaded-content"
         class="cursor-pointer font-bold text-2xl"
         title="Następny miesiąc">
@@ -57,5 +59,3 @@
         {% endfor %}
     </ol>
 </div>
-
-{% endblock %}
