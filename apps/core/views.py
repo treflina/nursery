@@ -103,7 +103,9 @@ def day_details(request, selected_child, children, chosendate=None):
         num_days_in_month = num_days
         not_enrolled_days = get_not_enrolled_days(child, year, month)
 
-        enrolled = child.is_enrolled_month(chosendate)
+        enrolled = child.is_enrolled_month(chosendate) and date.today() <= date(
+            year, month, num_days
+        )
 
         if num_days_in_month == len(not_enrolled_days):
             anr_days = []

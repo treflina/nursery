@@ -8,7 +8,8 @@
         </svg> {% translate 'Back' %}
     </button>
     <div id="absence-form-wrapper" class="lg:mr-8 px-2 mx-auto w-full max-w-[700px]">
-    <form id="form-abs" hx-target="#main" hx-swap="outerHTML" hx-post="{% url 'absences:absence_create' %}"
+    <form id="form-abs"
+        hx-post="{% url 'absences:absence_create' %}"
         class="flex flex-col items-start justify-start border-2 border-neutral-200 rounded-md
         px-3 py-6 lg:p-8 mt-8 lg:mt-12 shadow-lg">
         {% csrf_token %}

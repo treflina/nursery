@@ -87,17 +87,6 @@ import Alpine from 'alpinejs'
         chosenDate.setHours(0, 0, 0, 0);
         const numDate = `${chosenDate.getDate()}`;
         const calendarDays = document.querySelectorAll(".cal-day")
-        const btnAbsenceForm = document.querySelector("#btn-abs")
-
-        const today = new Date()
-        today.setHours(0, 0, 0, 0);
-        if (btnAbsenceForm) {
-            if (today > chosenDate) {
-                btnAbsenceForm.style.display = "none";
-            } else {
-                btnAbsenceForm.style.display = "block";
-            }
-        }
 
         calendarDays.forEach(day => {
             if (day.innerHTML === numDate) {

@@ -11,7 +11,7 @@
     hx-swap="innerHTML"
     hx-trigger="click"
     hx-select="#info-day"
-    {% comment %} hx-push-url='{% url "core:day" chosendate=data %}' {% endcomment %}
+    hx-push-url='{% url "core:day" chosendate=data %}'
     hx-indicator=".request-indicator2,.loaded-box"
     class="cal-day block px-1 py-2 md:px-2 md:py-2  cursor-pointer rounded-sm text-lg
     {% if num == day %}

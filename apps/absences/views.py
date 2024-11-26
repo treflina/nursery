@@ -165,19 +165,11 @@ for the submitted date."
 
             if absences_list:
                 Absence.objects.bulk_create(absences_list)
-                billing = Billing.objects.filter(
-                    date_month=date(date_from.year, date_from.month, 1), child=child
-                )
-                return render(
-                    request,
-                    "core/base-day.html",
-                    context={
-                        "chosendate": date_from,
-                        "children": children,
-                        "form": AbsenceForm(),
-                        "billing": billing,
-                    },
-                )
+
+                resp = HttpResponse(status=204)
+                msg = _("Absence has been successfully submitted")
+                trigger_client_event(resp, "showToast", {"msg": msg})
+                return trigger_client_event(resp, "absenceAdded")
             else:
                 form.add_error(None, _("Chosen days are already off."))
                 return resp_err(request, "absences/includes/absence_form.html", form)

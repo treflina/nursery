@@ -19,7 +19,7 @@
             hx-get="{% url 'core:day' %}"
             hx-target="this"
             hx-select="#calendar-content"
-            hx-trigger="changeChild from:body"
+            hx-trigger="changeChild from:body, absenceAdded from:body"
             >
             {% include 'core/calendar.html' %}
         </div>
@@ -32,7 +32,7 @@
             <button id="btn-abs"
                 hx-target="#info"
                 hx-get="{% url 'absences:absence_create' %}"
-                x-bind:hx-swap="scrollBox ? 'innerHTML show:.sm-screen:top' : 'innerHTML show:body:top'"
+                x-bind:hx-swap="scrollBox ? 'innerHTML show:.sm-screen:top' : 'innerHTML show:window:top'"
                 class="rounded-md shadow-sm
                 px-6 pt-3 pb-3 bg-sky-700 hover:bg-sky-600 focus:bg-sky-600 active:bg-sky-600
                 border-2 border-neutral-200 text-white hover:shadow-md transition-all
