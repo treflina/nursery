@@ -10,6 +10,7 @@
     <div id="absence-form-wrapper" class="lg:mr-8 px-2 mx-auto w-full max-w-[700px]">
     <form id="form-abs"
         hx-post="{% url 'absences:absence_create' %}"
+        hx-target="#info"
         hx-disabled-elt="this"
         hx-on::after-request="this.classList.remove('htmx-request')"
         class="flex flex-col items-start justify-start border-2 border-neutral-200 rounded-md

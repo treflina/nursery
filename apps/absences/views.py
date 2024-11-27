@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from django.views.generic import UpdateView
 from django_filters.views import FilterView
-from django_htmx.http import trigger_client_event
+from django_htmx.http import trigger_client_event, reswap
 from django_tables2 import SingleTableMixin
 
 from apps.core.utils.absent_days import get_holidays
@@ -168,9 +168,8 @@ for the submitted date."
 
             if absences_list:
                 Absence.objects.bulk_create(absences_list)
-
-                resp = HttpResponse(status=204)
                 msg = _("Absence has been successfully submitted")
+                resp = HttpResponse(status=204)
                 trigger_client_event(resp, "showToast", {"msg": msg})
                 return trigger_client_event(resp, "absenceAdded")
             else:

@@ -81,6 +81,9 @@
     <div class="info-top relative lg:basis-2/3 lg:max-w-[850px] lg:pl-8 pb-5 mt-7">
         <div id="info"
             x-bind:class="scrollBox ? 'sm-screen loaded-box' : 'loaded-box'"
+            hx-get="{% url 'info:day' %}"
+            hx-trigger="absenceAdded from:body"
+            hx-swap="innerHTML show:window:top"
             >
             {% include 'info/infoday.html' %}
         </div>
