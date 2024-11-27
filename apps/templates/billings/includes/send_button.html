@@ -7,11 +7,12 @@
     hx-post="{% url 'billings:email' record.id %}"
     hx-swap="outerHTML"
     hx-target="this"
+    hx-disabled-elt="this"
     confirm-swal2="wysłać email z rachunkiem: {{ record.child }} - {{ record.date_month|date:'F Y' }}"
     title-swal="Potwierdzenie"
     >
     <svg class="w-4 h-5 fill-neutral-800" aria-hidden="true">
-    <use href="{% static 'img/sprite.svg' %}#check" />
+        <use href="{% static 'img/sprite.svg' %}#check" />
     </svg>
     Wyślij
 </button>

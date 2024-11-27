@@ -1463,6 +1463,14 @@ input:checked + .toggle-bg {
   height: 1px;
 }
 
+.min-h-10 {
+  min-height: 2.5rem;
+}
+
+.min-h-\[50px\] {
+  min-height: 50px;
+}
+
 .min-h-dvh {
   min-height: 100dvh;
 }
@@ -1554,6 +1562,10 @@ input:checked + .toggle-bg {
 
 .min-w-20 {
   min-width: 5rem;
+}
+
+.min-w-24 {
+  min-width: 6rem;
 }
 
 .min-w-40 {
@@ -2338,16 +2350,16 @@ input:checked + .toggle-bg {
   padding-left: 0.75rem;
 }
 
+.pr-3 {
+  padding-right: 0.75rem;
+}
+
 .pr-4 {
   padding-right: 1rem;
 }
 
 .pr-5 {
   padding-right: 1.25rem;
-}
-
-.pr-6 {
-  padding-right: 1.5rem;
 }
 
 .ps-10 {
@@ -2372,10 +2384,6 @@ input:checked + .toggle-bg {
 
 .pt-8 {
   padding-top: 2rem;
-}
-
-.pr-3 {
-  padding-right: 0.75rem;
 }
 
 .\!text-left {
@@ -2567,6 +2575,11 @@ input:checked + .toggle-bg {
 .text-sky-700 {
   --tw-text-opacity: 1;
   color: rgb(3 105 161 / var(--tw-text-opacity));
+}
+
+.text-sky-800 {
+  --tw-text-opacity: 1;
+  color: rgb(7 89 133 / var(--tw-text-opacity));
 }
 
 .text-white {
@@ -2792,15 +2805,19 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
 /* loader */
 
 .request-indicator,
-.request-indicator2 {
+.request-indicator2,
+.loader-dots {
   display: none;
 }
 
-.htmx-request .request-indicator {
+.htmx-request .request-indicator,
+.htmx-request .loader-dots
+{
   display: block;
 }
 
-.htmx-request.request-indicator {
+.htmx-request.request-indicator,
+.htmx-request.loader-dots {
   display: block;
 }
 
@@ -2812,11 +2829,14 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
   display: flex;
 }
 
-.htmx-request .loaded-content {
+.htmx-request .loaded-content,
+.htmx-request .btn-content
+ {
   display: none;
 }
 
-.htmx-request.loaded-content {
+.htmx-request.loaded-content,
+.htmx-request.btn-content {
   display: none;
 }
 
@@ -2826,6 +2846,10 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
 
 .htmx-request.loaded-box {
   display: none;
+}
+
+.btn-content {
+  display: inline-block;
 }
 
 .loader-circle {
@@ -2839,6 +2863,35 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
 @keyframes l1 {
   to{
     clip-path: inset(0 -34% 0 0)
+  }
+}
+
+.loader-dots {
+  width: 10px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  animation: l5 1s infinite linear alternate;
+}
+
+@keyframes l5 {
+  0%  {
+    box-shadow: 20px 0 #000, -20px 0 #0002;
+    background: #000
+  }
+
+  33% {
+    box-shadow: 20px 0 #000, -20px 0 #0002;
+    background: #0002
+  }
+
+  66% {
+    box-shadow: 20px 0 #0002,-20px 0 #000;
+    background: #0002
+  }
+
+  100%{
+    box-shadow: 20px 0 #0002,-20px 0 #000;
+    background: #000
   }
 }
 
@@ -3831,11 +3884,6 @@ ul.pagination {
 
   .md\:text-center {
     text-align: center;
-  }
-
-  .md\:text-xl {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
   }
 }
 

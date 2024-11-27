@@ -3,7 +3,7 @@
     class="flex justify-end gap-2 relative lg:absolute bg-neutral-200 lg:bg-transparent lg:top-6 lg:right-2 py-1 pr-3
     lg:w-min">
     {% if session_child %}
-    <div class="flex items-center gap-2 p-2 bg-neutral-50 rounded-lg shadow-sm lg:shadow-md
+    <div class="flex items-center justify-center gap-2  min-w-24 p-2 bg-neutral-50 rounded-lg shadow-sm lg:shadow-md
         hover:bg-neutral-200 transition-colors duration-300 cursor-pointer relative z-40"
         {% if children_count > 1 %}
         role="button"
@@ -12,11 +12,14 @@
         hx-target="#main"
         hx-select="#main"
         hx-swap="outerHTML"
+        hx-disabled-elt="this"
+        hx-on::after-request="this.classList.remove('htmx-request')"
         {% endif %}>
-        <svg class="w-6 h-6">
+        <svg class="btn-content w-6 h-6">
             <use href="{% static 'img/sprite.svg' %}#person" />
         </svg>
-        <p id="child-name" hx-swap-oob="true" class="font-semibold text-lg">{{session_child.first_name}}</p>
+        <p id="child-name" hx-swap-oob="true" class="btn-content font-semibold text-lg">{{session_child.first_name}}</p>
+        <div class="loader-dots"></div>
     </div>
     {% endif %}
     <form class="relative flex gap-2 bg-neutral-50 rounded-lg shadow-sm lg:shadow-md z-30" method="post" action="{% url 'logout' %}">
