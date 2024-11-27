@@ -1251,11 +1251,6 @@ input:checked + .toggle-bg {
   margin-bottom: 2rem;
 }
 
-.my-auto {
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
 .\!mt-0 {
   margin-top: 0px !important;
 }
@@ -1316,6 +1311,10 @@ input:checked + .toggle-bg {
   margin-right: 0.5rem;
 }
 
+.mr-8 {
+  margin-right: 2rem;
+}
+
 .mr-auto {
   margin-right: auto;
 }
@@ -1354,10 +1353,6 @@ input:checked + .toggle-bg {
 
 .mt-auto {
   margin-top: auto;
-}
-
-.mr-8 {
-  margin-right: 2rem;
 }
 
 .block {
@@ -2379,6 +2374,10 @@ input:checked + .toggle-bg {
   padding-top: 2rem;
 }
 
+.pr-3 {
+  padding-right: 0.75rem;
+}
+
 .\!text-left {
   text-align: left !important;
 }
@@ -3353,11 +3352,6 @@ ul.pagination {
   background-color: rgb(252 233 106 / var(--tw-bg-opacity));
 }
 
-.hover\:bg-neutral-100:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(245 245 245 / var(--tw-bg-opacity));
-}
-
 .hover\:text-blue-600:hover {
   --tw-text-opacity: 1;
   color: rgb(28 100 242 / var(--tw-text-opacity));
@@ -3665,10 +3659,6 @@ ul.pagination {
     margin-top: 0px;
   }
 
-  .sm\:ml-0 {
-    margin-left: 0px;
-  }
-
   .sm\:inline-block {
     display: inline-block;
   }
@@ -3810,10 +3800,6 @@ ul.pagination {
 
   .md\:justify-between {
     justify-content: space-between;
-  }
-
-  .md\:gap-4 {
-    gap: 1rem;
   }
 
   .md\:p-10 {

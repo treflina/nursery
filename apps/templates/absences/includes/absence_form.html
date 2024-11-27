@@ -1,6 +1,6 @@
 {% load static i18n %}
    <button class="flex gap-2 justify-center items-center py-2 px-2 hover:bg-neutral-200 bg-neutral-50 shadow-sm lg:shadow-md
-            transition-colors duration-300 rounded-lg font-semibold text-lg md:text-xl mb-2 ml-2"
+            transition-colors duration-300 rounded-lg font-semibold text-lg mb-2 ml-2"
             hx-get="{% url 'info:day' %}{{chosendate.year}}-{{chosendate.month}}-{{chosendate.day}}"
             hx-target="#info">
         <svg class="w-4 h-4 fill-sky-700" aria-hidden="true">
