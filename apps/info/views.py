@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from io import BytesIO
 
 from django.contrib.auth.decorators import user_passes_test
@@ -19,7 +19,11 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
-from apps.users.permissions import EmployeePermissionMixin, check_employee
+from apps.users.permissions import (
+    EmployeePermissionMixin,
+    check_employee,
+    login_required_htmx,
+)
 
 from .forms import ActivitiesInfoForm, MainTopicForm
 from .models import Activities, MainTopic, Menu
@@ -34,11 +38,15 @@ def get_info_about_day(request, chosendate=None):
 
     menu = Menu.objects.filter(menu_date=chosendate).last()
     activities = Activities.objects.filter(day=chosendate).last()
+    day_before = chosendate - timedelta(days=1)
+    next_day = chosendate + timedelta(days=1)
 
     context = {
         "menu": menu,
         "activities": activities,
         "chosendate": chosendate,
+        "day_before": day_before,
+        "next_day": next_day,
     }
 
     response = render(request, template_name="info/infoday.html", context=context)
@@ -138,6 +146,7 @@ class ActivityUpdateView(EmployeePermissionMixin, UpdateView):
         return context
 
 
+@login_required_htmx
 @user_passes_test(check_employee)
 @require_http_methods(["DELETE"])
 def delete_activity(request, pk):
@@ -153,6 +162,7 @@ def delete_activity(request, pk):
         return trigger_client_event(resp, "htmx:abort")
 
 
+@login_required_htmx
 @user_passes_test(check_employee)
 def main_topic_create(request):
     context = {}
@@ -165,6 +175,7 @@ def main_topic_create(request):
     return render(request, "info/main_topic_form.html", context)
 
 
+@login_required_htmx
 @user_passes_test(check_employee)
 def main_topic_update(request, pk):
     obj = MainTopic.objects.get(id=pk)
@@ -182,6 +193,7 @@ def main_topic_update(request, pk):
     )
 
 
+@login_required_htmx
 @user_passes_test(check_employee)
 @require_http_methods(["DELETE"])
 def delete_main_topic(request, pk):
@@ -197,6 +209,7 @@ def delete_main_topic(request, pk):
         return trigger_client_event(resp, "htmx:abort")
 
 
+@login_required_htmx
 @user_passes_test(check_employee)
 def get_pdf(request, pk):
 

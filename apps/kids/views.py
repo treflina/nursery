@@ -12,7 +12,12 @@ from django_htmx.http import trigger_client_event
 from django_tables2 import SingleTableMixin
 
 from apps.users.decorators import get_parent_context
-from apps.users.permissions import EmployeePermissionMixin, check_employee, check_parent
+from apps.users.permissions import (
+    EmployeePermissionMixin,
+    check_employee,
+    check_parent,
+    login_required_htmx,
+)
 
 from .filters import ChildFilter
 from .forms import ChildForm
@@ -20,6 +25,7 @@ from .models import Child
 from .tables import ChildrenTable
 
 
+@login_required_htmx
 @user_passes_test(check_parent)
 @get_parent_context
 def switch_child_profile(request, selected_child, children):
@@ -116,6 +122,7 @@ class ChildUpdateView(EmployeePermissionMixin, UpdateView):
         return context
 
 
+@login_required_htmx
 @user_passes_test(check_employee)
 @require_http_methods(["DELETE"])
 def delete_child(request, pk):

@@ -6,14 +6,18 @@
         </div>
         <h2 class="font-bold text-3xl px-2 lg:px-0">{{chosendate|date:"d.m.Y"}}</h2>
     </div>
-    {% if activities.main_topic or activities.topic %}
     <div class="relative lg:h-28 mt-4">
-        <div class="px-4 lg:pr-4 sky-linear-dark lg:sky-linear py-4 text-right text-white lg:w-screen lg:absolute lg:top-0 lg:right-0 z-10">
+        <div class="px-4 lg:h-full lg:pr-4 sky-linear-dark lg:sky-linear py-4 text-right text-white lg:w-screen lg:absolute lg:top-0 lg:right-0 z-10">
+            {% if activities.main_topic %}
             <p class="uppercase text-xl">{{activities.main_topic}}</p>
+            {% endif %}
+            {% if activities.topic %}
             <p class="font-semibold text-2xl ">{{activities.topic}}</p>
+            {% else %}
+             <p class="font-semibold text-2xl mr-8">{{chosendate|date:"l"}}</p>
+            {% endif %}
         </div>
     </div>
-    {% endif %}
     <div class="mt-6 px-6 lg:px-0">
         {% if activities.special_event %}
         <p class="font-semibold text-[#d70263]  mb-3">{{activities.special_event}}</p>
@@ -58,7 +62,37 @@
     {% if success %}
     <h3>Dziękujemy za zgłoszenie nieobecności dziecka!</h3>
     {% endif %}
-
+    <div class="flex w-full gap-2 items-center justify-around px-2 pb-2 mt-8"
+        x-bind:hx-swap="scrollBox ? 'innerHTML show:.info-top:top' : 'innerHTML show:body:top'"
+        x-bind:hx-indicator="scrollBox ? '#spinner,.loaded-content' : 'request-indicator2,.loaded-box'">
+        <a href='{% url "info:day" day_before %}'
+            hx-get='{% url "info:day" day_before %}'
+            hx-target="#info"
+            hx-trigger="click"
+            hx-select="#info-day"
+            hx-push-url='{% url "core:day" day_before %}'
+            class="flex flex-col items-end font-semibold text-sm py-1 px-2
+                bg-neutral-50 rounded-lg shadow-md
+                hover:bg-neutral-200 transition-colors duration-300"
+            title="Przejdż do poprzedniego dnia" >
+            <svg class="w-8 h-8"><use href="{% static 'img/sprite.svg' %}#arrow-left" /></svg>
+            Poprzedni dzień
+        </a>
+        <a href='{% url "info:day" next_day %}'
+            x-bind:data-scroll="scrollBox ? 'true' : 'false'"
+            hx-get='{% url "info:day" next_day %}'
+            hx-target="#info"
+            hx-trigger="click"
+            hx-select="#info-day"
+            hx-push-url='{% url "core:day" next_day %}'
+            class="flex flex-col items-start font-semibold text-sm py-1 px-2
+                bg-neutral-50 rounded-lg shadow-md
+                hover:bg-neutral-200 transition-colors duration-300"
+            title="Przejdż do następnego dnia">
+            <svg class="w-8 h-8 rotate-180"><use href="{% static 'img/sprite.svg' %}#arrow-left" /></svg>
+            Następny dzień
+        </a>
+    </div>
     <div id="absence-form" class="w-full text-center my-4">
         <div id="form-container" class="p-2 md:p-4 rounded-md"></div>
     </div>

@@ -6,7 +6,11 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import UpdateView
 from django_htmx.http import trigger_client_event
 
-from apps.users.permissions import EmployeePermissionMixin, check_employee
+from apps.users.permissions import (
+    EmployeePermissionMixin,
+    check_employee,
+    login_required_htmx,
+)
 
 from .forms import (
     GetParentForm,
@@ -25,6 +29,7 @@ class ParentUpdate(EmployeePermissionMixin, UpdateView):
     success_url = reverse_lazy("kids:children")
 
 
+@login_required_htmx
 @user_passes_test(check_employee)
 def create_parent(request):
     if request.method == "POST":
@@ -39,6 +44,7 @@ def create_parent(request):
     return render(request, "users/parent_form.html", {"form2": form, "add": True})
 
 
+@login_required_htmx
 @user_passes_test(check_employee)
 def change_password_parent(request):
     if request.method == "POST":
@@ -58,6 +64,7 @@ def change_password_parent(request):
     return render(request, "users/parent_form.html", {"form2": form, "update": True})
 
 
+@login_required_htmx
 @user_passes_test(check_employee)
 def change_email_parent(request):
     if request.method == "POST":
@@ -77,6 +84,7 @@ def change_email_parent(request):
     )
 
 
+@login_required_htmx
 @user_passes_test(check_employee)
 def delete_parent(request):
     if request.method == "POST":

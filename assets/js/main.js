@@ -8,10 +8,12 @@ import Alpine from 'alpinejs'
     window.Alpine = Alpine
     Alpine.start()
 
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     htmx.logAll();
+    // });
+
     document.addEventListener("createAbsenceForm", function (e) {
         Datepicker.locales.pl = pl.pl
-
-        console.log(Datepicker.locales.pl);
 
         const datepickerOptions = {
             allowOneSidedRange: true,

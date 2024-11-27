@@ -25,6 +25,7 @@ from apps.users.permissions import (
     check_employee,
     check_parent,
     check_staff,
+    login_required_htmx,
 )
 
 from .filters import BillingsFilter
@@ -33,6 +34,7 @@ from .models import Billing
 from .tables import BillingsHTMxBulkActionTable
 
 
+@login_required_htmx
 @user_passes_test(check_staff)
 def generate_report(request):
     if request.method == "POST":
@@ -172,6 +174,7 @@ given period all are already confirmed."
         return render(request, "billings/billing_create.html", {"form2": form})
 
 
+@login_required_htmx
 @user_passes_test(check_parent)
 @get_parent_context
 def billing(request, selected_child, children, chosendate=None):
@@ -284,6 +287,7 @@ class BillingsReportsView(StaffPermissionMixin, SingleTableMixin, FilterView):
         return kwargs
 
 
+@login_required_htmx
 @user_passes_test(check_staff)
 def export_xlsx_file(request, year=None, month=None):
 
@@ -370,6 +374,7 @@ def export_xlsx_file(request, year=None, month=None):
     return response
 
 
+@login_required_htmx
 @user_passes_test(check_staff)
 def billing_paid_update(request, pk):
     if request.method == "POST" and request.htmx:
@@ -402,6 +407,7 @@ def billing_paid_update(request, pk):
     )
 
 
+@login_required_htmx
 @user_passes_test(check_staff)
 def billing_confirm(request, pk):
     if request.method == "POST" and request.htmx:
@@ -417,6 +423,7 @@ def billing_confirm(request, pk):
     return trigger_client_event(HttpResponse(""), "htmx:abort")
 
 
+@login_required_htmx
 @user_passes_test(check_staff)
 def billing_response_updateview(request):
     if request.method == "POST" and request.htmx:
@@ -483,6 +490,7 @@ class BillingUpdateView(StaffPermissionMixin, UpdateView):
         return context
 
 
+@login_required_htmx
 @user_passes_test(check_staff)
 def billing_update_notes(request, pk):
 
@@ -517,6 +525,7 @@ def billing_update_notes(request, pk):
     )
 
 
+@login_required_htmx
 @user_passes_test(check_employee)
 def send_billing(request, pk):
     if request.method == "POST" and request.htmx:
@@ -561,6 +570,7 @@ def send_billing(request, pk):
     return trigger_client_event(resp, "showToast", {"msg": msg, "err": "true"})
 
 
+@login_required_htmx
 @user_passes_test(check_staff)
 @require_http_methods(["DELETE"])
 def delete_billing(request, pk):
@@ -577,6 +587,7 @@ def delete_billing(request, pk):
         return trigger_client_event(resp, "htmx:abort")
 
 
+@login_required_htmx
 @user_passes_test(check_staff)
 @require_http_methods(["DELETE"])
 def delete_billings(request):

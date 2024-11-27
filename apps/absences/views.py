@@ -11,7 +11,6 @@ from django_filters.views import FilterView
 from django_htmx.http import trigger_client_event
 from django_tables2 import SingleTableMixin
 
-from apps.billings.models import Billing
 from apps.core.utils.absent_days import get_holidays
 from apps.core.utils.helpers import daterange
 from apps.kids.models import Child
@@ -21,6 +20,7 @@ from apps.users.permissions import (
     check_employee,
     check_parent,
     check_staff,
+    login_required_htmx,
 )
 
 from .filters import AbsencesFilter
@@ -67,6 +67,7 @@ class AbsencesView(EmployeePermissionMixin, SingleTableMixin, FilterView):
         return response
 
 
+@login_required_htmx
 @user_passes_test(check_staff)
 def top_info_about_absences(request):
 
@@ -89,6 +90,7 @@ class AbsenceUpdateView(EmployeePermissionMixin, UpdateView):
         return url
 
 
+@login_required_htmx
 @user_passes_test(check_employee)
 @require_http_methods(["DELETE"])
 def delete_absence(request, pk):
@@ -97,6 +99,7 @@ def delete_absence(request, pk):
         return HttpResponse("", headers={"HX-Trigger": "absenceDeleted"})
 
 
+@login_required_htmx
 @user_passes_test(check_parent)
 @get_parent_context
 def create_absence(request, selected_child, children, chosendate=None):
@@ -193,6 +196,7 @@ for the submitted date."
     return trigger_client_event(resp, "createAbsenceForm", after="settle")
 
 
+@login_required_htmx
 @user_passes_test(check_employee)
 def nursery_create_absence(request):
 
