@@ -3,7 +3,6 @@ node_modules/
 .env.prod
 dane.csv
 django.log
-fixture.py
 fixture.json
 
 

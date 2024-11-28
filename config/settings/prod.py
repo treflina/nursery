@@ -44,11 +44,19 @@ DATABASES = {
 
 SITE_NAME = getenv("SITE_NAME")
 
+BASE_URL = getenv("BASE_URL")
+
 SECRET_KEY = getenv("DJANGO_SECRET_KEY")
 
 ALLOWED_HOSTS = getenv("ALLOWED_HOSTS").split()
 
 ADMIN_URL = getenv("DJANGO_ADMIN_URL")
+
+WEBPUSH_SETTINGS = {
+    "VAPID_PUBLIC_KEY": getenv("VAPID_PUBLIC_KEY"),
+    "VAPID_PRIVATE_KEY": getenv("VAPID_PRIVATE_KEY"),
+    "VAPID_ADMIN_EMAIL": getenv("VAPID_ADMIN_EMAIL"),
+}
 
 # SECURITY
 # ------------------------------------------------------------------------------

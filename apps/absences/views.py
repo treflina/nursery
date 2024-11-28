@@ -1,3 +1,4 @@
+import logging
 from datetime import date, datetime, timedelta
 
 from django.contrib.auth.decorators import user_passes_test
@@ -8,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from django.views.generic import UpdateView
 from django_filters.views import FilterView
-from django_htmx.http import trigger_client_event, reswap
+from django_htmx.http import trigger_client_event
 from django_tables2 import SingleTableMixin
 
 from apps.core.utils.absent_days import get_holidays
@@ -27,7 +28,9 @@ from .filters import AbsencesFilter
 from .forms import AbsenceForm, NurseryAbsenceForm, UpdateAbsenceForm
 from .models import Absence
 from .tables import AbsencesTable
-from .utils import resp_err
+from .utils import resp_err, send_notification
+
+logger = logging.getLogger("django")
 
 
 class AbsencesView(EmployeePermissionMixin, SingleTableMixin, FilterView):
@@ -168,6 +171,10 @@ for the submitted date."
 
             if absences_list:
                 Absence.objects.bulk_create(absences_list)
+                try:
+                    send_notification(child, date_from, date_to)
+                except Exception as e:
+                    logger.error(f"{e}")
                 msg = _("Absence has been successfully submitted")
                 resp = HttpResponse(status=204)
                 trigger_client_event(resp, "showToast", {"msg": msg})

@@ -108,46 +108,27 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
 /* loader */
 .request-indicator,
 .request-indicator2,
-.loader-dots {
+.loader-dots,
+.htmx-request .loaded-content,
+.htmx-request .loaded-box,
+.htmx-request .btn-content,
+.htmx-request.loaded-content,
+.htmx-request.loaded-box ,
+.htmx-request.btn-content {
     display: none;
 }
 
 .htmx-request .request-indicator,
-.htmx-request .loader-dots
-{
-    display: block;
-}
-
+.htmx-request .loader-dots,
 .htmx-request.request-indicator,
 .htmx-request.loader-dots {
     display: block;
 }
 
-.htmx-request .request-indicator2 {
-    display: flex;
-}
-
-.htmx-request.request-indicator2 {
-    display: flex;
-}
-
-.htmx-request .loaded-content,
-.htmx-request .btn-content
+.htmx-request .request-indicator2,
+.htmx-request.request-indicator2
  {
-    display: none;
-}
-
-.htmx-request.loaded-content,
-.htmx-request.btn-content {
-    display: none;
-}
-
-.htmx-request .loaded-box {
-    display: none;
-}
-
-.htmx-request.loaded-box {
-    display: none;
+    display: flex;
 }
 
 .btn-content {
@@ -175,6 +156,11 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
     33% {box-shadow: 20px 0 #000, -20px 0 #0002;background: #0002}
     66% {box-shadow: 20px 0 #0002,-20px 0 #000; background: #0002}
     100%{box-shadow: 20px 0 #0002,-20px 0 #000; background: #000 }
+}
+
+/* datepicker */
+.datepicker-cell.disabled {
+    color: #a4a0a0;
 }
 
 /* modal */

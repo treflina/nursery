@@ -2121,6 +2121,11 @@ input:checked + .toggle-bg {
   background-color: rgb(253 246 178 / var(--tw-bg-opacity));
 }
 
+.bg-amber-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 230 138 / var(--tw-bg-opacity));
+}
+
 .fill-black {
   fill: #000000;
 }
@@ -2806,46 +2811,27 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
 
 .request-indicator,
 .request-indicator2,
-.loader-dots {
+.loader-dots,
+.htmx-request .loaded-content,
+.htmx-request .loaded-box,
+.htmx-request .btn-content,
+.htmx-request.loaded-content,
+.htmx-request.loaded-box ,
+.htmx-request.btn-content {
   display: none;
 }
 
 .htmx-request .request-indicator,
-.htmx-request .loader-dots
-{
-  display: block;
-}
-
+.htmx-request .loader-dots,
 .htmx-request.request-indicator,
 .htmx-request.loader-dots {
   display: block;
 }
 
-.htmx-request .request-indicator2 {
-  display: flex;
-}
-
-.htmx-request.request-indicator2 {
-  display: flex;
-}
-
-.htmx-request .loaded-content,
-.htmx-request .btn-content
+.htmx-request .request-indicator2,
+.htmx-request.request-indicator2
  {
-  display: none;
-}
-
-.htmx-request.loaded-content,
-.htmx-request.btn-content {
-  display: none;
-}
-
-.htmx-request .loaded-box {
-  display: none;
-}
-
-.htmx-request.loaded-box {
-  display: none;
+  display: flex;
 }
 
 .btn-content {
@@ -2893,6 +2879,12 @@ form .phac_aspc_form_autocomplete_focus_ring.active > div {
     box-shadow: 20px 0 #0002,-20px 0 #000;
     background: #000
   }
+}
+
+/* datepicker */
+
+.datepicker-cell.disabled {
+  color: #a4a0a0;
 }
 
 /* modal */

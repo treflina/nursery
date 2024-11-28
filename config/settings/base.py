@@ -22,6 +22,7 @@ THIRD_PARTY_APPS = [
     "django_tables2",
     "django_filters",
     "autocomplete",
+    "webpush",
 ]
 
 LOCAL_APPS = [

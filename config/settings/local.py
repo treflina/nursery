@@ -14,6 +14,8 @@ DEBUG = True
 
 SITE_NAME = getenv("SITE_NAME")
 
+BASE_URL = getenv("BASE_URL")
+
 SECRET_KEY = getenv(
     "DJANGO_SECRET_KEY",
     "django-insecure-+zpoh9pvr1fo$^3e_u^yxr*$p5ebpmc4qgdkja9$y!j4@07gqv",
@@ -46,3 +48,9 @@ EMAIL_BACKEND = getenv(
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+WEBPUSH_SETTINGS = {
+    "VAPID_PUBLIC_KEY": getenv("VAPID_PUBLIC_KEY"),
+    "VAPID_PRIVATE_KEY": getenv("VAPID_PRIVATE_KEY"),
+    "VAPID_ADMIN_EMAIL": getenv("VAPID_ADMIN_EMAIL"),
+}
