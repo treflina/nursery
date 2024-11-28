@@ -1,6 +1,6 @@
 
 {% load static core_extras %}
-<div class="flex gap-2 items-center justify-center pb-2">
+<div class="flex gap-2 items-center justify-center mt-2 pb-2">
     <a tabindex="0"
     hx-get="{% url 'core:day' %}{{prev_year}}-{{prev_month}}-{{prev_month_num_days}}"
     hx-target="#main"
