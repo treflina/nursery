@@ -31,6 +31,8 @@ class AbsencesFilter(BaseFilter):
     MONTH_CHOICES = [(month[0], month[1]) for month in enumerate(MONTH_NAMES, start=1)]
     YEAR_CHOICES = [(i, i) for i in range(2024, year_end_range)]
 
+    url = "/nieobecnosci"
+
     month = django_filters.ChoiceFilter(
         field_name="a_date",
         method="month_filter",
@@ -40,7 +42,7 @@ class AbsencesFilter(BaseFilter):
                 "class": "form-control",
                 "id": "id_month",
                 "hx-trigger": "change",
-                "hx-get": "/absences",
+                "hx-get": f"{url}",
                 "hx-indicator": ".progress",
                 "hx-target": ".table-container",
                 "hx-include": "[name='year'], [name='query'], [name='day']",
@@ -59,7 +61,7 @@ class AbsencesFilter(BaseFilter):
                 "class": "form-control",
                 "hx-trigger": "change",
                 "hx-target": ".table-container",
-                "hx-get": "/absences",
+                "hx-get": f"{url}",
                 "hx-indicator": ".progress",
                 "hx-include": "[name='month'], [name='day'], [name='query']",
                 "x-data": "",
@@ -79,7 +81,7 @@ class AbsencesFilter(BaseFilter):
                 "class": "form-control",
                 "hx-trigger": "change",
                 "hx-target": ".table-container",
-                "hx-get": "/absences",
+                "hx-get": f"{url}",
                 "hx-indicator": ".progress",
                 "hx-include": "[name='year'], [name='query'], [name='month']",
                 "x-data": "",

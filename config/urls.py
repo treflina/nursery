@@ -9,7 +9,6 @@ from django.views.i18n import JavaScriptCatalog
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path("jsi18n/", JavaScriptCatalog.as_view(), name="javascript-catalog"),
-
     path("", include("apps.core.urls")),
     path("", include("apps.info.urls")),
     path("", include("apps.kids.urls")),
@@ -27,9 +26,7 @@ urlpatterns = [
     ),
     path(
         "robots.txt",
-        TemplateView.as_view(
-            template_name="robots.txt", content_type="text/plain"
-        ),
+        TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
     ),
     *HTMXAutoComplete.url_dispatcher("ac"),
 ]

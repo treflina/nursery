@@ -30,6 +30,8 @@ class BillingsFilter(BaseFilter):
     # MONTH_CHOICES = [(i, calendar.month_name[i]) for i in range(1, 13)]
     MONTH_CHOICES = [(month[0], month[1]) for month in enumerate(MONTH_NAMES, start=1)]
 
+    url = "/rachunki"
+
     month = django_filters.ChoiceFilter(
         field_name="date_month",
         method="month_filter",
@@ -40,7 +42,7 @@ class BillingsFilter(BaseFilter):
                 "class": "form-control",
                 "hx-trigger": "change",
                 # "hx-headers": "filterChange",
-                "hx-get": "/billings",
+                "hx-get": f"{url}",
                 "hx-indicator": ".progress",
                 "hx-target": ".table-container",
                 "hx-include": "[name='year'], [name='query']",
@@ -60,7 +62,7 @@ class BillingsFilter(BaseFilter):
                 "hx-trigger": "change",
                 # "hx-headers": "filterChange",
                 "hx-target": ".table-container",
-                "hx-get": "/billings",
+                "hx-get": f"{url}",
                 "hx-indicator": ".progress",
                 "hx-include": "[name='day'], [name='query'], [name='month']",
                 "x-data": "",
