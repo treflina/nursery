@@ -4,7 +4,8 @@ from datetime import date, datetime, timedelta
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import ProtectedError
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from django_htmx.http import reswap, retarget, trigger_client_event
@@ -14,7 +15,7 @@ from apps.billings.models import Billing
 from apps.info.models import Activities, Menu
 from apps.kids.models import Child
 from apps.users.decorators import get_parent_context
-from apps.users.models import Parent
+from apps.users.models import User
 from apps.users.permissions import check_employee, check_parent, login_required_htmx
 
 from .forms import (
@@ -38,23 +39,15 @@ from .utils.helpers import get_next_prev_month
 
 
 @login_required
-@get_parent_context
-def home(request, selected_child, children):
+def home(request):
 
-    parent = Parent.objects.filter(id=request.user.id).last()
-
-    if request.method == "POST":
-        child = request.POST.get("child")
-        child_obj = Child.objects.filter(id=child).last()
-        if child_obj.parent.id is parent.id:
-            selected_child = child_obj.id
-            request.session["child"] = selected_child
-
-    return render(
-        request,
-        template_name="core/home.html",
-        context={"children": children, "selected_child": selected_child},
-    )
+    if request.user.type == User.Types.PARENT:
+        return redirect(reverse("core:day"))
+    else:
+        return render(
+            request,
+            template_name="core/home.html"
+        )
 
 
 @login_required_htmx
