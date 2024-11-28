@@ -98,4 +98,5 @@ import Alpine from 'alpinejs'
             }
         })
     });
+
 })();

@@ -58,6 +58,13 @@ WEBPUSH_SETTINGS = {
     "VAPID_ADMIN_EMAIL": getenv("VAPID_ADMIN_EMAIL"),
 }
 
+if getenv("DEVIL"):
+    STATIC_ROOT = path.join(BASE_DIR, "public", "static")
+    MEDIA_ROOT = path.join(BASE_DIR, "public", "media")
+else:
+    STATIC_ROOT = path.join(BASE_DIR, "staticfiles")
+    MEDIA_ROOT = path.join(BASE_DIR, "media")
+
 # SECURITY
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header

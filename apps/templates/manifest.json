@@ -144,10 +144,10 @@
         "sizes": "1024x1024"
         }
     ],
-    "start_url": "/promyczki",
+    "start_url": "/",
     "scope": "/",
-    "background_color": "rgb(240, 240, 245)",
+    "background_color": "rgb(255, 255, 255)",
     "display": "standalone",
     "orientation": "portrait",
-    "theme_color": "rgb(240, 240, 245)"
+    "theme_color": "rgb(229, 229, 229)"
 }
