@@ -91,15 +91,14 @@ import Alpine from 'alpinejs'
         const displayedMonth = document.querySelector(".monthHeading").dataset.month
         const calendarDays = document.querySelectorAll(".cal-day")
 
-        console.log(window.getComputedStyle(document.getElementById("body")).getPropertyValue("font-family"));
-
         if (displayedMonth > month) {
-            const nextMonthBtn = document.querySelector(".nextMonth");
-            nextMonthBtn.click();
-        }
-        if (displayedMonth < month){
             const prevMonthBtn = document.querySelector(".prevMonth");
-            prevMonthBtn.click()
+            prevMonthBtn.click();
+        }
+
+        if (displayedMonth < month){
+            const nextMonthBtn = document.querySelector(".nextMonth");
+            nextMonthBtn.click()
         }
 
         calendarDays.forEach(day => {
