@@ -7,18 +7,18 @@
     hx-select="#main"
     hx-swap="outerHTML"
     hx-indicator="#spinner,.loaded-content"
-    class="cursor-pointer font-bold text-2xl focus:text-sm"
+    class="prevMonth cursor-pointer font-bold text-2xl focus:text-sm"
     title="Poprzedni miesiąc" >
         <svg class="w-8 h-8"><use href="{% static 'img/sprite.svg' %}#arrow-left" /></svg>
     </a>
-    <h1 class="font-semibold text-xl uppercase my-2">{{displayed_month|date:"F Y"}}</h1>
+    <h1 class="monthHeading font-semibold text-xl uppercase my-2" data-month="{{displayed_month.month}}">{{displayed_month|date:"F Y"}}</h1>
     <a tabindex="0"
         hx-get="{% url 'core:day' %}{{next_year}}-{{next_month}}-1"
         hx-target="#main"
         hx-select="#main"
         hx-swap="outerHTML"
         hx-indicator="#spinner,.loaded-content"
-        class="cursor-pointer font-bold text-2xl"
+        class="nextMonth cursor-pointer font-bold text-2xl"
         title="Następny miesiąc">
         <svg class="w-8 h-8 rotate-180"><use href="{% static 'img/sprite.svg' %}#arrow-left" /></svg>
     </a>

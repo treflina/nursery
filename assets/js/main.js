@@ -86,9 +86,21 @@ import Alpine from 'alpinejs'
 
     document.addEventListener("changedDate", function (evt) {
         const chosenDate = new Date(Date.parse(evt.detail.chosendate));
-        chosenDate.setHours(0, 0, 0, 0);
         const numDate = `${chosenDate.getDate()}`;
+        const month = `${chosenDate.getMonth() + 1}`;
+        const displayedMonth = document.querySelector(".monthHeading").dataset.month
         const calendarDays = document.querySelectorAll(".cal-day")
+
+        console.log(window.getComputedStyle(document.getElementById("body")).getPropertyValue("font-family"));
+
+        if (displayedMonth > month) {
+            const nextMonthBtn = document.querySelector(".nextMonth");
+            nextMonthBtn.click();
+        }
+        if (displayedMonth < month){
+            const prevMonthBtn = document.querySelector(".prevMonth");
+            prevMonthBtn.click()
+        }
 
         calendarDays.forEach(day => {
             if (day.innerHTML === numDate) {

@@ -1,4 +1,4 @@
-{% load static webpush_notifications %}
+{% load static i18n webpush_notifications %}
 <!DOCTYPE html>
 <html lang="pl" class="scroll-smooth">
 
@@ -11,6 +11,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    {% block extra_head %}
+    {% endblock extra_head %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     <link rel="icon" type="image/png" href="{% static 'favicon/favicon-96x96.png' %}" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="{% static 'favicon/favicon.svg' %}" />
@@ -20,8 +22,7 @@
     <link rel="manifest" href="/manifest.json"/>
     <script defer src="{% static 'js/htmx.min.js' %}"></script>
     {% comment %} <script defer src="{% static 'js/alpine.min.js' %}"></script> {% endcomment %}
-    {% block extra_head %}
-    {% endblock extra_head %}
+
     {% block extra_styles %}
     {% endblock extra_styles %}
 
