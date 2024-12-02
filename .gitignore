@@ -4,6 +4,7 @@ node_modules/
 dane.csv
 django.log
 fixture.json
+apps/*/migrations/*
 
 
 # Byte-compiled / optimized / DLL files

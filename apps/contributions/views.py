@@ -33,7 +33,7 @@ def contributions(request, pk=None):
                 contribution=contribution, not_applicable=False
             )
             .select_related("child", "contribution")
-            .order_by("paid")
+            .order_by("paid", "child")
         )
         if contribution_list:
             filter = BaseFilter(request.GET, queryset=contribution_list)

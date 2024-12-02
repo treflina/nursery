@@ -157,7 +157,10 @@ for the submitted date."
                     )
 
                 if day not in days_off:
-                    if not idx:
+                    now = datetime.now()
+                    today8am = now.replace(hour=8, minute=2, second=0, microsecond=0)
+
+                    if not idx and day == now.date() and now > today8am:
                         absence = Absence(
                             child=child, a_date=day, reason=reason, absence_type="FR"
                         )
