@@ -1,0 +1,14 @@
+{% load i18n %}
+<template id="contribution-msg">
+  <swal-title>
+    Prosimy o wpłatę składki na:
+  </swal-title>
+  <swal-html>
+    <ul class="list-inside !text-base">
+      {% for c in contributions %}
+        <li>{{ c.contribution.name_full }}
+            {% if cc.contribution.amount > 0 %}{{ c.contribution.amount}}&nbsp;zł{% endif %}</li>
+      {% endfor %}
+    </ul>
+  </swal-html>
+</template>

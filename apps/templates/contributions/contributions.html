@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block content %}
+<main id="contributions-main" class="top-container modal-wrapper flex w-full min-h-dvh flex-col items-center"
+    hx-get="{% url 'contributions:contributions' %}"
+    hx-trigger="contributionCreated from:body"
+    >
+    <div class="w-full bg-sky-700">
+        <div class="nav-wrapper flex items-center flex-wrap justify-between w-full max-w-[1200px] mx-auto py-1">
+            {% include 'includes/logo.html' %}
+            <div class="flex flex-wrap min-h-12 gap-1 px-2 pt-2">
+                {% for contribution in contributions %}
+                    <a href="{% url 'contributions:contributions' contribution.id %}"
+                        hx-get="{% url 'contributions:contributions' contribution.id %}"
+                        hx-target="#contributions-main"
+                        hx-swap="outerHTML"
+                        hx-push-url="true"
+                        class="relative pr-4 pl-5 py-3 -mb-1 rounded-t-md border-2 border-white font-semibold
+                        {% if contribution == selected_contribution %}
+                        bg-[#CEE8BC]
+                        {% else %}
+                        bg-neutral-200
+                        {% endif %}
+                        "
+                        >
+                        {{ contribution.name }}
+                        <div class="absolute top-1 left-1 rounded-full
+                        {% if contribution == selected_contribution %} bg-sky-700 {% else %} bg-white {% endif %}
+                        w-2 h-2 z-10"></div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% include 'includes/logout_form.html' %}
+    <div class="flex gap-2 items-center mt-3 w-full max-w-[1200px] mx-auto">
+        <a href="/"
+            hx-get="{% url 'core:home' %}"
+            hx-target="#contributions-main"
+            hx-swap="outerHTML"
+            hx-push-url="true"
+            class="flex gap-2 justify-center items-center bg-neutral-50 text-base
+            rounded-md px-2 py-1 border-2 border-neutral-300 hover:bg-neutral-300 transition-colors duration-300">
+                <svg class="w-4 h-4 fill-sky-700" aria-hidden="true">
+                    <use href="{% static 'img/sprite.svg' %}#left" />
+                </svg>
+            <span class="font-semibold">Wróć</span>
+        </a>
+        {% if selected_contribution %}
+        <button
+            hx-target="#modal"
+            hx-get="{% url 'contributions:create' %}"
+            hx-push-url="false"
+            class="flex gap-2 justify-center items-center bg-amber-100 font-semibold
+            rounded-md px-2 py-1 border-2 border-neutral-300 hover:bg-amber-200 transition-colors duration-300">
+            <svg class="w-4 h-4 fill-sky-700" aria-hidden="true">
+                <use href="{% static 'img/sprite.svg' %}#plus" />
+            </svg>
+            Dodaj <span class="hidden md:inline-block">nową</span> składkę
+        </button>
+        {% endif %}
+    </div>
+    {% if selected_contribution %}
+    <h1 class="font-semibold text-2xl mt-14 mb-2 text-center px-2">{{ selected_contribution.name_full }}
+        {% if selected_contribution.amount > 0 %}
+         -&nbsp;{{ selected_contribution.amount }}&nbsp;zł
+        {% endif %}
+        </h1>
+    <div class="flex flex-wrap justify-center gap-2 mb-4 mt-1">
+        {% include 'contributions/includes/contribution_published.html' %}
+        <div class="flex gap-2">
+            <div class="gap-2 flex items-center">
+                <button id="btn-abs-nursery" class="flex items-center py-0.5 px-2 gap-1 border-2 border-neutral-300
+                        rounded-md bg-neutral-100 hover:bg-neutral-300 focus:bg-neutral-300
+                        duration-300 transition-colors"
+                        hx-target="#modal"
+                        hx-get="{% url 'contributions:update' selected_contribution.id %}"
+                        hx-push-url="false" title="{%translate 'Edit' %}">
+                    <svg class="w-4 h-4 fill-neutral-800" aria-hidden="true" >
+                        <use href="{% static 'img/sprite.svg' %}#pen" />
+                    </svg>
+                    <span class="">{%translate 'Edit' %}</span>
+                </button>
+                <button id="btn-abs-nursery" class="flex items-center py-0.5 px-2 gap-1 border-2 border-red-300
+                    rounded-md bg-neutral-100 hover:bg-red-200 focus:bg-red-200 text-black
+                    duration-300 transition-colors"
+                    hx-delete="{% url 'contributions:delete' selected_contribution.id %}"
+                    hx-target="#contributions-main"
+                    hx-swap="outerHTML"
+                    confirm-swal="składkę {{selected_contribution.name_full}}"
+                    >
+                    <svg class="w-4 h-4 fill-neutral-800" aria-hidden="true">
+                        <use href="{% static 'img/sprite.svg' %}#trash" />
+                    </svg>
+                    <span class="">{%translate 'Delete' %}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="w-full max-w-[1200px] mx-auto flex justify-center items-center mt-2 py-1 px-2 border-2 rounded-sm  bg-neutral-200 border-neutral-300">
+        <form method="get" action="{% url 'contributions:contributions' %}" class="flex w-full md:w-[500px]">
+            <label for="id_query" class="sr-only">Wyszukaj dziecko</label>
+            <input type="search" name="query" placeholder="Wyszukaj dziecko" id="id_query"
+                hx-trigger="keyup changed delay:500ms, search"
+                hx-get="{% url 'contributions:contributions' %}"
+                {% comment %} hx-indicator=".progress" {% endcomment %}
+                hx-target="#contributions"
+                hx-select="#contributions"
+                class="rounded-md border-2 border-neutral-300 basis-full"
+                >
+            <button type="submit" class="px-2 border-2 py-2 border-neutral-300
+                rounded-md bg-neutral-100 hover:bg-neutral-300 focus:bg-neutral-300
+                duration-300 transition-colors">OK</button>
+        </form>
+    </div>
+    <div id="contributions" class="flex w-full justify-center items-center px-2">
+        <form method="post" class="w-full max-w-[1200px] mx-auto"> {% csrf_token %}
+            {% regroup filter.qs by paid as paid_status %}
+            {% for option in paid_status %}
+            <div class="flex flex-col mb-8">
+                <h2 class="text-lg font-semibold my-4">{% if option.grouper == False %}Niezapłacone:{% else %}Zapłacone:{% endif %}</h2>
+                <ul class="columns-2 md:columns-3 lg:columns-4 gap-x-4">
+                    {% for item in option.list %}
+                        <li class="flex gap-2 items-center">
+                            <input type="checkbox" name="paid" id="" value="{{ item.paid }}"
+                                hx-post="{% url 'contributions:update_paid' item.id %}"
+                                hx-target="#contributions"
+                                hx-select="#contributions"
+                                hx-include="#id_query"
+                                {% if item.paid %} checked {% endif %}
+                                class="w-5 h-5 text-sky-700 bg-white border-gray-300 rounded
+                                focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2"/>
+                            <p>{{ item.child.full_name }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% comment %} <hr class="h-0.5 w-full bg-[#CEE8BC]"/> {% endcomment %}
+            {% endfor %}
+        </form>
+    </div>
+    {% else %}
+        <h1 class="font-semibold text-2xl mt-14 mb-8 text-center px-2">Brak aktywnych składek</h1>
+        <button id="btn-abs-nursery" class="flex items-center mb-4 h-11 px-2 gap-1 border-2 border-neutral-300
+                rounded-md bg-amber-100 hover:bg-amber-200 focus:bg-amber-200
+                duration-300 transition-colors"
+                hx-target="#modal"
+                hx-get="{% url 'contributions:create' %}"
+                hx-push-url="false">
+            <svg class="w-5 h-5" aria-hidden="true">
+                <use href="{% static 'img/sprite.svg' %}#plus" />
+            </svg>
+                {% comment %} {% translate 'Add' %} {% endcomment %}
+                Dodaj <span class="hidden md:inline-block">nową</span> składkę
+        </button>
+    {% endif %}
+    <div class="modalBackground hidden z-30"></div>
+    <div id="billing-form-wrapper">
+        <div role="dialog" id="modal" aria-labelledby="modal-title"
+            hx-target="this"
+            class="no-inert modalbox hidden bg-neutral-50 rounded-md md:w-2/3 lg:w-1/2
+            px-2 py-3 md:p-6 z-40"
+            tabindex="-1">
+        </div>
+    </div>
+    {% include 'includes/footer.html' %}
+</main>
+
+{% endblock content %}

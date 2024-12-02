@@ -28,6 +28,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "apps.absences",
     "apps.billings",
+    "apps.contributions",
     "apps.core",
     "apps.info",
     "apps.kids",

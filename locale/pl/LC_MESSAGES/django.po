@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-28 04:40+0100\n"
+"POT-Creation-Date: 2024-12-02 09:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,7 +96,9 @@ msgstr "Nie można wprowadzić przeszłej daty 'od'."
 
 #: .\apps\absences\forms.py:104
 msgid "If you plan an absence in over six month, inform the nursery directly."
-msgstr "W przypadku nieobecności dziecka za ponad 6 miesięcy, prosimy o poinformowanie żłobka bezpośrednio."
+msgstr ""
+"W przypadku nieobecności dziecka za ponad 6 miesięcy, prosimy o "
+"poinformowanie żłobka bezpośrednio."
 
 #: .\apps\absences\forms.py:112
 msgid ""
@@ -163,7 +165,7 @@ msgstr "Tak (PD)"
 msgid "Yes (nz)"
 msgstr "Tak (nz)"
 
-#: .\apps\absences\tables.py:28
+#: .\apps\absences\tables.py:28 .\apps\contributions\models.py:33
 msgid "No"
 msgstr "Nie"
 
@@ -193,13 +195,13 @@ msgstr "Informacja o nieobecności została zapisana."
 msgid "Chosen days are already off."
 msgstr "W wybranym okresie żłobek jest zamknięty."
 
-#: .\apps\billings\filters.py:37 .\apps\billings\models.py:15
+#: .\apps\billings\filters.py:39 .\apps\billings\models.py:15
 #: .\apps\billings\tables.py:34 .\apps\templates\absences\absences_list.html:35
 #: .\apps\templates\billings\billings_list.html:18
 msgid "Month"
 msgstr "Miesiąc"
 
-#: .\apps\billings\filters.py:56
+#: .\apps\billings\filters.py:58
 #: .\apps\templates\absences\absences_list.html:39
 #: .\apps\templates\billings\billings_list.html:22
 msgid "Year"
@@ -312,48 +314,102 @@ msgstr ""
 "zatwierdzone. Możesz je usunąć, a następnie wygenerować na nowo."
 
 #: .\apps\billings\views.py:165
-#, python-brace-format
 msgid ""
-"Billings have been successfully created.                     Created: "
-"{count} \n"
-"Skipped: {confirmed_count}"
+"Billings have been successfully created.\n"
+" Created: "
 msgstr ""
-"Rachunki zostały wygenerowane. Utworzono: {count} \n"
-" Pominięto: {confirmed_count}"
+"Rachunki zostały wygenerowane.\n"
+" Utworzono: "
 
-#: .\apps\billings\views.py:509
+#: .\apps\billings\views.py:166
+msgid " Skipped: "
+msgstr " Pominięto: "
+
+#: .\apps\billings\views.py:508
 msgid "Note has been added/changed."
 msgstr "Notatka została dodana."
 
-#: .\apps\billings\views.py:517
+#: .\apps\billings\views.py:516
 msgid "Nie znaleziono w bazie wybranego rachunku."
 msgstr "Nie znaleziono w bazie wybranego rachunku."
 
-#: .\apps\billings\views.py:534
+#: .\apps\billings\views.py:533
 msgid "Before sending, confirm the billing."
 msgstr "Przed wysłaniem, zatwierdź rachunek."
 
-#: .\apps\billings\views.py:541 .\apps\billings\views.py:568
+#: .\apps\billings\views.py:540 .\apps\billings\views.py:567
 msgid "Email was not sent because there is no parent account assigned."
 msgstr ""
 "Rachunek nie został wysłany, ponieważ dziecko nie ma przypisanego konta "
 "rodzica z e-mailem."
 
-#: .\apps\billings\views.py:556
+#: .\apps\billings\views.py:555
 msgid "Email has been sent."
 msgstr "Rachunek został wysłany."
 
-#: .\apps\billings\views.py:564
+#: .\apps\billings\views.py:563
 msgid "Email was not sent"
 msgstr "E-mail nie został wysłany."
 
-#: .\apps\billings\views.py:583
+#: .\apps\billings\views.py:582
 msgid "Billing has been deleted."
 msgstr "Rachunek został usunięty z bazy."
 
-#: .\apps\billings\views.py:611
+#: .\apps\billings\views.py:610
 msgid "Selected billings have been deleted."
 msgstr "Wybrane rachunki zostały usunięte z bazy."
+
+#: .\apps\contributions\models.py:12 .\apps\core\models.py:37
+#: .\apps\core\models.py:66 .\apps\core\models.py:79
+msgid "Name"
+msgstr "Nazwa"
+
+#: .\apps\contributions\models.py:13
+#, fuzzy
+#| msgid "Information for parents"
+msgid "Name for parents"
+msgstr "Informacja dla rodziców"
+
+#: .\apps\contributions\models.py:14 .\apps\core\models.py:46
+#: .\apps\core\models.py:54 .\apps\core\models.py:67 .\apps\core\models.py:80
+msgid "Amount"
+msgstr "Kwota"
+
+#: .\apps\contributions\models.py:15
+msgid "Published"
+msgstr "Opublikowana"
+
+#: .\apps\contributions\models.py:21
+msgid "Contribution"
+msgstr "Składka"
+
+#: .\apps\contributions\models.py:22
+msgid "Contributions"
+msgstr "Skłądki"
+
+#: .\apps\contributions\models.py:33
+msgid "Yes"
+msgstr "Tak"
+
+#: .\apps\contributions\models.py:37
+msgid "Contribution status"
+msgstr "Szczegóły składki u dziecka"
+
+#: .\apps\contributions\models.py:38
+msgid "Contribution statuses"
+msgstr "Szczegóły składki u dziecka"
+
+#: .\apps\contributions\views.py:61
+msgid "New contribution has been added."
+msgstr "Nowa składka została dodana."
+
+#: .\apps\contributions\views.py:79
+msgid "Contribution has been updated."
+msgstr "Składka została zaktualizowana."
+
+#: .\apps\contributions\views.py:135
+msgid "Contribution has been deleted."
+msgstr "Składka została usunięta."
 
 #: .\apps\core\forms.py:20
 msgid "Enter date"
@@ -371,18 +427,9 @@ msgstr "Dodatkowy dzień wolny"
 msgid "Additional days off"
 msgstr "Dodatkowe dni wolne"
 
-#: .\apps\core\models.py:37 .\apps\core\models.py:66 .\apps\core\models.py:79
-msgid "Name"
-msgstr "Nazwa"
-
 #: .\apps\core\models.py:38
 msgid "Price"
 msgstr "Cena"
-
-#: .\apps\core\models.py:46 .\apps\core\models.py:54 .\apps\core\models.py:67
-#: .\apps\core\models.py:80
-msgid "Amount"
-msgstr "Kwota"
 
 #: .\apps\core\models.py:61
 msgid "Local subsidies"
@@ -405,35 +452,35 @@ msgstr "Brak wyników"
 msgid "Start typing child's name"
 msgstr "Zacznij pisać aby wyszukać"
 
-#: .\apps\core\views.py:197
+#: .\apps\core\views.py:193
 msgid "Additional day off has been saved."
 msgstr "Dodatkowy dzień wolny został zapisany."
 
-#: .\apps\core\views.py:212
+#: .\apps\core\views.py:208
 msgid "Day off has been deleted."
 msgstr "Dodatkowy dzień wolny został usunięty."
 
-#: .\apps\core\views.py:224
+#: .\apps\core\views.py:220
 msgid "Food price has been added."
 msgstr "Stawka wyżywienia została dodana."
 
-#: .\apps\core\views.py:242
+#: .\apps\core\views.py:238
 msgid "Food price has been deleted."
 msgstr "Stawka wyżywienia została usunięta."
 
-#: .\apps\core\views.py:279
+#: .\apps\core\views.py:275
 msgid "Monthly payment has been added."
 msgstr "Stawka opłaty miesięcznej została dodana."
 
-#: .\apps\core\views.py:316
+#: .\apps\core\views.py:312
 msgid "Monthly payment has been deleted."
 msgstr "Stawka opłaty miesięcznej została usunięta."
 
-#: .\apps\core\views.py:336 .\apps\core\views.py:384 .\apps\core\views.py:457
+#: .\apps\core\views.py:332 .\apps\core\views.py:380 .\apps\core\views.py:453
 msgid "Subsidy has been added."
 msgstr "Dopłata została dodana."
 
-#: .\apps\core\views.py:400 .\apps\core\views.py:437
+#: .\apps\core\views.py:396 .\apps\core\views.py:433
 msgid "Subsidy has been deleted."
 msgstr "Dopłata została usunięta z bazy."
 
@@ -589,6 +636,7 @@ msgstr "Edytuj nieobecność"
 #: .\apps\templates\billings\billing_form.html:73
 #: .\apps\templates\billings\billing_note_form.html:26
 #: .\apps\templates\billings\includes\back_button.html:8
+#: .\apps\templates\contributions\contribution_form.html:32
 #: .\apps\templates\core\settings_form.html:67
 #: .\apps\templates\info\activity_form.html:61
 #: .\apps\templates\kids\child_form.html:123
@@ -619,6 +667,7 @@ msgstr "Wpisz nazwisko imię"
 #: .\apps\templates\absences\absences_list.html:60
 #: .\apps\templates\absences\includes\absence_form_nursery.html:100
 #: .\apps\templates\billings\billings_list.html:46
+#: .\apps\templates\contributions\contribution_form.html:37
 #: .\apps\templates\core\settings.html:42
 #: .\apps\templates\core\settings.html:79
 #: .\apps\templates\core\settings.html:130
@@ -635,6 +684,8 @@ msgstr "Dodaj"
 #: .\apps\templates\absences\includes\absence_accions_links.html:7
 #: .\apps\templates\billings\billing_actions_links.html:6
 #: .\apps\templates\billings\billing_actions_links.html:12
+#: .\apps\templates\contributions\contributions.html:78
+#: .\apps\templates\contributions\contributions.html:82
 #: .\apps\templates\core\settings.html:97
 #: .\apps\templates\core\settings.html:101
 #: .\apps\templates\core\settings.html:148
@@ -654,7 +705,8 @@ msgstr "Edytuj"
 #: .\apps\templates\absences\includes\absence_accions_links.html:14
 #: .\apps\templates\billings\billing_actions_links.html:16
 #: .\apps\templates\billings\billing_actions_links.html:24
-#: .\apps\templates\billings\includes\actions_panel.html:82
+#: .\apps\templates\billings\includes\actions_panel.html:79
+#: .\apps\templates\contributions\contributions.html:95
 #: .\apps\templates\core\settings.html:59
 #: .\apps\templates\core\settings.html:63
 #: .\apps\templates\core\settings.html:108
@@ -722,20 +774,20 @@ msgstr "Rodzaj"
 msgid "Children absent"
 msgstr "Dzieci nieobecne w dniu"
 
-#: .\apps\templates\absences\includes\absences_top_info.html:17
+#: .\apps\templates\absences\includes\absences_top_info.html:13
 msgid "Total today"
 msgstr "Razem dzisiaj"
 
-#: .\apps\templates\absences\includes\absences_top_info.html:40
-#: .\apps\templates\absences\includes\absences_top_info.html:61
+#: .\apps\templates\absences\includes\absences_top_info.html:36
+#: .\apps\templates\absences\includes\absences_top_info.html:57
 msgid "Absent children list"
 msgstr "Lista dzieci nieobecnych"
 
-#: .\apps\templates\absences\includes\absences_top_info.html:74
+#: .\apps\templates\absences\includes\absences_top_info.html:70
 msgid "present"
 msgstr "obecnych"
 
-#: .\apps\templates\absences\includes\absences_top_info.html:75
+#: .\apps\templates\absences\includes\absences_top_info.html:71
 msgid "absent"
 msgstr "nieobecnych"
 
@@ -761,6 +813,7 @@ msgstr "Edytuj rachunek"
 
 #: .\apps\templates\billings\billing_form.html:85
 #: .\apps\templates\billings\billing_note_form.html:30
+#: .\apps\templates\contributions\contribution_form.html:39
 #: .\apps\templates\core\settings_form.html:74
 #: .\apps\templates\info\activity_form.html:74
 #: .\apps\templates\kids\child_form.html:133
@@ -777,9 +830,17 @@ msgstr "Edytuj notatkę"
 msgid "Find child"
 msgstr "Wyszukaj dziecko"
 
-#: .\apps\templates\billings\includes\actions_panel.html:70
+#: .\apps\templates\billings\includes\actions_panel.html:67
 msgid "Confirm"
 msgstr "Zatwierdź"
+
+#: .\apps\templates\contributions\contribution_form.html:5
+msgid "Add contribution"
+msgstr "Dodaj składkę"
+
+#: .\apps\templates\contributions\contribution_form.html:7
+msgid "Edit contribution"
+msgstr "Edytuj składkę"
 
 #: .\apps\templates\core\settings.html:30
 msgid "Settings"
@@ -826,7 +887,7 @@ msgid "Edit subsidy"
 msgstr "Zmień wysokość dopłaty"
 
 #: .\apps\templates\includes\logout_form.html:11
-#: .\apps\templates\includes\profile.html:33
+#: .\apps\templates\includes\profile.html:41
 msgid "Logout"
 msgstr "Wyloguj"
 
@@ -911,20 +972,24 @@ msgstr "Usuń konto rodziców"
 msgid "Start typing to search"
 msgstr "Zacznij pisać aby wyszukać"
 
-#: .\apps\users\forms.py:41 .\apps\users\forms.py:130
+#: .\apps\users\forms.py:41 .\apps\users\forms.py:132
 msgid "Repeat password"
 msgstr "Powtórz hasło"
 
-#: .\apps\users\forms.py:68 .\apps\users\forms.py:153
+#: .\apps\users\forms.py:68 .\apps\users\forms.py:155
 msgid "Passwords don't match"
 msgstr "Wprowadzone hasła nie są identyczne."
 
-#: .\apps\users\forms.py:111 .\apps\users\forms.py:164
-#: .\apps\users\forms.py:195
+#: .\apps\users\forms.py:87 .\apps\users\forms.py:119 .\apps\users\forms.py:173
+msgid "Username"
+msgstr "Nazwa użytkownika"
+
+#: .\apps\users\forms.py:112 .\apps\users\forms.py:166
+#: .\apps\users\forms.py:198
 msgid "Username is invalid."
 msgstr "Login do konta jest nieprawidłowy."
 
-#: .\apps\users\forms.py:182
+#: .\apps\users\forms.py:185
 msgid "I'm sure I want to delete the user."
 msgstr "Jestem pewna, że chcę usunąć powyższe konto."
 
@@ -944,17 +1009,78 @@ msgstr "Adres e-mail został zmieniony."
 msgid "User's account has been deleted."
 msgstr "Konto rodziców zostało usunięte."
 
-#~ msgid "Number of children"
-#~ msgstr "Liczba dzieci"
 
-#~ msgid "ZUS"
-#~ msgstr "ZUS"
+msgid "Enter a valid value."
+msgstr "Wprowadź prawidłową wartość."
 
-#~ msgid "Inna dopłata"
-#~ msgstr "Dopłata"
+msgid "Enter a valid email address."
+msgstr "Wprowadź prawidłowy adres e-mail"
 
-#~ msgid "Yes (NZ)"
-#~ msgstr "Tak (NZ)"
+msgid "Enter a number."
+msgstr "Wprowadź liczbę"
 
-#~ msgid "Data has been successfully changed"
-#~ msgstr "Informacje o nieobecności zostały zmienione."
+msgid "Decimal number"
+msgstr "Liczba dziesiętna"
+
+msgid "Duration"
+msgstr "Czas"
+
+msgid "Email address"
+msgstr "Adres e-mail"
+
+msgid "Enter a valid date."
+msgstr "Wprowadź datę"
+
+msgid "Enter a valid time."
+msgstr "Wprowadź prawidłową wartość"
+
+msgid "Mon"
+msgstr "Pon"
+
+msgid "may"
+msgstr "Maj"
+
+msgid "aug"
+msgstr "sie"
+
+msgid "nov"
+msgstr "lis"
+
+msgid "Date out of range"
+msgstr "Data poza zakresem"
+
+msgid "Number of children"
+msgstr "Liczba dzieci"
+
+msgid "ZUS"
+msgstr "ZUS"
+
+msgid "Inna dopłata"
+msgstr "Inna dopłata"
+
+msgid "Yes (NZ)"
+msgstr "Tak (NZ)"
+
+msgid "Data has been successfully changed"
+msgstr "Informacje o nieobecności zostały zmienione."
+
+msgid "Monday"
+msgstr "Poniedziałek"
+
+msgid "Tuesday"
+msgstr "Wtorek"
+
+msgid "Wednesday"
+msgstr "Środa"
+
+msgid "Thursday"
+msgstr "Czwartek"
+
+msgid "Friday"
+msgstr "Piątek"
+
+msgid "Saturday"
+msgstr "Sobota"
+
+msgid "Sunday"
+msgstr "Niedziela"

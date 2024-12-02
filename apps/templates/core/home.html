@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static i18n %}
+{% load static i18n webpush_notifications %}
 {% block content %}
 <div id="spinner" class="request-indicator absolute inset-0 w-full min-h-dvh bg-neutral-200 z-30">
     <div class="loader-circle absolute top-1/2 left-1/2 -translate-x-1/2 z-30"></div>
@@ -7,8 +7,9 @@
 <div class="loaded-content min-h-dvh flex flex-col">
   {% include 'absences/includes/absences_top_info.html' %}
   {% include 'includes/logout_form.html' %}
-  <section class="relative mx-auto max-w-[1000px] flex flex-col gap-4 justify-center items-center mt-8 mb-4 pt-8 py-6">
-    <div class="flex flex-wrap gap-4 justify-center">
+  <section class="relative mx-auto max-w-[1000px] lg:min-h-[calc(100dvh-12rem)]
+    flex flex-col gap-4 justify-center items-center mt-8 mb-4 pt-8 py-6">
+    <div class="flex flex-wrap gap-4 justify-center items-center">
       <div class="relative rounded-md border-4 bg-neutral-100 border-sky-700 w-72">
         <a class="cursor-pointer inline-block w-full h-full p-8 text-lg font-semibold after:absolute after:inset-0 after:z-10
           hover:bg-neutral-200 transition-colors duration-300"
@@ -57,11 +58,11 @@
         <a class="cursor-pointer block text-lg font-semibold after:absolute after:inset-0 after:z-10
         hover:bg-neutral-200 transition-colors duration-300 p-8"
         href="{% url 'core:settings' %}"
-        hx-get="{% url 'core:settings' %}"
+        {% comment %} hx-get="{% url 'core:settings' %}"
         hx-target="#body"
         hx-swap="innerHTML show:window:top"
         hx-push-url="true"
-        hx-indicator="#spinner,.loaded-content"
+        hx-indicator="#spinner,.loaded-content" {% endcomment %}
         >Ustawienia</a>
         <svg class=" absolute right-1 bottom-1 w-16 h-16 fill-green-700" aria-hidden="true">
             <use href="{% static 'img/sprite.svg' %}#gear" />
@@ -72,15 +73,15 @@
       <div class="relative rounded-md border-4 border-sky-700 bg-neutral-100 w-72">
         <a class="cursor-pointer block text-lg font-semibold after:absolute after:inset-0 after:z-10
         hover:bg-neutral-200 transition-colors duration-300 p-8"
-        href="#"
-        {% comment %} hx-get="{% url 'absences:absences_list' %}"
+        href="{% url 'contributions:contributions' %}"
+        hx-get="{% url 'contributions:contributions' %}"
         hx-target="#body"
         hx-swap="innerHTML show:window:top"
         hx-push-url="true"
-        hx-indicator="#spinner,.loaded-content" {% endcomment %}
-        >Jadłospis</a>
+        hx-indicator="#spinner,.loaded-content"
+        >Składki</a>
         <svg class=" absolute right-1 bottom-1 w-16 h-16 fill-lime-400" aria-hidden="true">
-            <use href="{% static 'img/sprite.svg' %}#plate" />
+            <use href="{% static 'img/sprite.svg' %}#coins" />
         </svg>
       </div>
       <div class="relative rounded-md border-4 border-sky-700 bg-neutral-100 w-72">

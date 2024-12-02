@@ -84,6 +84,7 @@ class ParentForm(forms.ModelForm):
 class ParentChangeEmailForm(forms.ModelForm):
 
     username = forms.CharField(
+        label=_("Username"),
         widget=widgets.Autocomplete(
             name="username",
             use_ac=ParentHTMXAutocomplete,
@@ -115,6 +116,7 @@ class ParentChangeEmailForm(forms.ModelForm):
 class ParentChangePasswordForm(forms.ModelForm):
 
     username = forms.CharField(
+        label=_("Username"),
         widget=widgets.Autocomplete(
             name="username",
             use_ac=ParentHTMXAutocomplete,
@@ -168,6 +170,7 @@ class ParentChangePasswordForm(forms.ModelForm):
 class GetParentForm(forms.Form):
 
     username = forms.CharField(
+        label=_("Username"),
         widget=forms.TextInput(
             attrs={
                 "class": """

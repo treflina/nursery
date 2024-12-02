@@ -1,0 +1,10 @@
+{% load static %}
+<div class="h-14 bg-neutral-50 rounded-md border-2 border-neutral-300 ml-2 mr-auto">
+    <a href="/"
+        hx-get="{% url 'core:home' %}"
+        hx-swap="outerHTML"
+        hx-target=".top-container"
+        hx-push-url="true">
+        <img class="h-full w-full" src="{% static 'img/logozlobeknobg.png' %}" alt="logo">
+    </a>
+</div>

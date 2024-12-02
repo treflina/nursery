@@ -162,9 +162,8 @@ given period all are already confirmed."
                 trigger_client_event(resp, "showToast", {"msg": msg, "err": "true"})
             else:
                 msg = _(
-                    f"Billings have been successfully created. \
-                    Created: {count} \nSkipped: {confirmed_count}"
-                )
+                    f"Billings have been successfully created.\n Created: ") \
+                    + f"{count}" + _(" Skipped: ") + f"{confirmed_count}"
                 trigger_client_event(resp, "showToast", {"msg": msg})
 
             return trigger_client_event(resp, "newReport")

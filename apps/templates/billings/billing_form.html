@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% load static i18n %}
+
 {% block content %}
 <div id="billings">
-    <div class="flex flex-wrap justify-center items-center py-3 bg-sky-700 w-full">
+    <div class="top-container flex flex-wrap justify-center items-center py-3 bg-sky-700 w-full">
         <h1 class="text-xl font-semibold text-center text-white">
             {{ object.date_month|date:'F Y'}}:
             <span class="text-amber-100">{{ object.child_name }}</span>
@@ -89,7 +90,7 @@
             <div class="modalBackground hidden"></div>
             <div id="parent-form-wrapper">
                 <div role="dialog" id="modal" aria-labelledby="modal-title" hx-target="this" class="no-inert modalbox hidden bg-neutral-50 rounded-md lg:w-96
-            px-2 py-3 md::p-6 lg:px-12 lg:py-6" tabindex="-1">
+            px-2 py-3 md:p-6 lg:px-12 lg:py-6" tabindex="-1">
                 </div>
             </div>
         </section>

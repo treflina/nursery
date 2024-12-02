@@ -1,10 +1,7 @@
   {% load static i18n %}
   <div class="fixed top-0 items-center gap-4 bg-sky-700 w-full max-w-[100vw] z-20">
-    <div class="nav-wrapper flex items-center flex-wrap justify-between lg:justify-around max-w-[1200px] mx-auto h-14">
-      <a href="/" class="inline-block h-full bg-neutral-100 rounded-md border-2 border-neutral-300 mx-2">
-        <img class="inline-block h-full w-full" src="{% static 'img/logozlobeknobg.png' %}" alt="logo">
-        <span class="sr-only">Przejdź do strony głównej</span>
-      </a>
+    <div class="nav-wrapper flex items-center flex-wrap justify-between  max-w-[1200px] mx-auto py-1">
+      {% include 'includes/logo.html' %}
       <div class="flex flex-row gap-2 items-center h-12 mx-2">
         <p class="text-neutral-50 hidden lg:inline">Oznacz jako: </p>
         <button id="activate" type="submit" name="activate"
@@ -81,7 +78,7 @@
             </svg>
             {% translate 'Delete' %}
           </button>
-          <div id="export" hx-swap-oob="true" class="w-[7.7rem]">
+          <div id="export" class="w-[7.7rem]">
             <a href='{% url "billings:export_file" year month %}'
               class="flex items-center gap-1 bg-neutral-200 border border-neutral-300 rounded-md px-2 py-1
               hover:bg-neutral-300 transition-colors duration-300">

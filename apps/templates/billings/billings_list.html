@@ -5,11 +5,11 @@
 {% load django_tables2 i18n static %}
 
 {% block content %}
-<main id="billings-main" class="modal-wrapper overflow-x-hidden min-h-dvh flex flex-col">
+<main id="billings-main" class="top-container modal-wrapper overflow-x-hidden min-h-dvh flex flex-col">
   {% include 'billings/includes/actions_panel.html' %}
-  <div id="billings" class="flex flex-col justify-center items-center mt-14 md:mt-12"  hx-push-url="true">
+  <div id="billings" class="flex flex-col justify-center items-center mt-14 md:mt-14"  hx-push-url="true">
   {% include 'includes/logout_form.html' %}
-    <section class="billings my-8 px-1 relative">
+    <section class="billings mt-10 mb-8 px-1 relative">
       <h1 class="text-2xl font-semibold mb-8 text-center">Zestawienie rachunków</h1>
       <div class="table-top-container">
         {# Bulk actions and search bar #}
@@ -93,7 +93,7 @@
         <div role="dialog" id="modal" aria-labelledby="modal-title"
             hx-target="this"
             class="no-inert modalbox hidden bg-neutral-50 rounded-md lg:w-96
-            px-2 py-3 md::p-6 z-40"
+            px-2 py-3 md:p-6 z-40"
             tabindex="-1">
         </div>
     </div>

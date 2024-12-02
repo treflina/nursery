@@ -2,6 +2,14 @@
 <div
     class="profile-container flex justify-end gap-2 relative lg:absolute bg-neutral-200 lg:bg-transparent lg:top-6 lg:right-2 py-1 pr-3
     lg:w-min">
+    {% if contributions %}
+        <button class='contributionMsg flex items-center justify-center gap-2 p-2 bg-red-200 rounded-lg shadow-sm lg:shadow-md
+            hover:bg-neutral-200 transition-colors duration-300 cursor-pointer relative z-40'>
+            <svg class="btn-content w-6 h-6">
+                <use href="{% static 'img/sprite.svg' %}#envelope" />
+            </svg>
+        </button>
+    {% endif %}
     {% if session_child %}
     <div class="flex items-center justify-center gap-2  min-w-24 p-2 bg-neutral-50 rounded-lg shadow-sm lg:shadow-md
         hover:bg-neutral-200 transition-colors duration-300 cursor-pointer relative z-40"

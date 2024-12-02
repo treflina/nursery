@@ -1,0 +1,44 @@
+{% load i18n %}
+<div id="settings-form" class="sm:px-2 sm:py-1 md:px-4 md:py-2 lg:px-6 lg:py-3 lg:min-w-1/2">
+  <h2 id="modal-title" class="font-semibold mb-4 text-lg">
+    {% if add %}
+    {% translate 'Add contribution' %}
+    {% else %}
+    {% translate 'Edit contribution' %}
+    {% endif %}
+  </h2>
+  <form method="post" hx-post="{{ request.path }}"
+      class="flex flex-col gap-3"> {% csrf_token %}
+      {{ form.non_field_errors }}
+
+    <div class="flex flex-col gap-1 w-full">
+        <label for="id_name">{{ form.name.label }}</label>
+        {{ form.name.errors }}
+        {{ form.name }}
+    </div>
+    <div class="flex flex-col gap-1 w-full">
+        <label for="id_name">{{ form.name_full.label }}</label>
+        {{ form.name_full.errors }}
+        {{ form.name_full }}
+    </div>
+    <div class="flex flex-col gap-1 w-full">
+        <label for="id_name">{{ form.amount.label }}</label>
+        {{ form.amount.errors }}
+        {{ form.amount }}
+    </div>
+    <div class="flex gap-2 justify-center items-center w-full mt-4 lg:mt-8">
+        <button type="button" class="cancelBtn rounded-md border-2
+              px-4 pt-2 pb-2 bg-amber-100 hover:bg-amber-200 hover:shadow-md transition-all duration-300
+              uppercase font-semibold">{% translate 'Back' %}</button>
+        <button type="submit" class="self-end rounded-md border-2
+              px-4 pt-2 pb-2 text-white bg-sky-700 hover:bg-sky-600 hover:shadow-md transition-all duration-300
+              uppercase font-semibold">
+              {% if add  %}
+              {% translate 'Add' %}
+              {% else %}
+              {% translate 'Ready' %}
+              {% endif %}
+        </button>
+    </div>
+  </form>
+</div>

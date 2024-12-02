@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
 <div id="spinner" class="request-indicator absolute inset-0 w-full min-h-dvh bg-neutral-200 z-30">
     <div class="loader-circle absolute top-1/2 left-1/2 -translate-x-1/2 z-30"></div>
@@ -86,7 +87,7 @@
         </div>
         {% endif %}
     </div>
-    <div class="info-top relative lg:basis-2/3 lg:max-w-[850px] lg:pl-8 pb-5 mt-7">
+    <div class="info-top relative lg:basis-2/3 lg:max-w-[850px] lg:pl-4 pb-5 mt-7">
         <div id="info"
             x-bind:class="scrollBox ? 'sm-screen loaded-box' : 'loaded-box'"
             hx-get="{% url 'info:day' %}"
@@ -101,6 +102,7 @@
     </div>
 </main>
 {% include 'includes/footer.html' %}
+{% include 'contributions/includes/contribution_msg_modal.html' %}
 {% endblock content %}
 {% block footer %}
 <script>

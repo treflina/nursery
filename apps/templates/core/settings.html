@@ -4,7 +4,7 @@
 {% webpush_header %}
 {% endblock extra_head %}
 {% block content %}
-<div id="settings-wrapper" class="min-h-dvh flex flex-col">
+<div id="settings-wrapper" class="top-container min-h-dvh flex flex-col">
     {% include 'absences/includes/absences_top_info.html' %}
     <main id="settings-main"
         class="modal-wrapper flex flex-col justify-center items-center w-full">
@@ -312,7 +312,7 @@
             <div role="dialog" id="modal" aria-labelledby="modal-title"
                 hx-target="this"
                 class="no-inert modalbox hidden bg-neutral-50 rounded-md lg:w-96
-                px-2 py-3 md::p-6 lg:px-12 lg:py-6"
+                px-2 py-3 md:p-6 lg:px-12 lg:py-6"
                 tabindex="-1">
             </div>
         </div>

@@ -50,7 +50,7 @@ import Swal from 'sweetalert2';
             btn.addEventListener("click", closeModal)
         );
 
-        modalBackground?.addEventListener("click", closeModal)
+        // modalBackground?.addEventListener("click", closeModal)
         window.addEventListener("keyup", (e) => {
             if (e.key === "Escape" && !modal?.classList.contains("hidden")) {
                 closeModal()
@@ -64,15 +64,17 @@ import Swal from 'sweetalert2';
         modalBackground = document.querySelector(".modalBackground");
         modal = document.querySelector("#modal");
 
-         // Show swal pop-up info about absent children
+         // Show swal pop-up info about absent children, contributions
         const absentTodayInfoBtn = document.querySelector(".absentToday");
         const absentTomorrowInfoBtn = document.querySelector(".absentTomorrow");
+        const contributionMsgBtn = document.querySelector(".contributionMsg");
 
         const absenceInfoOptions = {
+            animation: false,
             buttonsStyling: false,
             confirmButtonText: "Zamknij",
             customClass: {
-                title: "text-xl",
+                title: "text-lg",
                 confirmButton: "flex items-center font-semibold h-11 px-2 gap-1 border-2 border-neutral-300 \
               rounded-md bg-amber-100 hover:bg-amber-200  \
               !duration-300 !transition-colors",
@@ -95,6 +97,17 @@ import Swal from 'sweetalert2';
             Swal.fire(
                 {
                     template: "#absent-tomorrow-info",
+                    ...absenceInfoOptions
+                }
+            )
+        }
+        );
+
+        contributionMsgBtn?.addEventListener("click", (e) => {
+            e.preventDefault();
+            Swal.fire(
+                {
+                    template: "#contribution-msg",
                     ...absenceInfoOptions
                 }
             )

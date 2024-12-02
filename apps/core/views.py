@@ -4,7 +4,7 @@ from datetime import date, datetime, timedelta
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import ProtectedError
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
@@ -12,6 +12,7 @@ from django_htmx.http import reswap, retarget, trigger_client_event
 
 from apps.absences.models import Absence
 from apps.billings.models import Billing
+from apps.contributions.models import ContributionStatus
 from apps.info.models import Activities, Menu
 from apps.kids.models import Child
 from apps.users.decorators import get_parent_context
@@ -41,13 +42,10 @@ from .utils.helpers import get_next_prev_month
 @login_required
 def home(request):
 
-    if request.user.type == User.Types.PARENT:
+    if request.user.type == User.Types.PARENT and not request.user.is_superuser:
         return redirect(reverse("core:day"))
     else:
-        return render(
-            request,
-            template_name="core/home.html"
-        )
+        return render(request, template_name="core/home.html")
 
 
 @login_required_htmx
@@ -98,6 +96,10 @@ def day_details(request, selected_child, children, chosendate=None):
         billing = Billing.objects.filter(
             date_month=date(year, month, 1), child=selected_child, confirmed=True
         ).exists()
+
+        contributions = ContributionStatus.objects.filter(
+            child=child, paid=False, contribution__published=True
+        ).select_related("contribution")
 
         num_days_in_month = num_days
         not_enrolled_days = get_not_enrolled_days(child, year, month)
@@ -155,6 +157,7 @@ def day_details(request, selected_child, children, chosendate=None):
                 "not_enrolled": not_enrolled_days,
                 "enrolled": enrolled,
                 "billing": billing,
+                "contributions": contributions,
             }
         )
 

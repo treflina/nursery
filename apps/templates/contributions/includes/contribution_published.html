@@ -1,0 +1,29 @@
+{% load static %}
+<div id="published" class="flex gap-2 items-center">
+    <p class="text-neutral-700">Status: <span class="font-semibold">
+        {% if selected_contribution.published == False %}
+        niewidoczna
+        {% else %}
+        widoczna
+        {% endif %}
+    </span></p>
+    <form method="post" action="{% url 'contributions:update_published' selected_contribution.id %}"
+        >{% csrf_token %}
+        <button type="submit" name="published" class="flex gap-1 items-center justify-center px-2 py-0.5 rounded-md border-2 border-neutral-300
+            bg-neutral-100 hover:bg-neutral-300 duration-300 transition-colors"
+            hx-post="{% url 'contributions:update_published' selected_contribution.id %}"
+            hx-target="#published"
+            hx-swap="outerHTML"
+            hx-disabled-elt="true">
+            {% if selected_contribution.published == False %}
+            <svg class="w-5 h-5 fill-neutral-800" aria-hidden="true" focusable="false" >
+                <use href="{% static 'img/sprite.svg' %}#visible" />
+            </svg> Opublikuj
+            {% else %}
+            <svg class="w-5 h-5 fill-neutral-800" aria-hidden="true" focusable="false">
+                <use href="{% static 'img/sprite.svg' %}#notvisible" />
+            </svg>Wycofaj
+            {% endif %}
+        </button>
+    </form>
+</div>

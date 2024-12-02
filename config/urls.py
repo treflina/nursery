@@ -9,6 +9,7 @@ from django.views.i18n import JavaScriptCatalog
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path("jsi18n/", JavaScriptCatalog.as_view(), name="javascript-catalog"),
+    path("", include("apps.contributions.urls")),
     path("", include("apps.core.urls")),
     path("", include("apps.info.urls")),
     path("", include("apps.kids.urls")),
