@@ -18,12 +18,15 @@ from .models import Contribution, ContributionStatus
 
 
 @login_required_htmx
+@user_passes_test(check_employee)
 def contributions(request, pk=None):
     contributions = Contribution.objects.all()
     if pk is None:
         contribution = contributions.last()
     else:
         contribution = contributions.filter(id=pk).last()
+        if not contribution:
+            contribution = contributions.last()
 
     contribution_list = []
     filter = None

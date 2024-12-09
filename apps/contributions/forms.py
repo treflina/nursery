@@ -22,5 +22,5 @@ class ContributionForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": base_class})
         self.fields["name"].label = "Nazwa krótka"
-        self.fields["name_full"].label = "Nazwa pełna dla rodziców"
+        self.fields["name_full"].label = "Nazwa pełna"
         self.fields["amount"].label = "Kwota"

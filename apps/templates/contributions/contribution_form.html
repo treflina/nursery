@@ -7,7 +7,7 @@
     {% translate 'Edit contribution' %}
     {% endif %}
   </h2>
-  <form method="post" hx-post="{{ request.path }}"
+  <form method="post" hx-post="{{ request.path }}" hx-push-url="true"
       class="flex flex-col gap-3"> {% csrf_token %}
       {{ form.non_field_errors }}
 

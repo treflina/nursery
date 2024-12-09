@@ -221,8 +221,11 @@ def get_pdf(request, pk):
     pdfmetrics.registerFontFamily("roboto", normal="roboto", bold="roboto-medium")
 
     stylesheet = getSampleStyleSheet()
+    # headingStyle = stylesheet["Normal"]
+    # headingStyle.fontName = "roboto-medium"
     normalStyle = stylesheet["Normal"]
     normalStyle.fontName = "roboto"
+
 
     pdf_buffer = BytesIO()
 
@@ -261,27 +264,43 @@ def get_pdf(request, pk):
     data = [
         [
             "Temat dnia",
-            "Aktywność i działalność dziecka",
+            Paragraph("<b>Aktywność i działalność dziecka</b>", normalStyle),
             "Aktywność ruchowa",
             "Aktywność muzyczna",
             "Aktywność plastyczna",
         ]
     ]
+    if any(x.other != "" for x in activities):
+        for i, a in enumerate(activities):
+            a_topic = f"<b>Dzień {i+1}</b>: {a.topic}" if a.topic else f"<b>Dzień {i+1}</b>"
+            activity_data = [
+                Paragraph(a_topic, normalStyle),
+                Paragraph(a.activity, normalStyle),
+                Paragraph(a.movement, normalStyle),
+                Paragraph(a.music, normalStyle),
+                Paragraph(a.art, normalStyle),
+                Paragraph(a.other, normalStyle),
+            ]
+            data.append(activity_data)
 
-    for i, a in enumerate(activities):
-        a_topic = f"<b>Dzień {i+1}</b>: {a.topic}" if a.topic else f"<b>Dzień {i+1}</b>"
-        activity_data = [
-            Paragraph(a_topic, normalStyle),
-            Paragraph(a.activity, normalStyle),
-            Paragraph(a.movement, normalStyle),
-            Paragraph(a.music, normalStyle),
-            Paragraph(a.art, normalStyle),
-        ]
-        data.append(activity_data)
+        table = Table(
+            data, spaceBefore=20, colWidths=[45 * mm, 45 * mm, 45 * mm, 45 * mm, 45 * mm, 45 * mm]
+        )
+    else:
+        for i, a in enumerate(activities):
+            a_topic = f"<b>Dzień {i+1}</b>: {a.topic}" if a.topic else f"<b>Dzień {i+1}</b>"
+            activity_data = [
+                Paragraph(a_topic, normalStyle),
+                Paragraph(a.activity, normalStyle),
+                Paragraph(a.movement, normalStyle),
+                Paragraph(a.music, normalStyle),
+                Paragraph(a.art, normalStyle),
+            ]
+            data.append(activity_data)
 
-    table = Table(
-        data, spaceBefore=20, colWidths=[45 * mm, 57 * mm, 57 * mm, 57 * mm, 57 * mm]
-    )
+        table = Table(
+            data, spaceBefore=20, colWidths=[45 * mm, 57 * mm, 57 * mm, 57 * mm, 57 * mm]
+        )
 
     elems = []
     elems.append(Paragraph((f"Tematyka tygodnia: {topic.description}"), style=style))
@@ -294,10 +313,10 @@ def get_pdf(request, pk):
     elems.append(table)
     style_table = TableStyle(
         [
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
             ("GRID", (0, 0), (-1, -1), 1, colors.black),
             ("FONTNAME", (0, 0), (-1, 0), "roboto-medium"),
             ("FONTNAME", (1, -1), (-1, 1), "roboto"),
-            ("VALIGN", (0, 0), (-1, -1), "TOP"),
         ]
     )
     table.setStyle(style_table)
