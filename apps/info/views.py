@@ -1,3 +1,4 @@
+import re
 from datetime import date, timedelta
 from io import BytesIO
 
@@ -17,7 +18,7 @@ from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle, XPreformatted
 
 from apps.users.permissions import (
     EmployeePermissionMixin,
@@ -243,7 +244,10 @@ def get_pdf(request, pk):
         fontName="roboto-medium",
         fontSize=12,
         alignment=TA_CENTER,
+
     )
+    tableStyle = stylesheet["Normal"]
+    tableStyle.wordWrap = True
 
     topic = MainTopic.objects.get(id=pk)
     activities = topic.activities.all().order_by("day")
@@ -271,16 +275,20 @@ def get_pdf(request, pk):
             Paragraph("Aktywność plastyczna", headingStyle),
         ]
     ]
+
+    def linebreak(value):
+        return value.replace('\n','<br />\n')
+
     if any(x.other != "" for x in activities):
         for i, a in enumerate(activities):
             a_topic = f"<b>Dzień {i+1}</b>: {a.topic}" if a.topic else f"<b>Dzień {i+1}</b>"
             activity_data = [
                 Paragraph(a_topic, normalStyle),
-                Paragraph(a.activity, normalStyle),
-                Paragraph(a.movement, normalStyle),
-                Paragraph(a.music, normalStyle),
-                Paragraph(a.art, normalStyle),
-                Paragraph(a.other, normalStyle),
+                Paragraph(linebreak(a.activity), normalStyle),
+                Paragraph(linebreak(a.movement), normalStyle),
+                Paragraph(linebreak(a.music), normalStyle),
+                Paragraph(linebreak(a.art), normalStyle),
+                Paragraph(linebreak(a.other), normalStyle),
             ]
             data.append(activity_data)
 
@@ -296,10 +304,10 @@ def get_pdf(request, pk):
             a_topic = f"<b>Dzień {i+1}</b>: {a.topic}" if a.topic else f"<b>Dzień {i+1}</b>"
             activity_data = [
                 Paragraph(a_topic, normalStyle),
-                Paragraph(a.activity, normalStyle),
-                Paragraph(a.movement, normalStyle),
-                Paragraph(a.music, normalStyle),
-                Paragraph(a.art, normalStyle),
+                Paragraph(linebreak(a.activity), normalStyle),
+                Paragraph(linebreak(a.movement), normalStyle),
+                Paragraph(linebreak(a.music), normalStyle),
+                Paragraph(linebreak(a.art), normalStyle),
             ]
             data.append(activity_data)
 
