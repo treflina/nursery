@@ -221,11 +221,12 @@ def get_pdf(request, pk):
     pdfmetrics.registerFontFamily("roboto", normal="roboto", bold="roboto-medium")
 
     stylesheet = getSampleStyleSheet()
-    # headingStyle = stylesheet["Normal"]
-    # headingStyle.fontName = "roboto-medium"
     normalStyle = stylesheet["Normal"]
     normalStyle.fontName = "roboto"
 
+    headingStyle = stylesheet["Heading4"]
+    headingStyle.fontName = "roboto-medium"
+    headingStyle.fontSize = 11
 
     pdf_buffer = BytesIO()
 
@@ -263,11 +264,11 @@ def get_pdf(request, pk):
 
     data = [
         [
-            "Temat dnia",
-            Paragraph("<b>Aktywność i działalność dziecka</b>", normalStyle),
-            "Aktywność ruchowa",
-            "Aktywność muzyczna",
-            "Aktywność plastyczna",
+            Paragraph("Temat dnia", headingStyle),
+            Paragraph("Aktywność i działalność dziecka", headingStyle),
+            Paragraph("Aktywność ruchowa", headingStyle),
+            Paragraph("Aktywność muzyczna", headingStyle),
+            Paragraph("Aktywność plastyczna", headingStyle),
         ]
     ]
     if any(x.other != "" for x in activities):
@@ -284,9 +285,13 @@ def get_pdf(request, pk):
             data.append(activity_data)
 
         table = Table(
-            data, spaceBefore=20, colWidths=[45 * mm, 45 * mm, 45 * mm, 45 * mm, 45 * mm, 45 * mm]
+            data,
+            spaceBefore=20,
+            colWidths=[45 * mm, 45 * mm, 45 * mm, 45 * mm, 45 * mm, 45 * mm],
+            minRowHeights=[5 * mm, 20 * mm, 20 * mm, 20 * mm, 20 * mm, 20 * mm]
         )
     else:
+        normalStyle.fontSize = 10
         for i, a in enumerate(activities):
             a_topic = f"<b>Dzień {i+1}</b>: {a.topic}" if a.topic else f"<b>Dzień {i+1}</b>"
             activity_data = [
@@ -299,7 +304,10 @@ def get_pdf(request, pk):
             data.append(activity_data)
 
         table = Table(
-            data, spaceBefore=20, colWidths=[45 * mm, 57 * mm, 57 * mm, 57 * mm, 57 * mm]
+            data,
+            spaceBefore=20,
+            colWidths=[45 * mm, 57 * mm, 57 * mm, 57 * mm, 57 * mm],
+            minRowHeights=[5 * mm, 20 * mm, 20 * mm, 20 * mm, 20 * mm, 20 * mm]
         )
 
     elems = []
@@ -316,6 +324,7 @@ def get_pdf(request, pk):
             ("VALIGN", (0, 0), (-1, -1), "TOP"),
             ("GRID", (0, 0), (-1, -1), 1, colors.black),
             ("FONTNAME", (0, 0), (-1, 0), "roboto-medium"),
+            ("FONTSIZE", (0, 0), (-1, 0), 11),
             ("FONTNAME", (1, -1), (-1, 1), "roboto"),
         ]
     )
