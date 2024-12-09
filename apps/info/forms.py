@@ -35,6 +35,14 @@ class ActivitiesInfoForm(forms.ModelForm):
         for field in ["activity", "movement", "music", "art", "other", "special_event"]:
             self.fields[field].widget.attrs.update({"rows": "3"})
 
+        self.fields["other"].help_text = (
+        '<p class="text-sm text-neutral-700">(Wyświetlone w PDF jako dodatkowa kolumna.)</p>'
+        )
+        self.fields["special_event"].help_text = (
+        '<p class="text-sm text-neutral-700">(Informacja wyróżniona na koncie rodzica. \
+        Nie jest zawarta w PDF.)</p>'
+        )
+
 
 class MainTopicForm(forms.ModelForm):
 
